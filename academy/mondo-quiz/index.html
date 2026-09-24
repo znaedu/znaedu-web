@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b63ce">
-
 <title>Mondo Quiz — Zénith Nova Academy</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -22,9 +21,7 @@
   --red:#d83a3a;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -79,13 +76,8 @@ main{
   padding:20px 12px 45px;
 }
 
-.screen{
-  display:none;
-}
-
-.screen.active{
-  display:block;
-}
+.screen{display:none}
+.screen.active{display:block}
 
 .card{
   background:#fff;
@@ -218,6 +210,11 @@ button{
 .error{
   background:#fff0f0;
   color:#a12626;
+}
+
+.success{
+  background:#edfff3;
+  color:#106a30;
 }
 
 .qhead{
@@ -386,7 +383,6 @@ button{
 }
 
 @media(max-width:600px){
-
   .cats,
   .grid{
     grid-template-columns:1fr;
@@ -399,7 +395,6 @@ button{
   .question{
     font-size:19px;
   }
-
 }
 </style>
 </head>
@@ -408,23 +403,16 @@ button{
 
 <header class="top">
   <div class="topin">
-
     <div class="logo">M</div>
 
     <div>
       <h1>Mondo Quiz</h1>
       <p>Zénith Nova Academy · ZNAEDU</p>
     </div>
-
   </div>
 </header>
 
-
 <main>
-
-<!-- =========================
-     ÉCRAN DE CONFIGURATION
-========================= -->
 
 <section id="setup" class="screen active">
 
@@ -439,13 +427,12 @@ button{
     </h2>
 
     <p class="lead">
-      Le quiz est connecté directement au moteur Mondo Quiz de Supabase.
-      Les réponses correctes ne sont pas exposées dans le navigateur avant
-      leur validation.
+      Mondo Quiz utilise maintenant son moteur central connecté à Supabase.
+      Les questions sont tirées depuis la base de données et les réponses
+      correctes restent côté serveur jusqu'à la validation.
     </p>
 
   </div>
-
 
   <div class="card">
 
@@ -454,7 +441,6 @@ button{
     </label>
 
     <div id="cats" class="cats"></div>
-
 
     <div class="grid">
 
@@ -465,55 +451,32 @@ button{
         </label>
 
         <select id="difficulty">
-
-          <option value="beginner">
-            Débutant
-          </option>
-
-          <option value="intermediate">
-            Intermédiaire
-          </option>
-
+          <option value="beginner">Débutant</option>
+          <option value="intermediate">Intermédiaire</option>
         </select>
 
       </div>
 
-
       <div>
 
         <label for="count">
-          Questions
+          Nombre de questions
         </label>
 
         <select id="count">
-
-          <option value="5">
-            5 questions
-          </option>
-
-          <option value="10">
-            10 questions
-          </option>
-
-          <option value="20">
-            20 questions
-          </option>
-
-          <option value="50">
-            50 questions
-          </option>
-
+          <option value="5">5 questions</option>
+          <option value="10">10 questions</option>
+          <option value="20">20 questions</option>
+          <option value="50">50 questions</option>
         </select>
 
       </div>
 
     </div>
 
-
     <button id="start" class="primary">
       Commencer le quiz
     </button>
-
 
     <div id="msg" class="notice">
       Choisis une discipline pour commencer.
@@ -521,21 +484,13 @@ button{
 
   </div>
 
-
   <div class="footer">
-
     600 questions actuellement disponibles dans Supabase ·
     100 par discipline.
-
   </div>
 
 </section>
 
-
-
-<!-- =========================
-     ÉCRAN DU QUIZ
-========================= -->
 
 <section id="quiz" class="screen">
 
@@ -549,13 +504,9 @@ button{
 
   </div>
 
-
   <div class="progress">
-
     <div id="bar"></div>
-
   </div>
-
 
   <div class="card">
 
@@ -580,11 +531,6 @@ button{
 </section>
 
 
-
-<!-- =========================
-     ÉCRAN DES RÉSULTATS
-========================= -->
-
 <section id="result" class="screen">
 
   <div class="card result">
@@ -593,62 +539,34 @@ button{
       0%
     </div>
 
-
     <h2 id="rtitle">
       Quiz terminé
     </h2>
 
-
     <p id="rtext" class="lead"></p>
-
 
     <div class="stats">
 
       <div class="stat">
-
-        <strong id="score">
-          0
-        </strong>
-
-        <span>
-          Points
-        </span>
-
+        <strong id="score">0</strong>
+        <span>Points</span>
       </div>
 
-
       <div class="stat">
-
-        <strong id="answered">
-          0
-        </strong>
-
-        <span>
-          Réponses
-        </span>
-
+        <strong id="answered">0</strong>
+        <span>Réponses</span>
       </div>
 
-
       <div class="stat">
-
-        <strong id="total">
-          0
-        </strong>
-
-        <span>
-          Questions
-        </span>
-
+        <strong id="total">0</strong>
+        <span>Questions</span>
       </div>
 
     </div>
 
-
     <button id="replay" class="primary">
       Rejouer
     </button>
-
 
     <button id="back" class="secondary">
       Choisir une autre partie
@@ -670,19 +588,18 @@ button{
 </main>
 
 
-
 <script>
 
 /* =========================================================
-   CONFIGURATION SUPABASE
+   CONNEXION SUPABASE
+   Clé publishable officielle du projet ZNAEDU
 ========================================================= */
 
 const SUPABASE_URL =
   "https://dpxghtjhjylofxhmnfxf.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKE";
-
+  "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKEs";
 
 const sb =
   window.supabase.createClient(
@@ -699,72 +616,50 @@ const sb =
 
 
 /* =========================================================
-   DONNÉES DU QUIZ
+   ÉTAT DU QUIZ
 ========================================================= */
 
 const categories = [
-
   ["Culture générale","🧠"],
-
   ["Sciences","🔬"],
-
   ["Mathématiques","📐"],
-
   ["Histoire","🏛️"],
-
   ["Géographie","🌍"],
-
   ["Français","📚"]
-
 ];
 
-
 const state = {
-
   category:null,
-
   difficulty:"beginner",
-
   count:5,
-
   session:null,
-
   questions:[],
-
   index:0,
-
   score:0,
-
   answered:0,
-
   locked:false,
-
   timer:null,
-
   seconds:30
-
 };
 
-
-/* =========================================================
-   OUTILS
-========================================================= */
 
 const $ = id =>
   document.getElementById(id);
 
 
+/* =========================================================
+   AFFICHAGE
+========================================================= */
+
 function showScreen(id){
 
   document
     .querySelectorAll(".screen")
-    .forEach(
-      element =>
-        element.classList.remove("active")
+    .forEach(element =>
+      element.classList.remove("active")
     );
 
   $(id).classList.add("active");
-
 }
 
 
@@ -774,7 +669,6 @@ function setLoading(value){
     value ? "block" : "none";
 
   $("start").disabled = value;
-
 }
 
 
@@ -786,7 +680,6 @@ function escapeHTML(value){
     .replaceAll(">","&gt;")
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
-
 }
 
 
@@ -798,24 +691,19 @@ function initializeCategories(){
 
   $("cats").innerHTML =
     categories
-      .map(category => {
+      .map(category => `
+        <button
+          class="cat"
+          data-category="${escapeHTML(category[0])}"
+        >
+          ${category[1]} ${escapeHTML(category[0])}
 
-        return `
-          <button
-            class="cat"
-            data-category="${escapeHTML(category[0])}"
-          >
-            ${category[1]} ${escapeHTML(category[0])}
-
-            <small>
-              100 questions disponibles
-            </small>
-          </button>
-        `;
-
-      })
+          <small>
+            100 questions disponibles
+          </small>
+        </button>
+      `)
       .join("");
-
 
   document
     .querySelectorAll(".cat")
@@ -825,22 +713,17 @@ function initializeCategories(){
 
         document
           .querySelectorAll(".cat")
-          .forEach(
-            element =>
-              element.classList.remove("selected")
+          .forEach(element =>
+            element.classList.remove("selected")
           );
 
-
         button.classList.add("selected");
-
 
         state.category =
           button.dataset.category;
 
-
         $("msg").className =
           "notice";
-
 
         $("msg").textContent =
           state.category +
@@ -849,12 +732,11 @@ function initializeCategories(){
       };
 
     });
-
 }
 
 
 /* =========================================================
-   DÉMARRAGE D'UNE PARTIE
+   DÉMARRER UNE PARTIE
 ========================================================= */
 
 async function startQuiz(){
@@ -868,24 +750,20 @@ async function startQuiz(){
       "Sélectionne d’abord une discipline.";
 
     return;
-
   }
 
 
   state.difficulty =
     $("difficulty").value;
 
-
   state.count =
     Number($("count").value);
 
-
   state.index = 0;
-
   state.score = 0;
-
   state.answered = 0;
-
+  state.session = null;
+  state.questions = [];
   state.locked = false;
 
 
@@ -894,7 +772,7 @@ async function startQuiz(){
 
   try{
 
-    const { data, error } =
+    const response =
       await sb.rpc(
         "mondo_quiz_start",
         {
@@ -910,8 +788,27 @@ async function startQuiz(){
       );
 
 
+    const data =
+      response.data;
+
+    const error =
+      response.error;
+
+
     if(error){
-      throw error;
+
+      console.error(
+        "MONDO QUIZ RPC ERROR:",
+        error
+      );
+
+      throw new Error(
+        error.message ||
+        error.details ||
+        error.hint ||
+        "Erreur Supabase lors du démarrage."
+      );
+
     }
 
 
@@ -919,11 +816,11 @@ async function startQuiz(){
       !data ||
       !data.session_id ||
       !Array.isArray(data.questions) ||
-      !data.questions.length
+      data.questions.length === 0
     ){
 
       throw new Error(
-        "Réponse serveur invalide."
+        "Le serveur n'a retourné aucune question."
       );
 
     }
@@ -931,7 +828,6 @@ async function startQuiz(){
 
     state.session =
       data.session_id;
-
 
     state.questions =
       data.questions;
@@ -949,14 +845,16 @@ async function startQuiz(){
 
     showScreen("quiz");
 
-
     renderQuestion();
 
   }
 
   catch(error){
 
-    console.error(error);
+    console.error(
+      "ERREUR MONDO QUIZ :",
+      error
+    );
 
 
     $("msg").className =
@@ -964,7 +862,11 @@ async function startQuiz(){
 
 
     $("msg").textContent =
-      "Le moteur Mondo Quiz n’a pas pu démarrer cette partie. Réessaie.";
+      "Impossible de démarrer la partie : " +
+      (
+        error?.message ||
+        "Erreur inconnue."
+      );
 
   }
 
@@ -985,9 +887,7 @@ function startTimer(){
 
   clearInterval(state.timer);
 
-
   state.seconds = 30;
-
 
   $("timer").textContent =
     "30 s";
@@ -998,7 +898,6 @@ function startTimer(){
 
       state.seconds--;
 
-
       $("timer").textContent =
         state.seconds + " s";
 
@@ -1007,8 +906,7 @@ function startTimer(){
 
         clearInterval(state.timer);
 
-
-        submitAnswer(null,true);
+        submitAnswer("",true);
 
       }
 
@@ -1018,7 +916,7 @@ function startTimer(){
 
 
 /* =========================================================
-   AFFICHAGE D'UNE QUESTION
+   AFFICHER QUESTION
 ========================================================= */
 
 function renderQuestion(){
@@ -1056,7 +954,6 @@ function renderQuestion(){
   $("feedback").className =
     "feedback";
 
-
   $("feedback").textContent =
     "";
 
@@ -1073,18 +970,14 @@ function renderQuestion(){
 
   $("options").innerHTML =
     options
-      .map((option,index) => {
-
-        return `
-          <button
-            class="option"
-            data-index="${index}"
-          >
-            ${escapeHTML(option)}
-          </button>
-        `;
-
-      })
+      .map((option,index) => `
+        <button
+          class="option"
+          data-index="${index}"
+        >
+          ${escapeHTML(option)}
+        </button>
+      `)
       .join("");
 
 
@@ -1096,7 +989,6 @@ function renderQuestion(){
 
         const index =
           Number(button.dataset.index);
-
 
         submitAnswer(
           options[index],
@@ -1114,7 +1006,7 @@ function renderQuestion(){
 
 
 /* =========================================================
-   ENVOI D'UNE RÉPONSE
+   VALIDER RÉPONSE
 ========================================================= */
 
 async function submitAnswer(
@@ -1129,7 +1021,6 @@ async function submitAnswer(
 
   state.locked = true;
 
-
   clearInterval(state.timer);
 
 
@@ -1139,7 +1030,7 @@ async function submitAnswer(
 
   try{
 
-    const { data, error } =
+    const response =
       await sb.rpc(
         "mondo_quiz_submit_answer",
         {
@@ -1150,13 +1041,32 @@ async function submitAnswer(
             question.id,
 
           p_answer:
-            answer
+            answer ?? ""
         }
       );
 
 
+    const data =
+      response.data;
+
+    const error =
+      response.error;
+
+
     if(error){
-      throw error;
+
+      console.error(
+        "MONDO QUIZ ANSWER ERROR:",
+        error
+      );
+
+      throw new Error(
+        error.message ||
+        error.details ||
+        error.hint ||
+        "Erreur lors de la validation."
+      );
+
     }
 
 
@@ -1212,12 +1122,16 @@ async function submitAnswer(
       .querySelectorAll(".option")
       .forEach(button => {
 
-        if(
-          button.textContent.trim() ===
+        const text =
+          button.textContent.trim();
+
+        const correctAnswer =
           String(
             data?.correct_answer ?? ""
-          ).trim()
-        ){
+          ).trim();
+
+
+        if(text === correctAnswer){
 
           button.classList.add("correct");
 
@@ -1226,8 +1140,7 @@ async function submitAnswer(
 
         if(
           !correct &&
-          button.textContent.trim() ===
-          String(answer ?? "").trim()
+          text === String(answer ?? "").trim()
         ){
 
           button.classList.add("wrong");
@@ -1261,7 +1174,10 @@ async function submitAnswer(
 
   catch(error){
 
-    console.error(error);
+    console.error(
+      "ERREUR VALIDATION MONDO QUIZ :",
+      error
+    );
 
 
     state.locked = false;
@@ -1272,7 +1188,11 @@ async function submitAnswer(
 
 
     $("feedback").textContent =
-      "La validation a échoué. Aucun score local n’a été appliqué.";
+      "La validation a échoué : " +
+      (
+        error?.message ||
+        "erreur inconnue."
+      );
 
   }
 
@@ -1293,12 +1213,10 @@ function nextQuestion(){
     showResult();
 
     return;
-
   }
 
 
   state.index++;
-
 
   renderQuestion();
 
