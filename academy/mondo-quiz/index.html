@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mondo Quiz — quiz éducatifs et défis de connaissances de Zénith Nova Academy.">
+  <meta name="description" content="Mondo Quiz — plateforme de quiz de Zénith Nova Academy.">
   <title>Mondo Quiz — Zénith Nova Academy</title>
 
   <style>
@@ -23,7 +23,7 @@
     header {
       background: linear-gradient(135deg, #0757c9, #0b78e3);
       color: white;
-      padding: 18px 20px;
+      padding: 17px 20px;
       box-shadow: 0 3px 12px rgba(0, 50, 120, 0.18);
     }
 
@@ -31,8 +31,8 @@
       max-width: 1100px;
       margin: auto;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 15px;
     }
 
@@ -45,214 +45,311 @@
       display: block;
       font-size: 11px;
       font-weight: 400;
-      opacity: 0.85;
+      opacity: .85;
       margin-top: 3px;
     }
 
     .back-btn {
       color: white;
       text-decoration: none;
-      border: 1px solid rgba(255,255,255,0.45);
+      border: 1px solid rgba(255,255,255,.45);
       padding: 9px 14px;
       border-radius: 9px;
       font-size: 14px;
     }
 
     main {
-      max-width: 1100px;
+      max-width: 900px;
       margin: auto;
-      padding: 30px 18px 50px;
+      padding: 25px 16px 50px;
     }
 
-    .hero {
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .hero,
+    .quiz-box,
+    .result-box,
+    .history-box {
       background: white;
       border-radius: 18px;
-      padding: 30px 24px;
-      box-shadow: 0 5px 20px rgba(30, 70, 130, 0.08);
-      margin-bottom: 25px;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(30,70,130,.08);
     }
 
     .hero h1 {
       color: #0757c9;
-      font-size: 32px;
+      font-size: 31px;
       margin-bottom: 10px;
     }
 
     .hero p {
-      color: #53657d;
+      color: #5b6c82;
       line-height: 1.6;
-      max-width: 720px;
-    }
-
-    .hero-actions {
-      margin-top: 22px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    button {
-      border: none;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: 700;
-      border-radius: 10px;
-      padding: 12px 18px;
-    }
-
-    .primary {
-      background: #0757c9;
-      color: white;
-    }
-
-    .secondary {
-      background: #eaf2ff;
-      color: #0757c9;
     }
 
     .section-title {
-      margin: 28px 0 14px;
+      margin: 25px 0 14px;
       font-size: 21px;
-      color: #12213a;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 15px;
-      padding: 21px;
-      box-shadow: 0 4px 16px rgba(30, 70, 130, 0.07);
-      border: 1px solid #e7eef8;
-    }
-
-    .icon {
-      width: 45px;
-      height: 45px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #eaf2ff;
-      border-radius: 12px;
-      font-size: 22px;
-      margin-bottom: 14px;
-    }
-
-    .card h3 {
-      margin-bottom: 8px;
-      color: #17345d;
-    }
-
-    .card p {
-      color: #68788e;
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 15px;
-    }
-
-    .card button {
-      width: 100%;
     }
 
     .categories {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
     }
 
     .category {
       background: white;
       border: 1px solid #dce7f6;
-      color: #245184;
-      padding: 10px 15px;
-      border-radius: 20px;
+      border-radius: 12px;
+      padding: 17px;
       cursor: pointer;
-      font-size: 14px;
+      text-align: left;
+      transition: .2s;
     }
 
     .category:hover {
-      background: #eaf2ff;
+      border-color: #0757c9;
+      background: #eef5ff;
+      transform: translateY(-2px);
     }
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .stat {
-      background: white;
-      border-radius: 13px;
-      padding: 18px;
-      text-align: center;
-      border: 1px solid #e7eef8;
-    }
-
-    .stat strong {
+    .category strong {
       display: block;
-      font-size: 24px;
-      color: #0757c9;
+      color: #17345d;
       margin-bottom: 5px;
     }
 
-    .stat span {
+    .category span {
       color: #718096;
       font-size: 13px;
     }
 
-    .notice {
-      margin-top: 25px;
-      background: #eef6ff;
-      border-left: 4px solid #0757c9;
-      padding: 16px;
-      border-radius: 8px;
-      color: #3b5575;
+    button {
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+    }
+
+    .primary {
+      background: #0757c9;
+      color: white;
+      padding: 12px 19px;
+      border-radius: 10px;
+    }
+
+    .secondary {
+      background: #eaf2ff;
+      color: #0757c9;
+      padding: 12px 19px;
+      border-radius: 10px;
+    }
+
+    .quiz-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .quiz-category {
+      color: #0757c9;
+      font-weight: 700;
       font-size: 14px;
-      line-height: 1.5;
+    }
+
+    .timer {
+      background: #fff2f2;
+      color: #c0392b;
+      padding: 8px 12px;
+      border-radius: 9px;
+      font-weight: 800;
+    }
+
+    .progress-container {
+      height: 8px;
+      background: #e8eef7;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: #0757c9;
+      transition: width .3s;
+    }
+
+    .question-number {
+      color: #6c7b90;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .question {
+      font-size: 23px;
+      line-height: 1.4;
+      margin-bottom: 22px;
+      color: #152d4f;
+    }
+
+    .answers {
+      display: grid;
+      gap: 11px;
+    }
+
+    .answer {
+      width: 100%;
+      text-align: left;
+      padding: 15px;
+      background: #f8fbff;
+      border: 2px solid #e1e9f4;
+      border-radius: 11px;
+      color: #263d5c;
+      font-size: 15px;
+      transition: .15s;
+    }
+
+    .answer:hover {
+      border-color: #75a9e8;
+      background: #eef6ff;
+    }
+
+    .answer.correct {
+      background: #e9f9ef;
+      border-color: #28a745;
+      color: #176b2b;
+    }
+
+    .answer.wrong {
+      background: #fff0f0;
+      border-color: #dc3545;
+      color: #9b1c27;
+    }
+
+    .quiz-actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .result-box {
+      text-align: center;
+    }
+
+    .result-icon {
+      font-size: 55px;
+      margin-bottom: 10px;
+    }
+
+    .result-box h2 {
+      color: #0757c9;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .score {
+      font-size: 45px;
+      font-weight: 900;
+      color: #17345d;
+      margin: 15px 0;
+    }
+
+    .result-details {
+      color: #65758a;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .stat {
+      background: #f6f9fd;
+      border-radius: 11px;
+      padding: 15px;
+    }
+
+    .stat strong {
+      display: block;
+      color: #0757c9;
+      font-size: 22px;
+      margin-bottom: 5px;
+    }
+
+    .stat span {
+      font-size: 12px;
+      color: #728095;
+    }
+
+    .history-item {
+      padding: 13px 0;
+      border-bottom: 1px solid #e8eef6;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-item strong {
+      color: #23466f;
+    }
+
+    .history-item span {
+      color: #0757c9;
+      font-weight: 700;
+    }
+
+    .hidden {
+      display: none !important;
     }
 
     footer {
       text-align: center;
       color: #7b8798;
       font-size: 13px;
-      padding: 25px 15px;
+      padding: 25px;
     }
 
-    @media (max-width: 800px) {
-      .cards {
+    @media (max-width: 600px) {
+      .categories {
         grid-template-columns: 1fr;
-      }
-
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
       }
 
       .hero h1 {
         font-size: 27px;
       }
-    }
 
-    @media (max-width: 480px) {
-      .header-content {
-        align-items: flex-start;
-      }
-
-      .back-btn {
-        font-size: 12px;
-        padding: 8px 10px;
-      }
-
-      main {
-        padding-top: 20px;
+      .question {
+        font-size: 20px;
       }
 
       .stats {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
+      }
+
+      .hero,
+      .quiz-box,
+      .result-box,
+      .history-box {
+        padding: 20px;
       }
     }
   </style>
@@ -260,200 +357,740 @@
 
 <body>
 
-  <header>
-    <div class="header-content">
-      <div class="brand">
-        MONDO QUIZ
-        <small>Zénith Nova Academy</small>
-      </div>
-
-      <a class="back-btn" href="../">← Académie</a>
+<header>
+  <div class="header-content">
+    <div class="brand">
+      MONDO QUIZ
+      <small>Zénith Nova Academy</small>
     </div>
-  </header>
 
-  <main>
+    <a href="../" class="back-btn">← Académie</a>
+  </div>
+</header>
 
-    <section class="hero">
+<main>
+
+  <!-- ACCUEIL -->
+  <section id="homeScreen" class="screen active">
+
+    <div class="hero">
       <h1>Bienvenue sur Mondo Quiz</h1>
 
       <p>
-        Teste tes connaissances, apprends de nouvelles choses et
-        progresse à travers des quiz organisés par thèmes et niveaux.
+        Teste tes connaissances, progresse à ton rythme et découvre
+        différents domaines grâce à des quiz interactifs.
       </p>
-
-      <div class="hero-actions">
-        <button class="primary" onclick="startQuiz()">
-          Commencer un quiz
-        </button>
-
-        <button class="secondary" onclick="showCategories()">
-          Voir les catégories
-        </button>
-      </div>
-    </section>
-
-    <h2 class="section-title">Explorer Mondo Quiz</h2>
-
-    <section class="cards">
-
-      <article class="card">
-        <div class="icon">🎯</div>
-
-        <h3>Quiz du jour</h3>
-
-        <p>
-          Un nouveau défi pour tester rapidement tes connaissances.
-        </p>
-
-        <button class="primary" onclick="startQuiz()">
-          Jouer
-        </button>
-      </article>
-
-      <article class="card">
-        <div class="icon">📚</div>
-
-        <h3>Catégories</h3>
-
-        <p>
-          Choisis un domaine et entraîne-toi selon tes centres d'intérêt.
-        </p>
-
-        <button class="secondary" onclick="showCategories()">
-          Explorer
-        </button>
-      </article>
-
-      <article class="card">
-        <div class="icon">🏆</div>
-
-        <h3>Classement</h3>
-
-        <p>
-          Suis tes performances et découvre ton évolution au fil des quiz.
-        </p>
-
-        <button class="secondary" onclick="showRanking()">
-          Voir le classement
-        </button>
-      </article>
-
-    </section>
-
-    <h2 class="section-title">Catégories</h2>
-
-    <section class="categories" id="categories">
-
-      <button class="category" onclick="selectCategory('Culture générale')">
-        Culture générale
-      </button>
-
-      <button class="category" onclick="selectCategory('Sciences')">
-        Sciences
-      </button>
-
-      <button class="category" onclick="selectCategory('Mathématiques')">
-        Mathématiques
-      </button>
-
-      <button class="category" onclick="selectCategory('Histoire')">
-        Histoire
-      </button>
-
-      <button class="category" onclick="selectCategory('Géographie')">
-        Géographie
-      </button>
-
-      <button class="category" onclick="selectCategory('Français')">
-        Français
-      </button>
-
-      <button class="category" onclick="selectCategory('Anglais')">
-        Anglais
-      </button>
-
-      <button class="category" onclick="selectCategory('Informatique')">
-        Informatique
-      </button>
-
-    </section>
-
-    <h2 class="section-title">Votre activité</h2>
-
-    <section class="stats">
-
-      <div class="stat">
-        <strong id="played">0</strong>
-        <span>Quiz joués</span>
-      </div>
-
-      <div class="stat">
-        <strong id="score">0</strong>
-        <span>Points</span>
-      </div>
-
-      <div class="stat">
-        <strong id="streak">0</strong>
-        <span>Série actuelle</span>
-      </div>
-
-      <div class="stat">
-        <strong id="level">1</strong>
-        <span>Niveau</span>
-      </div>
-
-    </section>
-
-    <div class="notice">
-      <strong>Mondo Quiz évoluera progressivement.</strong><br>
-      Cette première interface constitue la base du module.
-      Les quiz réels, les comptes utilisateurs, les scores,
-      l'historique et les autres fonctions seront ensuite reliés
-      au système central ZNAEDU.
     </div>
 
-  </main>
+    <h2 class="section-title">Choisis une catégorie</h2>
 
-  <footer>
-    © ZNAEDU — Zénith Nova Academy — Mondo Quiz
-  </footer>
+    <div class="categories">
 
-  <script>
-    const stats = JSON.parse(
+      <button class="category" onclick="startQuiz('Culture générale')">
+        <strong>🌍 Culture générale</strong>
+        <span>Connaissances du monde</span>
+      </button>
+
+      <button class="category" onclick="startQuiz('Sciences')">
+        <strong>🔬 Sciences</strong>
+        <span>Découvertes et phénomènes scientifiques</span>
+      </button>
+
+      <button class="category" onclick="startQuiz('Mathématiques')">
+        <strong>➗ Mathématiques</strong>
+        <span>Calcul, logique et raisonnement</span>
+      </button>
+
+      <button class="category" onclick="startQuiz('Histoire')">
+        <strong>📜 Histoire</strong>
+        <span>Événements et civilisations</span>
+      </button>
+
+      <button class="category" onclick="startQuiz('Géographie')">
+        <strong>🗺️ Géographie</strong>
+        <span>Pays, villes et territoires</span>
+      </button>
+
+      <button class="category" onclick="startQuiz('Français')">
+        <strong>📖 Français</strong>
+        <span>Langue, grammaire et vocabulaire</span>
+      </button>
+
+    </div>
+
+    <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="secondary" onclick="showHistory()">
+        📊 Mon historique
+      </button>
+    </div>
+
+  </section>
+
+
+  <!-- QUIZ -->
+  <section id="quizScreen" class="screen">
+
+    <div class="quiz-box">
+
+      <div class="quiz-top">
+        <div id="quizCategory" class="quiz-category"></div>
+        <div id="timer" class="timer">20 s</div>
+      </div>
+
+      <div class="progress-container">
+        <div id="progress" class="progress"></div>
+      </div>
+
+      <div id="questionNumber" class="question-number"></div>
+
+      <h2 id="question" class="question"></h2>
+
+      <div id="answers" class="answers"></div>
+
+      <div class="quiz-actions">
+        <button class="secondary" onclick="quitQuiz()">
+          Quitter
+        </button>
+
+        <button id="nextButton" class="primary hidden" onclick="nextQuestion()">
+          Question suivante →
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- RESULTAT -->
+  <section id="resultScreen" class="screen">
+
+    <div class="result-box">
+
+      <div class="result-icon">🏆</div>
+
+      <h2>Quiz terminé</h2>
+
+      <div id="finalScore" class="score">0 / 5</div>
+
+      <div id="resultDetails" class="result-details"></div>
+
+      <div class="stats">
+
+        <div class="stat">
+          <strong id="resultCorrect">0</strong>
+          <span>Bonnes réponses</span>
+        </div>
+
+        <div class="stat">
+          <strong id="resultWrong">0</strong>
+          <span>Mauvaises réponses</span>
+        </div>
+
+        <div class="stat">
+          <strong id="resultPercent">0%</strong>
+          <span>Réussite</span>
+        </div>
+
+      </div>
+
+      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
+        <button class="primary" onclick="restartQuiz()">
+          Rejouer
+        </button>
+
+        <button class="secondary" onclick="goHome()">
+          Retour
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- HISTORIQUE -->
+  <section id="historyScreen" class="screen">
+
+    <div class="history-box">
+
+      <h2 class="section-title" style="margin-top:0;">
+        Mon historique
+      </h2>
+
+      <div id="historyList"></div>
+
+      <button class="secondary" onclick="goHome()" style="margin-top:20px;">
+        ← Retour à Mondo Quiz
+      </button>
+
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  © ZNAEDU — Zénith Nova Academy — Mondo Quiz
+</footer>
+
+
+<script>
+
+const quizBank = {
+
+  "Culture générale": [
+    {
+      question: "Quelle est la capitale du Bénin ?",
+      answers: ["Porto-Novo", "Cotonou", "Abomey", "Parakou"],
+      correct: 0
+    },
+    {
+      question: "Combien de continents compte-t-on généralement ?",
+      answers: ["5", "6", "7", "8"],
+      correct: 2
+    },
+    {
+      question: "Quelle planète est surnommée la planète rouge ?",
+      answers: ["Vénus", "Mars", "Jupiter", "Mercure"],
+      correct: 1
+    },
+    {
+      question: "Combien de jours compte une année normale ?",
+      answers: ["360", "364", "365", "366"],
+      correct: 2
+    },
+    {
+      question: "Quel est le plus grand océan de la Terre ?",
+      answers: ["Atlantique", "Indien", "Arctique", "Pacifique"],
+      correct: 3
+    }
+  ],
+
+  "Sciences": [
+    {
+      question: "Quel organe pompe le sang dans le corps humain ?",
+      answers: ["Le foie", "Le cœur", "Le poumon", "Le rein"],
+      correct: 1
+    },
+    {
+      question: "Quelle est la formule chimique de l'eau ?",
+      answers: ["CO₂", "O₂", "H₂O", "NaCl"],
+      correct: 2
+    },
+    {
+      question: "Quelle force nous maintient à la surface de la Terre ?",
+      answers: ["La gravité", "Le magnétisme", "La pression", "La lumière"],
+      correct: 0
+    },
+    {
+      question: "Quel gaz les humains respirent-ils principalement pour vivre ?",
+      answers: ["Oxygène", "Hydrogène", "Hélium", "Méthane"],
+      correct: 0
+    },
+    {
+      question: "Quelle partie de la plante absorbe principalement l'eau du sol ?",
+      answers: ["La fleur", "La feuille", "La racine", "Le fruit"],
+      correct: 2
+    }
+  ],
+
+  "Mathématiques": [
+    {
+      question: "Combien font 7 × 8 ?",
+      answers: ["54", "56", "58", "64"],
+      correct: 1
+    },
+    {
+      question: "Combien font 100 ÷ 4 ?",
+      answers: ["20", "25", "30", "40"],
+      correct: 1
+    },
+    {
+      question: "Quel nombre est premier ?",
+      answers: ["9", "15", "17", "21"],
+      correct: 2
+    },
+    {
+      question: "Combien font 15 + 27 ?",
+      answers: ["40", "41", "42", "43"],
+      correct: 2
+    },
+    {
+      question: "Combien font 12² ?",
+      answers: ["124", "134", "144", "154"],
+      correct: 2
+    }
+  ],
+
+  "Histoire": [
+    {
+      question: "Quelle civilisation a construit les pyramides de Gizeh ?",
+      answers: ["Les Romains", "Les Égyptiens", "Les Grecs", "Les Perses"],
+      correct: 1
+    },
+    {
+      question: "Dans quel pays se trouve la Grande Muraille ?",
+      answers: ["Inde", "Chine", "Japon", "Corée"],
+      correct: 1
+    },
+    {
+      question: "Quel événement marque traditionnellement la fin de l'Antiquité ?",
+      answers: [
+        "La chute de l'Empire romain d'Occident",
+        "La Révolution française",
+        "La découverte de l'Amérique",
+        "La Première Guerre mondiale"
+      ],
+      correct: 0
+    },
+    {
+      question: "Quel empire avait Rome pour capitale ?",
+      answers: [
+        "Empire romain",
+        "Empire mongol",
+        "Empire aztèque",
+        "Empire du Mali"
+      ],
+      correct: 0
+    },
+    {
+      question: "Quel célèbre souverain du Mali est connu pour sa grande richesse ?",
+      answers: [
+        "Soundiata Keïta",
+        "Mansa Moussa",
+        "Askia Mohammed",
+        "Samory Touré"
+      ],
+      correct: 1
+    }
+  ],
+
+  "Géographie": [
+    {
+      question: "Quel est le plus grand pays du monde par superficie ?",
+      answers: ["Canada", "Chine", "Russie", "États-Unis"],
+      correct: 2
+    },
+    {
+      question: "Sur quel continent se trouve le Bénin ?",
+      answers: ["Asie", "Afrique", "Europe", "Amérique"],
+      correct: 1
+    },
+    {
+      question: "Quelle est la capitale du Ghana ?",
+      answers: ["Accra", "Kumasi", "Lomé", "Abuja"],
+      correct: 0
+    },
+    {
+      question: "Quel océan borde la côte sud du Bénin ?",
+      answers: [
+        "Océan Atlantique",
+        "Océan Indien",
+        "Océan Pacifique",
+        "Océan Arctique"
+      ],
+      correct: 0
+    },
+    {
+      question: "Quel pays est situé à l'est du Bénin ?",
+      answers: ["Togo", "Nigeria", "Ghana", "Niger"],
+      correct: 1
+    }
+  ],
+
+  "Français": [
+    {
+      question: "Quel est le pluriel de « cheval » ?",
+      answers: ["Chevals", "Chevaux", "Chevals", "Chevaus"],
+      correct: 1
+    },
+    {
+      question: "Quel mot est un verbe ?",
+      answers: ["Maison", "Rapidement", "Courir", "Bleu"],
+      correct: 2
+    },
+    {
+      question: "Quel est le contraire de « difficile » ?",
+      answers: ["Compliqué", "Facile", "Long", "Fort"],
+      correct: 1
+    },
+    {
+      question: "Dans « Les enfants jouent », quel est le sujet ?",
+      answers: ["Les", "Enfants", "Jouent", "Les enfants"],
+      correct: 3
+    },
+    {
+      question: "Quel mot est correctement écrit ?",
+      answers: ["Aparament", "Apparemment", "Aparrement", "Apparement"],
+      correct: 1
+    }
+  ]
+
+};
+
+
+let currentCategory = "";
+let currentQuestions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+let timer = null;
+let timeLeft = 20;
+let answered = false;
+
+
+function showScreen(id) {
+
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+function startQuiz(category) {
+
+  currentCategory = category;
+
+  currentQuestions = [...quizBank[category]];
+
+  currentQuestionIndex = 0;
+
+  score = 0;
+
+  showScreen("quizScreen");
+
+  loadQuestion();
+}
+
+
+function loadQuestion() {
+
+  clearInterval(timer);
+
+  answered = false;
+
+  const questionData = currentQuestions[currentQuestionIndex];
+
+  document.getElementById("quizCategory").textContent =
+    currentCategory;
+
+  document.getElementById("questionNumber").textContent =
+    "Question " +
+    (currentQuestionIndex + 1) +
+    " / " +
+    currentQuestions.length;
+
+  document.getElementById("question").textContent =
+    questionData.question;
+
+  const progress =
+    ((currentQuestionIndex) / currentQuestions.length) * 100;
+
+  document.getElementById("progress").style.width =
+    progress + "%";
+
+  const answersContainer =
+    document.getElementById("answers");
+
+  answersContainer.innerHTML = "";
+
+  questionData.answers.forEach((answer, index) => {
+
+    const button = document.createElement("button");
+
+    button.className = "answer";
+
+    button.textContent = answer;
+
+    button.onclick = () => selectAnswer(index);
+
+    answersContainer.appendChild(button);
+
+  });
+
+  document.getElementById("nextButton").classList.add("hidden");
+
+  startTimer();
+}
+
+
+function startTimer() {
+
+  timeLeft = 20;
+
+  updateTimer();
+
+  timer = setInterval(() => {
+
+    timeLeft--;
+
+    updateTimer();
+
+    if (timeLeft <= 0) {
+
+      clearInterval(timer);
+
+      if (!answered) {
+        selectAnswer(-1);
+      }
+
+    }
+
+  }, 1000);
+}
+
+
+function updateTimer() {
+
+  const timerElement =
+    document.getElementById("timer");
+
+  timerElement.textContent =
+    timeLeft + " s";
+
+  if (timeLeft <= 5) {
+    timerElement.style.background = "#ffe2e2";
+    timerElement.style.color = "#b4232d";
+  } else {
+    timerElement.style.background = "#fff2f2";
+    timerElement.style.color = "#c0392b";
+  }
+}
+
+
+function selectAnswer(selectedIndex) {
+
+  if (answered) return;
+
+  answered = true;
+
+  clearInterval(timer);
+
+  const questionData =
+    currentQuestions[currentQuestionIndex];
+
+  const buttons =
+    document.querySelectorAll(".answer");
+
+  buttons.forEach((button, index) => {
+
+    button.disabled = true;
+
+    if (index === questionData.correct) {
+      button.classList.add("correct");
+    }
+
+    if (
+      selectedIndex !== -1 &&
+      index === selectedIndex &&
+      selectedIndex !== questionData.correct
+    ) {
+      button.classList.add("wrong");
+    }
+
+  });
+
+  if (selectedIndex === questionData.correct) {
+    score++;
+  }
+
+  document
+    .getElementById("nextButton")
+    .classList.remove("hidden");
+}
+
+
+function nextQuestion() {
+
+  currentQuestionIndex++;
+
+  if (currentQuestionIndex >= currentQuestions.length) {
+    finishQuiz();
+  } else {
+    loadQuestion();
+  }
+}
+
+
+function finishQuiz() {
+
+  clearInterval(timer);
+
+  const total = currentQuestions.length;
+
+  const percentage =
+    Math.round((score / total) * 100);
+
+  saveResult(
+    currentCategory,
+    score,
+    total,
+    percentage
+  );
+
+  document.getElementById("finalScore").textContent =
+    score + " / " + total;
+
+  document.getElementById("resultCorrect").textContent =
+    score;
+
+  document.getElementById("resultWrong").textContent =
+    total - score;
+
+  document.getElementById("resultPercent").textContent =
+    percentage + "%";
+
+  let message;
+
+  if (percentage === 100) {
+    message = "Excellent ! Performance parfaite.";
+  } else if (percentage >= 80) {
+    message = "Très bon résultat. Continue ainsi !";
+  } else if (percentage >= 60) {
+    message = "Bon résultat. Encore quelques efforts.";
+  } else if (percentage >= 40) {
+    message = "Tu progresses. Continue à t'entraîner.";
+  } else {
+    message = "Ne baisse pas les bras. Chaque quiz est une occasion d'apprendre.";
+  }
+
+  document.getElementById("resultDetails").textContent =
+    message;
+
+  showScreen("resultScreen");
+}
+
+
+function saveResult(category, score, total, percentage) {
+
+  const history =
+    JSON.parse(
+      localStorage.getItem("mondoQuizHistory") || "[]"
+    );
+
+  history.unshift({
+    category: category,
+    score: score,
+    total: total,
+    percentage: percentage,
+    date: new Date().toLocaleString("fr-FR")
+  });
+
+  localStorage.setItem(
+    "mondoQuizHistory",
+    JSON.stringify(history.slice(0, 20))
+  );
+
+  const stats =
+    JSON.parse(
       localStorage.getItem("mondoQuizStats") ||
       '{"played":0,"score":0,"streak":0,"level":1}'
     );
 
-    document.getElementById("played").textContent = stats.played;
-    document.getElementById("score").textContent = stats.score;
-    document.getElementById("streak").textContent = stats.streak;
-    document.getElementById("level").textContent = stats.level;
+  stats.played++;
+  stats.score += score;
 
-    function startQuiz() {
-      alert(
-        "Le moteur de quiz sera activé dans la prochaine étape de construction de Mondo Quiz."
-      );
-    }
+  if (percentage >= 60) {
+    stats.streak++;
+  } else {
+    stats.streak = 0;
+  }
 
-    function showCategories() {
-      document.getElementById("categories").scrollIntoView({
-        behavior: "smooth"
-      });
-    }
+  stats.level =
+    Math.max(
+      1,
+      Math.floor(stats.score / 10) + 1
+    );
 
-    function showRanking() {
-      alert(
-        "Le classement sera connecté au système de scores de Mondo Quiz."
-      );
-    }
+  localStorage.setItem(
+    "mondoQuizStats",
+    JSON.stringify(stats)
+  );
+}
 
-    function selectCategory(category) {
-      alert(
-        "Catégorie sélectionnée : " + category +
-        "\\nLe moteur de questions sera connecté dans la prochaine étape."
-      );
-    }
-  </script>
+
+function restartQuiz() {
+
+  startQuiz(currentCategory);
+
+}
+
+
+function quitQuiz() {
+
+  clearInterval(timer);
+
+  goHome();
+
+}
+
+
+function goHome() {
+
+  clearInterval(timer);
+
+  showScreen("homeScreen");
+
+}
+
+
+function showHistory() {
+
+  const history =
+    JSON.parse(
+      localStorage.getItem("mondoQuizHistory") || "[]"
+    );
+
+  const container =
+    document.getElementById("historyList");
+
+  if (history.length === 0) {
+
+    container.innerHTML =
+      "<p style='color:#718096;'>Aucun quiz joué pour le moment.</p>";
+
+  } else {
+
+    container.innerHTML = "";
+
+    history.forEach(item => {
+
+      const row =
+        document.createElement("div");
+
+      row.className = "history-item";
+
+      row.innerHTML =
+        "<div><strong>" +
+        item.category +
+        "</strong><br><small>" +
+        item.date +
+        "</small></div>" +
+        "<span>" +
+        item.score +
+        "/" +
+        item.total +
+        " (" +
+        item.percentage +
+        "%)</span>";
+
+      container.appendChild(row);
+
+    });
+
+  }
+
+  showScreen("historyScreen");
+}
+
+</script>
 
 </body>
 </html>
