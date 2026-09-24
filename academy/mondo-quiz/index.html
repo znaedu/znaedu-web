@@ -1,1094 +1,1423 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mondo Quiz — plateforme de quiz de Zénith Nova Academy.">
-  <title>Mondo Quiz — Zénith Nova Academy</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b63ce">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<title>Mondo Quiz — Zénith Nova Academy</title>
 
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f4f8ff;
-      color: #12213a;
-      min-height: 100vh;
-    }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    header {
-      background: linear-gradient(135deg, #0757c9, #0b78e3);
-      color: white;
-      padding: 17px 20px;
-      box-shadow: 0 3px 12px rgba(0, 50, 120, 0.18);
-    }
+<style>
+:root{
+  --blue:#0b63ce;
+  --blue-dark:#084b9c;
+  --blue-soft:#eaf3ff;
+  --white:#fff;
+  --text:#132238;
+  --muted:#6b7a90;
+  --border:#dce6f2;
+  --green:#159447;
+  --red:#d83a3a;
+}
 
-    .header-content {
-      max-width: 1100px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-    }
+*{
+  box-sizing:border-box;
+}
 
-    .brand {
-      font-size: 22px;
-      font-weight: 800;
-    }
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f2f7fd;
+  color:var(--text);
+}
 
-    .brand small {
-      display: block;
-      font-size: 11px;
-      font-weight: 400;
-      opacity: .85;
-      margin-top: 3px;
-    }
+.top{
+  background:linear-gradient(135deg,var(--blue),#1685e8);
+  color:#fff;
+  padding:16px;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
 
-    .back-btn {
-      color: white;
-      text-decoration: none;
-      border: 1px solid rgba(255,255,255,.45);
-      padding: 9px 14px;
-      border-radius: 9px;
-      font-size: 14px;
-    }
+.topin{
+  max-width:900px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
 
-    main {
-      max-width: 900px;
-      margin: auto;
-      padding: 25px 16px 50px;
-    }
+.logo{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:#fff;
+  color:var(--blue);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:20px;
+}
 
-    .screen {
-      display: none;
-    }
+.top h1{
+  font-size:20px;
+  margin:0;
+}
 
-    .screen.active {
-      display: block;
-    }
+.top p{
+  font-size:12px;
+  margin:2px 0 0;
+  opacity:.85;
+}
 
-    .hero,
-    .quiz-box,
-    .result-box,
-    .history-box {
-      background: white;
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 5px 20px rgba(30,70,130,.08);
-    }
+main{
+  max-width:900px;
+  margin:auto;
+  padding:20px 12px 45px;
+}
 
-    .hero h1 {
-      color: #0757c9;
-      font-size: 31px;
-      margin-bottom: 10px;
-    }
+.screen{
+  display:none;
+}
 
-    .hero p {
-      color: #5b6c82;
-      line-height: 1.6;
-    }
+.screen.active{
+  display:block;
+}
 
-    .section-title {
-      margin: 25px 0 14px;
-      font-size: 21px;
-    }
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 10px 30px #123a6615;
+  margin-bottom:15px;
+}
 
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
+.eyebrow{
+  display:inline-block;
+  background:var(--blue-soft);
+  color:var(--blue);
+  padding:7px 11px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+}
 
-    .category {
-      background: white;
-      border: 1px solid #dce7f6;
-      border-radius: 12px;
-      padding: 17px;
-      cursor: pointer;
-      text-align: left;
-      transition: .2s;
-    }
+h2{
+  font-size:28px;
+  margin:14px 0 8px;
+}
 
-    .category:hover {
-      border-color: #0757c9;
-      background: #eef5ff;
-      transform: translateY(-2px);
-    }
+.lead{
+  color:var(--muted);
+  line-height:1.5;
+  margin:0;
+}
 
-    .category strong {
-      display: block;
-      color: #17345d;
-      margin-bottom: 5px;
-    }
+.cats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:14px;
+}
 
-    .category span {
-      color: #718096;
-      font-size: 13px;
-    }
+.cat{
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:15px;
+  padding:13px;
+  text-align:left;
+  font-weight:800;
+  cursor:pointer;
+}
 
-    button {
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      font-weight: 700;
-    }
+.cat.selected{
+  border:2px solid var(--blue);
+  background:var(--blue-soft);
+  color:var(--blue);
+  padding:12px;
+}
 
-    .primary {
-      background: #0757c9;
-      color: white;
-      padding: 12px 19px;
-      border-radius: 10px;
-    }
+.cat small{
+  display:block;
+  color:var(--muted);
+  font-weight:500;
+  margin-top:4px;
+}
 
-    .secondary {
-      background: #eaf2ff;
-      color: #0757c9;
-      padding: 12px 19px;
-      border-radius: 10px;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:16px;
+}
 
-    .quiz-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
+label{
+  font-size:13px;
+  font-weight:800;
+  display:block;
+  margin-bottom:7px;
+}
 
-    .quiz-category {
-      color: #0757c9;
-      font-weight: 700;
-      font-size: 14px;
-    }
+select{
+  width:100%;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:#fff;
+  font-size:15px;
+}
 
-    .timer {
-      background: #fff2f2;
-      color: #c0392b;
-      padding: 8px 12px;
-      border-radius: 9px;
-      font-weight: 800;
-    }
+button{
+  font-family:inherit;
+}
 
-    .progress-container {
-      height: 8px;
-      background: #e8eef7;
-      border-radius: 20px;
-      overflow: hidden;
-      margin-bottom: 25px;
-    }
+.primary,
+.secondary{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:14px;
+  font-weight:900;
+  font-size:15px;
+  cursor:pointer;
+  margin-top:14px;
+}
 
-    .progress {
-      height: 100%;
-      width: 0%;
-      background: #0757c9;
-      transition: width .3s;
-    }
+.primary{
+  background:var(--blue);
+  color:#fff;
+}
 
-    .question-number {
-      color: #6c7b90;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
+.primary:hover{
+  background:var(--blue-dark);
+}
 
-    .question {
-      font-size: 23px;
-      line-height: 1.4;
-      margin-bottom: 22px;
-      color: #152d4f;
-    }
+.primary:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
 
-    .answers {
-      display: grid;
-      gap: 11px;
-    }
+.secondary{
+  background:var(--blue-soft);
+  color:var(--blue);
+}
 
-    .answer {
-      width: 100%;
-      text-align: left;
-      padding: 15px;
-      background: #f8fbff;
-      border: 2px solid #e1e9f4;
-      border-radius: 11px;
-      color: #263d5c;
-      font-size: 15px;
-      transition: .15s;
-    }
+.notice{
+  margin-top:12px;
+  padding:11px 13px;
+  border-radius:12px;
+  background:#f7f9fc;
+  color:var(--muted);
+  font-size:13px;
+}
 
-    .answer:hover {
-      border-color: #75a9e8;
-      background: #eef6ff;
-    }
+.error{
+  background:#fff0f0;
+  color:#a12626;
+}
 
-    .answer.correct {
-      background: #e9f9ef;
-      border-color: #28a745;
-      color: #176b2b;
-    }
+.qhead{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:12px;
+}
 
-    .answer.wrong {
-      background: #fff0f0;
-      border-color: #dc3545;
-      color: #9b1c27;
-    }
+.pill,
+.timer{
+  padding:8px 11px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+}
 
-    .quiz-actions {
-      margin-top: 20px;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
+.pill{
+  background:var(--blue-soft);
+  color:var(--blue);
+}
 
-    .result-box {
-      text-align: center;
-    }
+.timer{
+  background:#fff3df;
+  color:#9b5a00;
+}
 
-    .result-icon {
-      font-size: 55px;
-      margin-bottom: 10px;
-    }
+.progress{
+  height:8px;
+  background:#e7eef7;
+  border-radius:99px;
+  overflow:hidden;
+  margin-bottom:15px;
+}
 
-    .result-box h2 {
-      color: #0757c9;
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
+.progress div{
+  height:100%;
+  background:linear-gradient(90deg,var(--blue),#2e9df1);
+  width:0%;
+  transition:.2s;
+}
 
-    .score {
-      font-size: 45px;
-      font-weight: 900;
-      color: #17345d;
-      margin: 15px 0;
-    }
+.qnum{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+}
 
-    .result-details {
-      color: #65758a;
-      line-height: 1.7;
-      margin-bottom: 20px;
-    }
+.question{
+  font-size:21px;
+  font-weight:850;
+  line-height:1.4;
+  margin:10px 0 18px;
+}
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 22px 0;
-    }
+.options{
+  display:grid;
+  gap:10px;
+}
 
-    .stat {
-      background: #f6f9fd;
-      border-radius: 11px;
-      padding: 15px;
-    }
+.option{
+  width:100%;
+  text-align:left;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:15px;
+  padding:14px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:700;
+}
 
-    .stat strong {
-      display: block;
-      color: #0757c9;
-      font-size: 22px;
-      margin-bottom: 5px;
-    }
+.option:hover{
+  border-color:var(--blue);
+  background:var(--blue-soft);
+}
 
-    .stat span {
-      font-size: 12px;
-      color: #728095;
-    }
+.option.correct{
+  background:#edfff3;
+  border-color:#8bd6a7;
+  color:#106a30;
+}
 
-    .history-item {
-      padding: 13px 0;
-      border-bottom: 1px solid #e8eef6;
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-    }
+.option.wrong{
+  background:#fff0f0;
+  border-color:#f0a0a0;
+  color:#a12626;
+}
 
-    .history-item:last-child {
-      border-bottom: none;
-    }
+.feedback{
+  display:none;
+  margin-top:14px;
+  padding:14px;
+  border-radius:14px;
+  line-height:1.5;
+}
 
-    .history-item strong {
-      color: #23466f;
-    }
+.feedback.show{
+  display:block;
+}
 
-    .history-item span {
-      color: #0757c9;
-      font-weight: 700;
-    }
+.feedback.correct{
+  background:#edfff3;
+  border:1px solid #b9ebc8;
+  color:#106a30;
+}
 
-    .hidden {
-      display: none !important;
-    }
+.feedback.wrong{
+  background:#fff0f0;
+  border:1px solid #ffd0d0;
+  color:#a12626;
+}
 
-    footer {
-      text-align: center;
-      color: #7b8798;
-      font-size: 13px;
-      padding: 25px;
-    }
+.result{
+  text-align:center;
+}
 
-    @media (max-width: 600px) {
-      .categories {
-        grid-template-columns: 1fr;
-      }
+.circle{
+  width:118px;
+  height:118px;
+  border-radius:50%;
+  margin:0 auto 16px;
+  background:var(--blue-soft);
+  border:8px solid #d7e9ff;
+  display:grid;
+  place-items:center;
+  color:var(--blue);
+  font-size:30px;
+  font-weight:950;
+}
 
-      .hero h1 {
-        font-size: 27px;
-      }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:18px;
+}
 
-      .question {
-        font-size: 20px;
-      }
+.stat{
+  background:#f6f9fd;
+  border-radius:14px;
+  padding:12px;
+}
 
-      .stats {
-        grid-template-columns: 1fr;
-      }
+.stat strong{
+  display:block;
+  font-size:19px;
+}
 
-      .hero,
-      .quiz-box,
-      .result-box,
-      .history-box {
-        padding: 20px;
-      }
-    }
-  </style>
+.stat span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.loading{
+  text-align:center;
+  color:var(--muted);
+  padding:15px;
+}
+
+.footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:15px;
+}
+
+@media(max-width:600px){
+
+  .cats,
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  h2{
+    font-size:25px;
+  }
+
+  .question{
+    font-size:19px;
+  }
+
+}
+</style>
 </head>
 
 <body>
 
-<header>
-  <div class="header-content">
-    <div class="brand">
-      MONDO QUIZ
-      <small>Zénith Nova Academy</small>
+<header class="top">
+  <div class="topin">
+
+    <div class="logo">M</div>
+
+    <div>
+      <h1>Mondo Quiz</h1>
+      <p>Zénith Nova Academy · ZNAEDU</p>
     </div>
 
-    <a href="../" class="back-btn">← Académie</a>
   </div>
 </header>
 
+
 <main>
 
-  <!-- ACCUEIL -->
-  <section id="homeScreen" class="screen active">
+<!-- =========================
+     ÉCRAN DE CONFIGURATION
+========================= -->
 
-    <div class="hero">
-      <h1>Bienvenue sur Mondo Quiz</h1>
+<section id="setup" class="screen active">
 
-      <p>
-        Teste tes connaissances, progresse à ton rythme et découvre
-        différents domaines grâce à des quiz interactifs.
-      </p>
-    </div>
+  <div class="card">
 
-    <h2 class="section-title">Choisis une catégorie</h2>
+    <span class="eyebrow">
+      🎓 ZÉNITH NOVA ACADEMY
+    </span>
 
-    <div class="categories">
+    <h2>
+      Teste tes connaissances.
+    </h2>
 
-      <button class="category" onclick="startQuiz('Culture générale')">
-        <strong>🌍 Culture générale</strong>
-        <span>Connaissances du monde</span>
-      </button>
+    <p class="lead">
+      Le quiz est connecté directement au moteur Mondo Quiz de Supabase.
+      Les réponses correctes ne sont pas exposées dans le navigateur avant
+      leur validation.
+    </p>
 
-      <button class="category" onclick="startQuiz('Sciences')">
-        <strong>🔬 Sciences</strong>
-        <span>Découvertes et phénomènes scientifiques</span>
-      </button>
-
-      <button class="category" onclick="startQuiz('Mathématiques')">
-        <strong>➗ Mathématiques</strong>
-        <span>Calcul, logique et raisonnement</span>
-      </button>
-
-      <button class="category" onclick="startQuiz('Histoire')">
-        <strong>📜 Histoire</strong>
-        <span>Événements et civilisations</span>
-      </button>
-
-      <button class="category" onclick="startQuiz('Géographie')">
-        <strong>🗺️ Géographie</strong>
-        <span>Pays, villes et territoires</span>
-      </button>
-
-      <button class="category" onclick="startQuiz('Français')">
-        <strong>📖 Français</strong>
-        <span>Langue, grammaire et vocabulaire</span>
-      </button>
-
-    </div>
-
-    <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;">
-      <button class="secondary" onclick="showHistory()">
-        📊 Mon historique
-      </button>
-    </div>
-
-  </section>
+  </div>
 
 
-  <!-- QUIZ -->
-  <section id="quizScreen" class="screen">
+  <div class="card">
 
-    <div class="quiz-box">
+    <label>
+      Discipline
+    </label>
 
-      <div class="quiz-top">
-        <div id="quizCategory" class="quiz-category"></div>
-        <div id="timer" class="timer">20 s</div>
-      </div>
-
-      <div class="progress-container">
-        <div id="progress" class="progress"></div>
-      </div>
-
-      <div id="questionNumber" class="question-number"></div>
-
-      <h2 id="question" class="question"></h2>
-
-      <div id="answers" class="answers"></div>
-
-      <div class="quiz-actions">
-        <button class="secondary" onclick="quitQuiz()">
-          Quitter
-        </button>
-
-        <button id="nextButton" class="primary hidden" onclick="nextQuestion()">
-          Question suivante →
-        </button>
-      </div>
-
-    </div>
-
-  </section>
+    <div id="cats" class="cats"></div>
 
 
-  <!-- RESULTAT -->
-  <section id="resultScreen" class="screen">
+    <div class="grid">
 
-    <div class="result-box">
+      <div>
 
-      <div class="result-icon">🏆</div>
+        <label for="difficulty">
+          Niveau
+        </label>
 
-      <h2>Quiz terminé</h2>
+        <select id="difficulty">
 
-      <div id="finalScore" class="score">0 / 5</div>
+          <option value="beginner">
+            Débutant
+          </option>
 
-      <div id="resultDetails" class="result-details"></div>
+          <option value="intermediate">
+            Intermédiaire
+          </option>
 
-      <div class="stats">
-
-        <div class="stat">
-          <strong id="resultCorrect">0</strong>
-          <span>Bonnes réponses</span>
-        </div>
-
-        <div class="stat">
-          <strong id="resultWrong">0</strong>
-          <span>Mauvaises réponses</span>
-        </div>
-
-        <div class="stat">
-          <strong id="resultPercent">0%</strong>
-          <span>Réussite</span>
-        </div>
+        </select>
 
       </div>
 
-      <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
-        <button class="primary" onclick="restartQuiz()">
-          Rejouer
-        </button>
 
-        <button class="secondary" onclick="goHome()">
-          Retour
-        </button>
+      <div>
+
+        <label for="count">
+          Questions
+        </label>
+
+        <select id="count">
+
+          <option value="5">
+            5 questions
+          </option>
+
+          <option value="10">
+            10 questions
+          </option>
+
+          <option value="20">
+            20 questions
+          </option>
+
+          <option value="50">
+            50 questions
+          </option>
+
+        </select>
+
       </div>
 
     </div>
 
-  </section>
+
+    <button id="start" class="primary">
+      Commencer le quiz
+    </button>
 
 
-  <!-- HISTORIQUE -->
-  <section id="historyScreen" class="screen">
+    <div id="msg" class="notice">
+      Choisis une discipline pour commencer.
+    </div>
 
-    <div class="history-box">
+  </div>
 
-      <h2 class="section-title" style="margin-top:0;">
-        Mon historique
-      </h2>
 
-      <div id="historyList"></div>
+  <div class="footer">
 
-      <button class="secondary" onclick="goHome()" style="margin-top:20px;">
-        ← Retour à Mondo Quiz
-      </button>
+    600 questions actuellement disponibles dans Supabase ·
+    100 par discipline.
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     ÉCRAN DU QUIZ
+========================= -->
+
+<section id="quiz" class="screen">
+
+  <div class="qhead">
+
+    <span id="qcat" class="pill"></span>
+
+    <span id="timer" class="timer">
+      30 s
+    </span>
+
+  </div>
+
+
+  <div class="progress">
+
+    <div id="bar"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div id="qnum" class="qnum"></div>
+
+    <div id="question" class="question"></div>
+
+    <div id="options" class="options"></div>
+
+    <div id="feedback" class="feedback"></div>
+
+    <button
+      id="next"
+      class="primary"
+      style="display:none"
+    >
+      Question suivante
+    </button>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     ÉCRAN DES RÉSULTATS
+========================= -->
+
+<section id="result" class="screen">
+
+  <div class="card result">
+
+    <div id="circle" class="circle">
+      0%
+    </div>
+
+
+    <h2 id="rtitle">
+      Quiz terminé
+    </h2>
+
+
+    <p id="rtext" class="lead"></p>
+
+
+    <div class="stats">
+
+      <div class="stat">
+
+        <strong id="score">
+          0
+        </strong>
+
+        <span>
+          Points
+        </span>
+
+      </div>
+
+
+      <div class="stat">
+
+        <strong id="answered">
+          0
+        </strong>
+
+        <span>
+          Réponses
+        </span>
+
+      </div>
+
+
+      <div class="stat">
+
+        <strong id="total">
+          0
+        </strong>
+
+        <span>
+          Questions
+        </span>
+
+      </div>
 
     </div>
 
-  </section>
+
+    <button id="replay" class="primary">
+      Rejouer
+    </button>
+
+
+    <button id="back" class="secondary">
+      Choisir une autre partie
+    </button>
+
+  </div>
+
+</section>
+
+
+<div
+  id="loading"
+  class="loading"
+  style="display:none"
+>
+  Connexion au moteur Mondo Quiz…
+</div>
 
 </main>
 
-<footer>
-  © ZNAEDU — Zénith Nova Academy — Mondo Quiz
-</footer>
 
 
 <script>
 
-const quizBank = {
+/* =========================================================
+   CONFIGURATION SUPABASE
+========================================================= */
 
-  "Culture générale": [
-    {
-      question: "Quelle est la capitale du Bénin ?",
-      answers: ["Porto-Novo", "Cotonou", "Abomey", "Parakou"],
-      correct: 0
-    },
-    {
-      question: "Combien de continents compte-t-on généralement ?",
-      answers: ["5", "6", "7", "8"],
-      correct: 2
-    },
-    {
-      question: "Quelle planète est surnommée la planète rouge ?",
-      answers: ["Vénus", "Mars", "Jupiter", "Mercure"],
-      correct: 1
-    },
-    {
-      question: "Combien de jours compte une année normale ?",
-      answers: ["360", "364", "365", "366"],
-      correct: 2
-    },
-    {
-      question: "Quel est le plus grand océan de la Terre ?",
-      answers: ["Atlantique", "Indien", "Arctique", "Pacifique"],
-      correct: 3
-    }
-  ],
+const SUPABASE_URL =
+  "https://dpxghtjhjylofxhmnfxf.supabase.co";
 
-  "Sciences": [
-    {
-      question: "Quel organe pompe le sang dans le corps humain ?",
-      answers: ["Le foie", "Le cœur", "Le poumon", "Le rein"],
-      correct: 1
-    },
-    {
-      question: "Quelle est la formule chimique de l'eau ?",
-      answers: ["CO₂", "O₂", "H₂O", "NaCl"],
-      correct: 2
-    },
-    {
-      question: "Quelle force nous maintient à la surface de la Terre ?",
-      answers: ["La gravité", "Le magnétisme", "La pression", "La lumière"],
-      correct: 0
-    },
-    {
-      question: "Quel gaz les humains respirent-ils principalement pour vivre ?",
-      answers: ["Oxygène", "Hydrogène", "Hélium", "Méthane"],
-      correct: 0
-    },
-    {
-      question: "Quelle partie de la plante absorbe principalement l'eau du sol ?",
-      answers: ["La fleur", "La feuille", "La racine", "Le fruit"],
-      correct: 2
-    }
-  ],
+const SUPABASE_KEY =
+  "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKE";
 
-  "Mathématiques": [
-    {
-      question: "Combien font 7 × 8 ?",
-      answers: ["54", "56", "58", "64"],
-      correct: 1
-    },
-    {
-      question: "Combien font 100 ÷ 4 ?",
-      answers: ["20", "25", "30", "40"],
-      correct: 1
-    },
-    {
-      question: "Quel nombre est premier ?",
-      answers: ["9", "15", "17", "21"],
-      correct: 2
-    },
-    {
-      question: "Combien font 15 + 27 ?",
-      answers: ["40", "41", "42", "43"],
-      correct: 2
-    },
-    {
-      question: "Combien font 12² ?",
-      answers: ["124", "134", "144", "154"],
-      correct: 2
-    }
-  ],
 
-  "Histoire": [
+const sb =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
     {
-      question: "Quelle civilisation a construit les pyramides de Gizeh ?",
-      answers: ["Les Romains", "Les Égyptiens", "Les Grecs", "Les Perses"],
-      correct: 1
-    },
-    {
-      question: "Dans quel pays se trouve la Grande Muraille ?",
-      answers: ["Inde", "Chine", "Japon", "Corée"],
-      correct: 1
-    },
-    {
-      question: "Quel événement marque traditionnellement la fin de l'Antiquité ?",
-      answers: [
-        "La chute de l'Empire romain d'Occident",
-        "La Révolution française",
-        "La découverte de l'Amérique",
-        "La Première Guerre mondiale"
-      ],
-      correct: 0
-    },
-    {
-      question: "Quel empire avait Rome pour capitale ?",
-      answers: [
-        "Empire romain",
-        "Empire mongol",
-        "Empire aztèque",
-        "Empire du Mali"
-      ],
-      correct: 0
-    },
-    {
-      question: "Quel célèbre souverain du Mali est connu pour sa grande richesse ?",
-      answers: [
-        "Soundiata Keïta",
-        "Mansa Moussa",
-        "Askia Mohammed",
-        "Samory Touré"
-      ],
-      correct: 1
+      auth:{
+        autoRefreshToken:true,
+        persistSession:true,
+        detectSessionInUrl:true
+      }
     }
-  ],
+  );
 
-  "Géographie": [
-    {
-      question: "Quel est le plus grand pays du monde par superficie ?",
-      answers: ["Canada", "Chine", "Russie", "États-Unis"],
-      correct: 2
-    },
-    {
-      question: "Sur quel continent se trouve le Bénin ?",
-      answers: ["Asie", "Afrique", "Europe", "Amérique"],
-      correct: 1
-    },
-    {
-      question: "Quelle est la capitale du Ghana ?",
-      answers: ["Accra", "Kumasi", "Lomé", "Abuja"],
-      correct: 0
-    },
-    {
-      question: "Quel océan borde la côte sud du Bénin ?",
-      answers: [
-        "Océan Atlantique",
-        "Océan Indien",
-        "Océan Pacifique",
-        "Océan Arctique"
-      ],
-      correct: 0
-    },
-    {
-      question: "Quel pays est situé à l'est du Bénin ?",
-      answers: ["Togo", "Nigeria", "Ghana", "Niger"],
-      correct: 1
-    }
-  ],
 
-  "Français": [
-    {
-      question: "Quel est le pluriel de « cheval » ?",
-      answers: ["Chevals", "Chevaux", "Chevals", "Chevaus"],
-      correct: 1
-    },
-    {
-      question: "Quel mot est un verbe ?",
-      answers: ["Maison", "Rapidement", "Courir", "Bleu"],
-      correct: 2
-    },
-    {
-      question: "Quel est le contraire de « difficile » ?",
-      answers: ["Compliqué", "Facile", "Long", "Fort"],
-      correct: 1
-    },
-    {
-      question: "Dans « Les enfants jouent », quel est le sujet ?",
-      answers: ["Les", "Enfants", "Jouent", "Les enfants"],
-      correct: 3
-    },
-    {
-      question: "Quel mot est correctement écrit ?",
-      answers: ["Aparament", "Apparemment", "Aparrement", "Apparement"],
-      correct: 1
-    }
-  ]
+/* =========================================================
+   DONNÉES DU QUIZ
+========================================================= */
+
+const categories = [
+
+  ["Culture générale","🧠"],
+
+  ["Sciences","🔬"],
+
+  ["Mathématiques","📐"],
+
+  ["Histoire","🏛️"],
+
+  ["Géographie","🌍"],
+
+  ["Français","📚"]
+
+];
+
+
+const state = {
+
+  category:null,
+
+  difficulty:"beginner",
+
+  count:5,
+
+  session:null,
+
+  questions:[],
+
+  index:0,
+
+  score:0,
+
+  answered:0,
+
+  locked:false,
+
+  timer:null,
+
+  seconds:30
 
 };
 
 
-let currentCategory = "";
-let currentQuestions = [];
-let currentQuestionIndex = 0;
-let score = 0;
-let timer = null;
-let timeLeft = 20;
-let answered = false;
+/* =========================================================
+   OUTILS
+========================================================= */
 
+const $ = id =>
+  document.getElementById(id);
 
-function showScreen(id) {
 
-  document.querySelectorAll(".screen").forEach(screen => {
-    screen.classList.remove("active");
-  });
-
-  document.getElementById(id).classList.add("active");
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-
-function startQuiz(category) {
-
-  currentCategory = category;
-
-  currentQuestions = [...quizBank[category]];
-
-  currentQuestionIndex = 0;
-
-  score = 0;
-
-  showScreen("quizScreen");
-
-  loadQuestion();
-}
-
-
-function loadQuestion() {
-
-  clearInterval(timer);
-
-  answered = false;
-
-  const questionData = currentQuestions[currentQuestionIndex];
-
-  document.getElementById("quizCategory").textContent =
-    currentCategory;
-
-  document.getElementById("questionNumber").textContent =
-    "Question " +
-    (currentQuestionIndex + 1) +
-    " / " +
-    currentQuestions.length;
-
-  document.getElementById("question").textContent =
-    questionData.question;
-
-  const progress =
-    ((currentQuestionIndex) / currentQuestions.length) * 100;
-
-  document.getElementById("progress").style.width =
-    progress + "%";
-
-  const answersContainer =
-    document.getElementById("answers");
-
-  answersContainer.innerHTML = "";
-
-  questionData.answers.forEach((answer, index) => {
-
-    const button = document.createElement("button");
-
-    button.className = "answer";
-
-    button.textContent = answer;
-
-    button.onclick = () => selectAnswer(index);
-
-    answersContainer.appendChild(button);
-
-  });
-
-  document.getElementById("nextButton").classList.add("hidden");
-
-  startTimer();
-}
-
-
-function startTimer() {
-
-  timeLeft = 20;
-
-  updateTimer();
-
-  timer = setInterval(() => {
-
-    timeLeft--;
-
-    updateTimer();
-
-    if (timeLeft <= 0) {
-
-      clearInterval(timer);
-
-      if (!answered) {
-        selectAnswer(-1);
-      }
-
-    }
-
-  }, 1000);
-}
-
-
-function updateTimer() {
-
-  const timerElement =
-    document.getElementById("timer");
-
-  timerElement.textContent =
-    timeLeft + " s";
-
-  if (timeLeft <= 5) {
-    timerElement.style.background = "#ffe2e2";
-    timerElement.style.color = "#b4232d";
-  } else {
-    timerElement.style.background = "#fff2f2";
-    timerElement.style.color = "#c0392b";
-  }
-}
-
-
-function selectAnswer(selectedIndex) {
-
-  if (answered) return;
-
-  answered = true;
-
-  clearInterval(timer);
-
-  const questionData =
-    currentQuestions[currentQuestionIndex];
-
-  const buttons =
-    document.querySelectorAll(".answer");
-
-  buttons.forEach((button, index) => {
-
-    button.disabled = true;
-
-    if (index === questionData.correct) {
-      button.classList.add("correct");
-    }
-
-    if (
-      selectedIndex !== -1 &&
-      index === selectedIndex &&
-      selectedIndex !== questionData.correct
-    ) {
-      button.classList.add("wrong");
-    }
-
-  });
-
-  if (selectedIndex === questionData.correct) {
-    score++;
-  }
+function showScreen(id){
 
   document
-    .getElementById("nextButton")
-    .classList.remove("hidden");
-}
-
-
-function nextQuestion() {
-
-  currentQuestionIndex++;
-
-  if (currentQuestionIndex >= currentQuestions.length) {
-    finishQuiz();
-  } else {
-    loadQuestion();
-  }
-}
-
-
-function finishQuiz() {
-
-  clearInterval(timer);
-
-  const total = currentQuestions.length;
-
-  const percentage =
-    Math.round((score / total) * 100);
-
-  saveResult(
-    currentCategory,
-    score,
-    total,
-    percentage
-  );
-
-  document.getElementById("finalScore").textContent =
-    score + " / " + total;
-
-  document.getElementById("resultCorrect").textContent =
-    score;
-
-  document.getElementById("resultWrong").textContent =
-    total - score;
-
-  document.getElementById("resultPercent").textContent =
-    percentage + "%";
-
-  let message;
-
-  if (percentage === 100) {
-    message = "Excellent ! Performance parfaite.";
-  } else if (percentage >= 80) {
-    message = "Très bon résultat. Continue ainsi !";
-  } else if (percentage >= 60) {
-    message = "Bon résultat. Encore quelques efforts.";
-  } else if (percentage >= 40) {
-    message = "Tu progresses. Continue à t'entraîner.";
-  } else {
-    message = "Ne baisse pas les bras. Chaque quiz est une occasion d'apprendre.";
-  }
-
-  document.getElementById("resultDetails").textContent =
-    message;
-
-  showScreen("resultScreen");
-}
-
-
-function saveResult(category, score, total, percentage) {
-
-  const history =
-    JSON.parse(
-      localStorage.getItem("mondoQuizHistory") || "[]"
+    .querySelectorAll(".screen")
+    .forEach(
+      element =>
+        element.classList.remove("active")
     );
 
-  history.unshift({
-    category: category,
-    score: score,
-    total: total,
-    percentage: percentage,
-    date: new Date().toLocaleString("fr-FR")
-  });
-
-  localStorage.setItem(
-    "mondoQuizHistory",
-    JSON.stringify(history.slice(0, 20))
-  );
-
-  const stats =
-    JSON.parse(
-      localStorage.getItem("mondoQuizStats") ||
-      '{"played":0,"score":0,"streak":0,"level":1}'
-    );
-
-  stats.played++;
-  stats.score += score;
-
-  if (percentage >= 60) {
-    stats.streak++;
-  } else {
-    stats.streak = 0;
-  }
-
-  stats.level =
-    Math.max(
-      1,
-      Math.floor(stats.score / 10) + 1
-    );
-
-  localStorage.setItem(
-    "mondoQuizStats",
-    JSON.stringify(stats)
-  );
-}
-
-
-function restartQuiz() {
-
-  startQuiz(currentCategory);
+  $(id).classList.add("active");
 
 }
 
 
-function quitQuiz() {
+function setLoading(value){
 
-  clearInterval(timer);
+  $("loading").style.display =
+    value ? "block" : "none";
 
-  goHome();
-
-}
-
-
-function goHome() {
-
-  clearInterval(timer);
-
-  showScreen("homeScreen");
+  $("start").disabled = value;
 
 }
 
 
-function showHistory() {
+function escapeHTML(value){
 
-  const history =
-    JSON.parse(
-      localStorage.getItem("mondoQuizHistory") || "[]"
-    );
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
-  const container =
-    document.getElementById("historyList");
+}
 
-  if (history.length === 0) {
 
-    container.innerHTML =
-      "<p style='color:#718096;'>Aucun quiz joué pour le moment.</p>";
+/* =========================================================
+   CATÉGORIES
+========================================================= */
 
-  } else {
+function initializeCategories(){
 
-    container.innerHTML = "";
+  $("cats").innerHTML =
+    categories
+      .map(category => {
 
-    history.forEach(item => {
+        return `
+          <button
+            class="cat"
+            data-category="${escapeHTML(category[0])}"
+          >
+            ${category[1]} ${escapeHTML(category[0])}
 
-      const row =
-        document.createElement("div");
+            <small>
+              100 questions disponibles
+            </small>
+          </button>
+        `;
 
-      row.className = "history-item";
+      })
+      .join("");
 
-      row.innerHTML =
-        "<div><strong>" +
-        item.category +
-        "</strong><br><small>" +
-        item.date +
-        "</small></div>" +
-        "<span>" +
-        item.score +
-        "/" +
-        item.total +
-        " (" +
-        item.percentage +
-        "%)</span>";
 
-      container.appendChild(row);
+  document
+    .querySelectorAll(".cat")
+    .forEach(button => {
+
+      button.onclick = () => {
+
+        document
+          .querySelectorAll(".cat")
+          .forEach(
+            element =>
+              element.classList.remove("selected")
+          );
+
+
+        button.classList.add("selected");
+
+
+        state.category =
+          button.dataset.category;
+
+
+        $("msg").className =
+          "notice";
+
+
+        $("msg").textContent =
+          state.category +
+          " sélectionné.";
+
+      };
 
     });
 
+}
+
+
+/* =========================================================
+   DÉMARRAGE D'UNE PARTIE
+========================================================= */
+
+async function startQuiz(){
+
+  if(!state.category){
+
+    $("msg").className =
+      "notice error";
+
+    $("msg").textContent =
+      "Sélectionne d’abord une discipline.";
+
+    return;
+
   }
 
-  showScreen("historyScreen");
+
+  state.difficulty =
+    $("difficulty").value;
+
+
+  state.count =
+    Number($("count").value);
+
+
+  state.index = 0;
+
+  state.score = 0;
+
+  state.answered = 0;
+
+  state.locked = false;
+
+
+  setLoading(true);
+
+
+  try{
+
+    const { data, error } =
+      await sb.rpc(
+        "mondo_quiz_start",
+        {
+          p_category:
+            state.category,
+
+          p_difficulty:
+            state.difficulty,
+
+          p_question_count:
+            state.count
+        }
+      );
+
+
+    if(error){
+      throw error;
+    }
+
+
+    if(
+      !data ||
+      !data.session_id ||
+      !Array.isArray(data.questions) ||
+      !data.questions.length
+    ){
+
+      throw new Error(
+        "Réponse serveur invalide."
+      );
+
+    }
+
+
+    state.session =
+      data.session_id;
+
+
+    state.questions =
+      data.questions;
+
+
+    $("qcat").textContent =
+      data.category +
+      " · " +
+      (
+        data.difficulty === "beginner"
+          ? "Débutant"
+          : "Intermédiaire"
+      );
+
+
+    showScreen("quiz");
+
+
+    renderQuestion();
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+
+    $("msg").className =
+      "notice error";
+
+
+    $("msg").textContent =
+      "Le moteur Mondo Quiz n’a pas pu démarrer cette partie. Réessaie.";
+
+  }
+
+  finally{
+
+    setLoading(false);
+
+  }
+
 }
+
+
+/* =========================================================
+   CHRONOMÈTRE
+========================================================= */
+
+function startTimer(){
+
+  clearInterval(state.timer);
+
+
+  state.seconds = 30;
+
+
+  $("timer").textContent =
+    "30 s";
+
+
+  state.timer =
+    setInterval(() => {
+
+      state.seconds--;
+
+
+      $("timer").textContent =
+        state.seconds + " s";
+
+
+      if(state.seconds <= 0){
+
+        clearInterval(state.timer);
+
+
+        submitAnswer(null,true);
+
+      }
+
+    },1000);
+
+}
+
+
+/* =========================================================
+   AFFICHAGE D'UNE QUESTION
+========================================================= */
+
+function renderQuestion(){
+
+  clearInterval(state.timer);
+
+
+  const question =
+    state.questions[state.index];
+
+
+  state.locked = false;
+
+
+  $("qnum").textContent =
+    `Question ${
+      state.index + 1
+    } sur ${
+      state.questions.length
+    }`;
+
+
+  $("question").textContent =
+    question.question;
+
+
+  $("bar").style.width =
+    (
+      state.index /
+      state.questions.length *
+      100
+    ) + "%";
+
+
+  $("feedback").className =
+    "feedback";
+
+
+  $("feedback").textContent =
+    "";
+
+
+  $("next").style.display =
+    "none";
+
+
+  const options =
+    Array.isArray(question.options)
+      ? question.options
+      : [];
+
+
+  $("options").innerHTML =
+    options
+      .map((option,index) => {
+
+        return `
+          <button
+            class="option"
+            data-index="${index}"
+          >
+            ${escapeHTML(option)}
+          </button>
+        `;
+
+      })
+      .join("");
+
+
+  document
+    .querySelectorAll(".option")
+    .forEach(button => {
+
+      button.onclick = () => {
+
+        const index =
+          Number(button.dataset.index);
+
+
+        submitAnswer(
+          options[index],
+          false
+        );
+
+      };
+
+    });
+
+
+  startTimer();
+
+}
+
+
+/* =========================================================
+   ENVOI D'UNE RÉPONSE
+========================================================= */
+
+async function submitAnswer(
+  answer,
+  timeout
+){
+
+  if(state.locked){
+    return;
+  }
+
+
+  state.locked = true;
+
+
+  clearInterval(state.timer);
+
+
+  const question =
+    state.questions[state.index];
+
+
+  try{
+
+    const { data, error } =
+      await sb.rpc(
+        "mondo_quiz_submit_answer",
+        {
+          p_session_id:
+            state.session,
+
+          p_question_id:
+            question.id,
+
+          p_answer:
+            answer
+        }
+      );
+
+
+    if(error){
+      throw error;
+    }
+
+
+    state.score =
+      Number(data?.score || 0);
+
+
+    state.answered =
+      Number(
+        data?.answered_count ||
+        state.answered + 1
+      );
+
+
+    const correct =
+      data?.correct === true;
+
+
+    $("feedback").className =
+      "feedback show " +
+      (
+        correct
+          ? "correct"
+          : "wrong"
+      );
+
+
+    $("feedback").textContent =
+      (
+        timeout
+          ? "Temps écoulé. "
+          : ""
+      ) +
+
+      (
+        correct
+          ? "Bonne réponse. "
+          : "Réponse incorrecte. "
+      ) +
+
+      (
+        data?.explanation || ""
+      ) +
+
+      " Réponse correcte : " +
+
+      (
+        data?.correct_answer || ""
+      );
+
+
+    document
+      .querySelectorAll(".option")
+      .forEach(button => {
+
+        if(
+          button.textContent.trim() ===
+          String(
+            data?.correct_answer ?? ""
+          ).trim()
+        ){
+
+          button.classList.add("correct");
+
+        }
+
+
+        if(
+          !correct &&
+          button.textContent.trim() ===
+          String(answer ?? "").trim()
+        ){
+
+          button.classList.add("wrong");
+
+        }
+
+      });
+
+
+    $("bar").style.width =
+      (
+        (state.index + 1) /
+        state.questions.length *
+        100
+      ) + "%";
+
+
+    $("next").textContent =
+      state.index + 1 >=
+      state.questions.length
+
+        ? "Voir le résultat"
+
+        : "Question suivante";
+
+
+    $("next").style.display =
+      "block";
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+
+    state.locked = false;
+
+
+    $("feedback").className =
+      "feedback show wrong";
+
+
+    $("feedback").textContent =
+      "La validation a échoué. Aucun score local n’a été appliqué.";
+
+  }
+
+}
+
+
+/* =========================================================
+   QUESTION SUIVANTE
+========================================================= */
+
+function nextQuestion(){
+
+  if(
+    state.index + 1 >=
+    state.questions.length
+  ){
+
+    showResult();
+
+    return;
+
+  }
+
+
+  state.index++;
+
+
+  renderQuestion();
+
+}
+
+
+/* =========================================================
+   RÉSULTAT
+========================================================= */
+
+function showResult(){
+
+  clearInterval(state.timer);
+
+
+  const total =
+    state.questions.length;
+
+
+  const percentage =
+    total
+      ? Math.round(
+          state.score /
+          total *
+          100
+        )
+      : 0;
+
+
+  $("circle").textContent =
+    percentage + "%";
+
+
+  $("score").textContent =
+    state.score;
+
+
+  $("answered").textContent =
+    state.answered;
+
+
+  $("total").textContent =
+    total;
+
+
+  if(percentage >= 80){
+
+    $("rtitle").textContent =
+      "Excellent travail !";
+
+  }
+
+  else if(percentage >= 60){
+
+    $("rtitle").textContent =
+      "Très bon parcours.";
+
+  }
+
+  else if(percentage >= 40){
+
+    $("rtitle").textContent =
+      "Bonne progression.";
+
+  }
+
+  else{
+
+    $("rtitle").textContent =
+      "Continue à t’entraîner.";
+
+  }
+
+
+  $("rtext").textContent =
+    `${state.category} · ${
+      state.difficulty === "beginner"
+        ? "Débutant"
+        : "Intermédiaire"
+    } · score ${
+      state.score
+    }/${total}.`;
+
+
+  showScreen("result");
+
+}
+
+
+/* =========================================================
+   BOUTONS
+========================================================= */
+
+$("start").onclick =
+  startQuiz;
+
+
+$("next").onclick =
+  nextQuestion;
+
+
+$("replay").onclick =
+  startQuiz;
+
+
+$("back").onclick = () => {
+
+  clearInterval(state.timer);
+
+  showScreen("setup");
+
+};
+
+
+/* =========================================================
+   INITIALISATION
+========================================================= */
+
+initializeCategories();
 
 </script>
 
