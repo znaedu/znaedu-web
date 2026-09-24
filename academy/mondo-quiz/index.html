@@ -1,1 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mondo Quiz — quiz éducatifs et défis de connaissances de Zénith Nova Academy.">
+  <title>Mondo Quiz — Zénith Nova Academy</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f8ff;
+      color: #12213a;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0757c9, #0b78e3);
+      color: white;
+      padding: 18px 20px;
+      box-shadow: 0 3px 12px rgba(0, 50, 120, 0.18);
+    }
+
+    .header-content {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      opacity: 0.85;
+      margin-top: 3px;
+    }
+
+    .back-btn {
+      color: white;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.45);
+      padding: 9px 14px;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 18px 50px;
+    }
+
+    .hero {
+      background: white;
+      border-radius: 18px;
+      padding: 30px 24px;
+      box-shadow: 0 5px 20px rgba(30, 70, 130, 0.08);
+      margin-bottom: 25px;
+    }
+
+    .hero h1 {
+      color: #0757c9;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #53657d;
+      line-height: 1.6;
+      max-width: 720px;
+    }
+
+    .hero-actions {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 12px 18px;
+    }
+
+    .primary {
+      background: #0757c9;
+      color: white;
+    }
+
+    .secondary {
+      background: #eaf2ff;
+      color: #0757c9;
+    }
+
+    .section-title {
+      margin: 28px 0 14px;
+      font-size: 21px;
+      color: #12213a;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 21px;
+      box-shadow: 0 4px 16px rgba(30, 70, 130, 0.07);
+      border: 1px solid #e7eef8;
+    }
+
+    .icon {
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #eaf2ff;
+      border-radius: 12px;
+      font-size: 22px;
+      margin-bottom: 14px;
+    }
+
+    .card h3 {
+      margin-bottom: 8px;
+      color: #17345d;
+    }
+
+    .card p {
+      color: #68788e;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .card button {
+      width: 100%;
+    }
+
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .category {
+      background: white;
+      border: 1px solid #dce7f6;
+      color: #245184;
+      padding: 10px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .category:hover {
+      background: #eaf2ff;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .stat {
+      background: white;
+      border-radius: 13px;
+      padding: 18px;
+      text-align: center;
+      border: 1px solid #e7eef8;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 24px;
+      color: #0757c9;
+      margin-bottom: 5px;
+    }
+
+    .stat span {
+      color: #718096;
+      font-size: 13px;
+    }
+
+    .notice {
+      margin-top: 25px;
+      background: #eef6ff;
+      border-left: 4px solid #0757c9;
+      padding: 16px;
+      border-radius: 8px;
+      color: #3b5575;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      color: #7b8798;
+      font-size: 13px;
+      padding: 25px 15px;
+    }
+
+    @media (max-width: 800px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero h1 {
+        font-size: 27px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-content {
+        align-items: flex-start;
+      }
+
+      .back-btn {
+        font-size: 12px;
+        padding: 8px 10px;
+      }
+
+      main {
+        padding-top: 20px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-content">
+      <div class="brand">
+        MONDO QUIZ
+        <small>Zénith Nova Academy</small>
+      </div>
+
+      <a class="back-btn" href="../">← Académie</a>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <h1>Bienvenue sur Mondo Quiz</h1>
+
+      <p>
+        Teste tes connaissances, apprends de nouvelles choses et
+        progresse à travers des quiz organisés par thèmes et niveaux.
+      </p>
+
+      <div class="hero-actions">
+        <button class="primary" onclick="startQuiz()">
+          Commencer un quiz
+        </button>
+
+        <button class="secondary" onclick="showCategories()">
+          Voir les catégories
+        </button>
+      </div>
+    </section>
+
+    <h2 class="section-title">Explorer Mondo Quiz</h2>
+
+    <section class="cards">
+
+      <article class="card">
+        <div class="icon">🎯</div>
+
+        <h3>Quiz du jour</h3>
+
+        <p>
+          Un nouveau défi pour tester rapidement tes connaissances.
+        </p>
+
+        <button class="primary" onclick="startQuiz()">
+          Jouer
+        </button>
+      </article>
+
+      <article class="card">
+        <div class="icon">📚</div>
+
+        <h3>Catégories</h3>
+
+        <p>
+          Choisis un domaine et entraîne-toi selon tes centres d'intérêt.
+        </p>
+
+        <button class="secondary" onclick="showCategories()">
+          Explorer
+        </button>
+      </article>
+
+      <article class="card">
+        <div class="icon">🏆</div>
+
+        <h3>Classement</h3>
+
+        <p>
+          Suis tes performances et découvre ton évolution au fil des quiz.
+        </p>
+
+        <button class="secondary" onclick="showRanking()">
+          Voir le classement
+        </button>
+      </article>
+
+    </section>
+
+    <h2 class="section-title">Catégories</h2>
+
+    <section class="categories" id="categories">
+
+      <button class="category" onclick="selectCategory('Culture générale')">
+        Culture générale
+      </button>
+
+      <button class="category" onclick="selectCategory('Sciences')">
+        Sciences
+      </button>
+
+      <button class="category" onclick="selectCategory('Mathématiques')">
+        Mathématiques
+      </button>
+
+      <button class="category" onclick="selectCategory('Histoire')">
+        Histoire
+      </button>
+
+      <button class="category" onclick="selectCategory('Géographie')">
+        Géographie
+      </button>
+
+      <button class="category" onclick="selectCategory('Français')">
+        Français
+      </button>
+
+      <button class="category" onclick="selectCategory('Anglais')">
+        Anglais
+      </button>
+
+      <button class="category" onclick="selectCategory('Informatique')">
+        Informatique
+      </button>
+
+    </section>
+
+    <h2 class="section-title">Votre activité</h2>
+
+    <section class="stats">
+
+      <div class="stat">
+        <strong id="played">0</strong>
+        <span>Quiz joués</span>
+      </div>
+
+      <div class="stat">
+        <strong id="score">0</strong>
+        <span>Points</span>
+      </div>
+
+      <div class="stat">
+        <strong id="streak">0</strong>
+        <span>Série actuelle</span>
+      </div>
+
+      <div class="stat">
+        <strong id="level">1</strong>
+        <span>Niveau</span>
+      </div>
+
+    </section>
+
+    <div class="notice">
+      <strong>Mondo Quiz évoluera progressivement.</strong><br>
+      Cette première interface constitue la base du module.
+      Les quiz réels, les comptes utilisateurs, les scores,
+      l'historique et les autres fonctions seront ensuite reliés
+      au système central ZNAEDU.
+    </div>
+
+  </main>
+
+  <footer>
+    © ZNAEDU — Zénith Nova Academy — Mondo Quiz
+  </footer>
+
+  <script>
+    const stats = JSON.parse(
+      localStorage.getItem("mondoQuizStats") ||
+      '{"played":0,"score":0,"streak":0,"level":1}'
+    );
+
+    document.getElementById("played").textContent = stats.played;
+    document.getElementById("score").textContent = stats.score;
+    document.getElementById("streak").textContent = stats.streak;
+    document.getElementById("level").textContent = stats.level;
+
+    function startQuiz() {
+      alert(
+        "Le moteur de quiz sera activé dans la prochaine étape de construction de Mondo Quiz."
+      );
+    }
+
+    function showCategories() {
+      document.getElementById("categories").scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+
+    function showRanking() {
+      alert(
+        "Le classement sera connecté au système de scores de Mondo Quiz."
+      );
+    }
+
+    function selectCategory(category) {
+      alert(
+        "Catégorie sélectionnée : " + category +
+        "\\nLe moteur de questions sera connecté dans la prochaine étape."
+      );
+    }
+  </script>
+
+</body>
+</html>
