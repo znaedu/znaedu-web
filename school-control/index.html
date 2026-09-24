@@ -1,1 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SCHOOL CONTROL — ZNAEDU</title>
+  <style>
+    * { box-sizing: border-box; }
 
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f8fc;
+      color: #17243a;
+    }
+
+    header {
+      background: #0b4ea2;
+      color: white;
+      padding: 22px 18px;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 25px;
+    }
+
+    header p {
+      margin: 0;
+      opacity: .92;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 24px 18px;
+    }
+
+    .welcome {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 25px rgba(16,35,63,.08);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #dce7f5;
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 19px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 11px 16px;
+      border-radius: 10px;
+      background: #0b4ea2;
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>SCHOOL CONTROL</h1>
+    <p>Organiser • Suivre • Contrôler</p>
+  </header>
+
+  <main>
+    <section class="welcome">
+      <h2>Bienvenue dans SCHOOL CONTROL</h2>
+
+      <p>
+        L'espace de gestion et de suivi des établissements scolaires
+        intégré à ZNAEDU.
+      </p>
+
+      <div class="cards">
+        <div class="card">
+          <h2>🏫 Établissements</h2>
+          <p>Gérer les établissements et leur organisation.</p>
+        </div>
+
+        <div class="card">
+          <h2>👨‍🏫 Enseignants</h2>
+          <p>Gérer les enseignants et leurs activités scolaires.</p>
+        </div>
+
+        <div class="card">
+          <h2>🎓 Apprenants</h2>
+          <p>Suivre les apprenants et leur présence.</p>
+        </div>
+
+        <div class="card">
+          <h2>📚 Cours</h2>
+          <p>Organiser les cours, matières et emplois du temps.</p>
+        </div>
+
+        <div class="card">
+          <h2>🟢 Présences</h2>
+          <p>Suivre les présences, absences et cas particuliers.</p>
+        </div>
+
+        <div class="card">
+          <h2>📊 Statistiques</h2>
+          <p>Consulter les données et indicateurs de l'établissement.</p>
+        </div>
+      </div>
+
+      <a class="back" href="../index.html">← Retour à ZNAEDU</a>
+    </section>
+  </main>
+</body>
+</html>
