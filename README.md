@@ -1,11 +1,35 @@
-# ZNAEDU Web V3 — Portail connecté
+# ZNAEDU Web V4
 
-Frontend mobile-first du portail ZNAEDU connecté au backend Supabase.
+Version corrigée du portail ZNAEDU.
 
-Connexions : Supabase Auth, `platform_catalog`, `search_public_znaedu()`, Edge Function `znaedu-portal` et snapshot `get_my_znaedu_portal()`.
+Cette version affiche toujours les trois univers principaux même si le catalogue Supabase ou une fonction distante est momentanément indisponible.
 
-Univers préparés : `/academy`, `/bon-plan-229`, `/school-control`.
+Supabase est ensuite utilisé pour enrichir le portail.
 
-Le frontend utilise uniquement la clé publishable Supabase. Aucune service_role key n'est incluse.
+## Univers ZNAEDU
 
-Le package doit encore être déployé sur l'hébergement web choisi pour devenir le portail public. Les interfaces internes des trois univers doivent ensuite être raccordées à leurs routes réelles.
+- Zénith Nova Academy
+- BON PLAN 229
+- SCHOOL CONTROL
+
+## Déploiement GitHub Pages
+
+1. Remplacer les anciens fichiers du dépôt par ceux de cette version.
+2. Conserver `index.html`, `style.css`, `app.js` et `README.md` à la racine du dépôt.
+3. Cliquer sur **Commit changes**.
+4. Ouvrir l'URL GitHub Pages.
+5. Effectuer un rechargement de la page.
+
+## Supabase
+
+Le portail utilise Supabase pour :
+
+- l'authentification ;
+- le catalogue des plateformes ;
+- le portail personnel ;
+- la recherche globale ;
+- les fonctions ZNAEDU.
+
+La clé présente dans `app.js` est une clé publishable destinée au navigateur.
+
+Aucune clé secrète ou service-role ne doit être placée dans GitHub.
