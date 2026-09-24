@@ -11,103 +11,28 @@ const supabase =
   );
 
 
-const fallbackPlatforms = [
-
-  {
-    code: "academy",
-    name: "Zénith Nova Academy",
-    short_description: "Apprendre • Enseigner • Progresser",
-    description:
-      "Cours, quiz et espaces dédiés aux apprenants et enseignants.",
-    route: "/academy",
-    icon: "🎓"
-  },
-
-  {
-    code: "bon_plan_229",
-    name: "BON PLAN 229",
-    short_description: "Acheter • Vendre • Développer",
-    description:
-      "Marketplace pour découvrir, acheter, vendre et développer son activité.",
-    route: "/bon-plan-229",
-    icon: "🛍️"
-  },
-
-  {
-    code: "school_control",
-    name: "SCHOOL CONTROL",
-    short_description: "Organiser • Suivre • Contrôler",
-    description:
-      "Gestion et suivi des établissements, enseignants, apprenants et présences.",
-    route: "/school-control",
-    icon: "🏫"
-  }
-
-];
-
-
 const $ = id =>
   document.getElementById(id);
 
 
-function showToast(message) {
-
-  $("toast").textContent = message;
-
-  $("toast").classList.remove("hidden");
-
-  setTimeout(() => {
-    $("toast").classList.add("hidden");
-  }, 3500);
-
-}
-
-
-function renderPlatforms(items = fallbackPlatforms) {
-
-  $("platforms").innerHTML = items.map(p => `
-
-    <a
-      class="platform-card"
-      href="${p.route || "#"}"
-    >
-
-      <div class="platform-icon">
-        ${p.icon || "◈"}
-      </div>
-
-      <h3>
-        ${p.name}
-      </h3>
-
-      <p>
-        <strong>
-          ${p.short_description || ""}
-        </strong>
-      </p>
-
-      <p>
-        ${p.description || ""}
-      </p>
-
-      <span class="route">
-        Ouvrir l'espace →
-      </span>
-
-    </a>
-
-  `).join("");
-
-}
+const esc = value =>
+  String(value ?? "").replace(
+    /[&<>"']/g,
+    char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    }[char])
+  );
 
 
+/*
+ * Les univers sont déjà dans index.html.
+ * Cette fonction ne les efface jamais.
+ */
 async function loadPlatforms() {
-
-  /*
-   * Les trois univers sont immédiatement affichés
-   * grâce au catalogue de secours.
-   */
-  renderPlatforms();
 
   try {
 
@@ -117,25 +42,109 @@ async function loadPlatforms() {
     } = await supabase
       .from("platform_catalog")
       .select(
-        "code,name,short_description,description,route,icon"
+        "code,name,short_description,route,icon,status"
       )
       .eq("status", "active")
       .order("sort_order");
 
-    if (!error && data && data.length) {
 
-      renderPlatforms(data);
-
+    if (error || !data || !data.length) {
+      return;
     }
 
-  } catch (e) {
+
+    /*
+     * Si Supabase répond correctement,
+     * on peut enrichir les cartes.
+     * Sinon les cartes HTML restent intactes.
+     */
+    const container =
+      $("platforms");
+
+
+    if (!container) {
+      return;
+    }
+
+
+    container.innerHTML =
+      data.map(platform => `
+
+        <article class="card">
+
+          <div class="small">
+            ${esc(platform.icon || "ZNAEDU")}
+          </div>
+
+          <h3>
+            ${esc(platform.name)}
+          </h3>
+
+          <p>
+            ${esc(
+              platform.short_description || ""
+            )}
+          </p>
+
+          <button
+            data-route="${esc(
+              platform.route || "#"
+            )}"
+            class="btn btn-light open-platform"
+            type="button"
+          >
+            Ouvrir
+          </button>
+
+        </article>
+
+      `).join("");
+
+
+    bindPlatformButtons();
+
+  } catch (error) {
+
+    /*
+     * Très important :
+     * ne rien remplacer en cas d'erreur.
+     * Les cartes HTML restent visibles.
+     */
 
     console.warn(
-      "Catalogue distant indisponible, fallback conservé.",
-      e
+      "Catalogue Supabase indisponible.",
+      error
     );
 
   }
+
+}
+
+
+function bindPlatformButtons() {
+
+  document
+    .querySelectorAll(".open-platform")
+    .forEach(button => {
+
+      button.onclick = () => {
+
+        const route =
+          button.dataset.route;
+
+
+        if (
+          route &&
+          route !== "#"
+        ) {
+
+          location.href = route;
+
+        }
+
+      };
+
+    });
 
 }
 
@@ -145,31 +154,81 @@ async function loadPortal() {
   try {
 
     const {
+      data: {
+        session
+      }
+    } =
+      await supabase.auth.getSession();
+
+
+    if (!session) {
+
+      $("sessionState")
+        .textContent =
+        "Visiteur";
+
+      $("personal")
+        .classList
+        .add("hidden");
+
+      return;
+
+    }
+
+
+    $("sessionState")
+      .textContent =
+      "Connecté";
+
+
+    $("personal")
+      .classList
+      .remove("hidden");
+
+
+    const {
       data,
       error
-    } = await supabase.functions.invoke(
-      "znaedu-portal"
-    );
+    } =
+      await supabase.functions.invoke(
+        "znaedu-portal"
+      );
 
-    if (error) {
-      throw error;
-    }
 
     if (
-      data?.home ||
-      data?.universes ||
-      data?.actions
+      error ||
+      !data
     ) {
 
-      renderPersonal(data);
+      $("snapshot").innerHTML = `
+
+        <div class="card">
+
+          <h3>
+            Espace personnalisé
+          </h3>
+
+          <p>
+            Votre espace est temporairement
+            indisponible.
+          </p>
+
+        </div>
+
+      `;
+
+      return;
 
     }
 
-  } catch (e) {
+
+    renderPortal(data);
+
+  } catch (error) {
 
     console.warn(
-      "Portail personnel non chargé.",
-      e
+      "Portail personnel indisponible.",
+      error
     );
 
   }
@@ -177,94 +236,219 @@ async function loadPortal() {
 }
 
 
-function renderPersonal(data) {
+function renderPortal(data) {
 
-  $("personalSection")
-    .classList
-    .remove("hidden");
+  const roles =
+    data?.actions?.roles ||
+    data?.home?.portal_context?.roles ||
+    [];
 
 
-  const home =
-    data.home || {};
+  $("roles").innerHTML =
+    (
+      roles.length
+        ? roles
+        : ["Utilisateur"]
+    )
+      .map(role => `
+
+        <span class="chip">
+          ${
+            esc(
+              typeof role === "string"
+                ? role
+                : (
+                    role.name ||
+                    role.code ||
+                    "Rôle"
+                  )
+            )
+          }
+        </span>
+
+      `)
+      .join("");
+
+
+  const actions = [];
+
+
+  for (
+    const [key, group]
+    of Object.entries(
+      data?.actions || {}
+    )
+  ) {
+
+    if (
+      key === "roles" ||
+      !group?.enabled
+    ) {
+      continue;
+    }
+
+
+    for (
+      const action
+      of group.actions || []
+    ) {
+
+      actions.push({
+        ...action,
+        key
+      });
+
+    }
+
+  }
+
+
+  $("actions").innerHTML =
+    actions
+      .map(action => `
+
+        <article class="card">
+
+          <div class="small">
+            ${esc(action.key)}
+          </div>
+
+          <h3>
+            ${esc(
+              action.label ||
+              "Accéder"
+            )}
+          </h3>
+
+          <p>
+            ${esc(
+              action.description ||
+              ""
+            )}
+          </p>
+
+          <button
+            data-route="${esc(
+              action.route || "#"
+            )}"
+            class="btn btn-light open-action"
+            type="button"
+          >
+            Accéder
+          </button>
+
+        </article>
+
+      `)
+      .join("");
+
+
+  document
+    .querySelectorAll(".open-action")
+    .forEach(button => {
+
+      button.onclick = () => {
+
+        location.href =
+          button.dataset.route;
+
+      };
+
+    });
+
 
   const universes =
-    data.universes || {};
-
-  const actions =
-    Array.isArray(data.actions)
-      ? data.actions
-      : [];
+    data?.universes || {};
 
 
-  const cart =
-    universes
-      .bon_plan_229
-      ?.cart_items || 0;
+  const metrics = [
 
-  const orders =
-    universes
-      .bon_plan_229
-      ?.orders || 0;
+    [
+      "Academy",
+      "Inscriptions",
+      universes.academy?.enrollments ?? 0
+    ],
 
-  const courses =
-    universes
-      .academy
-      ?.completed_courses || 0;
+    [
+      "Academy",
+      "Cours terminés",
+      universes.academy?.completed_courses ?? 0
+    ],
+
+    [
+      "BON PLAN 229",
+      "Panier",
+      universes.bon_plan_229?.cart_items ?? 0
+    ],
+
+    [
+      "BON PLAN 229",
+      "Commandes",
+      universes.bon_plan_229?.orders ?? 0
+    ],
+
+    [
+      "BON PLAN 229",
+      "Annonces",
+      universes.bon_plan_229?.seller_listings ?? 0
+    ],
+
+    [
+      "SCHOOL CONTROL",
+      "Enseignant",
+      universes.school_control?.teacher_records ?? 0
+    ],
+
+    [
+      "SCHOOL CONTROL",
+      "Apprenant",
+      universes.school_control?.learner_records ?? 0
+    ],
+
+    [
+      "SCHOOL CONTROL",
+      "Présences",
+      universes.school_control?.teacher_attendance ?? 0
+    ]
+
+  ];
 
 
-  $("personalContent").innerHTML = `
+  $("snapshot").innerHTML =
+    metrics
+      .map(metric => `
 
-    <div class="stats">
+        <div class="metric">
 
-      <div class="stat">
-        <strong>${courses}</strong>
-        <span>Cours terminés</span>
-      </div>
+          <span>
+            ${esc(metric[0])}
+          </span>
 
-      <div class="stat">
-        <strong>${orders}</strong>
-        <span>Commandes</span>
-      </div>
+          <strong>
+            ${esc(metric[2])}
+          </strong>
 
-      <div class="stat">
-        <strong>${cart}</strong>
-        <span>Articles dans le panier</span>
-      </div>
+          <small>
+            ${esc(metric[1])}
+          </small>
 
-    </div>
+        </div>
 
-    <div class="actions">
-
-      ${actions
-        .slice(0, 8)
-        .map(a => `
-
-          <a
-            class="btn secondary"
-            href="${a.route || "#"}"
-          >
-            ${a.label || a.code || "Ouvrir"}
-          </a>
-
-        `)
-        .join("")}
-
-    </div>
-
-  `;
+      `)
+      .join("");
 
 }
 
 
 async function search() {
 
-  const q =
+  const query =
     $("searchInput")
       .value
       .trim();
 
 
-  if (!q) {
+  if (!query) {
 
     $("searchResults")
       .classList
@@ -275,72 +459,108 @@ async function search() {
   }
 
 
-  $("searchResults")
-    .classList
-    .remove("hidden");
-
-  $("searchResults")
-    .textContent =
-    "Recherche en cours…";
-
-
   try {
 
     const {
       data,
       error
-    } = await supabase.rpc(
-      "search_public_znaedu",
-      {
-        query_text: q,
-        result_limit: 8
-      }
-    );
+    } =
+      await supabase.rpc(
+        "search_public_znaedu",
+        {
+          p_query: query,
+          p_limit: 10
+        }
+      );
 
 
-    if (error) {
-      throw error;
-    }
-
-
-    if (!data?.length) {
-
-      $("searchResults")
-        .textContent =
-        "Aucun résultat trouvé.";
-
-      return;
-
-    }
+    const rows =
+      Array.isArray(data)
+        ? data
+        : [];
 
 
     $("searchResults").innerHTML =
-      data
-        .map(x => `
+      error || !rows.length
 
-          <div style="padding:8px 0">
-
-            <strong>
-              ${x.title || x.name || "Résultat"}
-            </strong>
-
-            <div style="color:#667085">
-
-              ${x.description || x.content || ""}
-
-            </div>
-
+        ? `
+          <div class="result">
+            Aucun résultat public.
           </div>
+        `
 
-        `)
-        .join("");
+        : rows
+            .map(result => `
 
+              <div class="result">
 
-  } catch (e) {
+                <strong>
+                  ${esc(
+                    result.title ||
+                    "Résultat"
+                  )}
+                </strong>
+
+                <div>
+                  ${esc(
+                    result.summary || ""
+                  )}
+                </div>
+
+                ${
+                  result.route
+                    ? `
+                      <button
+                        data-route="${esc(
+                          result.route
+                        )}"
+                        class="btn btn-light open-result"
+                        type="button"
+                      >
+                        Ouvrir
+                      </button>
+                    `
+                    : ""
+                }
+
+              </div>
+
+            `)
+            .join("");
+
 
     $("searchResults")
-      .textContent =
-      "La recherche en ligne est momentanément indisponible.";
+      .classList
+      .remove("hidden");
+
+
+    document
+      .querySelectorAll(".open-result")
+      .forEach(button => {
+
+        button.onclick = () => {
+
+          location.href =
+            button.dataset.route;
+
+        };
+
+      });
+
+  } catch (error) {
+
+    $("searchResults").innerHTML = `
+
+      <div class="result">
+        La recherche est momentanément
+        indisponible.
+      </div>
+
+    `;
+
+    $("searchResults")
+      .classList
+      .remove("hidden");
 
   }
 
@@ -353,13 +573,10 @@ $("loginBtn").onclick = () => {
     .classList
     .remove("hidden");
 
-  $("emailInput")
-    .focus();
-
 };
 
 
-$("closeModal").onclick = () => {
+$("closeLogin").onclick = () => {
 
   $("loginModal")
     .classList
@@ -368,19 +585,27 @@ $("closeModal").onclick = () => {
 };
 
 
-$("loginModal")
+$("searchBtn").onclick = () => {
+
+  $("searchInput").focus();
+
+};
+
+
+$("searchSubmit").onclick =
+  search;
+
+
+$("searchInput")
   .addEventListener(
-    "click",
-    e => {
+    "keydown",
+    event => {
 
       if (
-        e.target.id ===
-        "loginModal"
+        event.key === "Enter"
       ) {
 
-        $("loginModal")
-          .classList
-          .add("hidden");
+        search();
 
       }
 
@@ -388,53 +613,12 @@ $("loginModal")
   );
 
 
-$("sendOtpBtn").onclick =
-  async () => {
+$("supportBtn").onclick =
+  () => {
 
-    const email =
-      $("emailInput")
-        .value
-        .trim();
-
-
-    if (!email) {
-
-      $("loginStatus")
-        .textContent =
-        "Entrez une adresse e-mail valide.";
-
-      return;
-
-    }
-
-
-    $("loginStatus")
-      .textContent =
-      "Envoi du lien…";
-
-
-    const {
-      error
-    } =
-      await supabase.auth
-        .signInWithOtp({
-
-          email,
-
-          options: {
-
-            emailRedirectTo:
-              location.href
-
-          }
-
-        });
-
-
-    $("loginStatus")
-      .textContent = error
-        ? error.message
-        : "Lien envoyé. Consultez votre e-mail.";
+    alert(
+      "L'assistance ZNAEDU sera ouverte dans votre espace utilisateur."
+    );
 
   };
 
@@ -449,64 +633,62 @@ $("logoutBtn").onclick =
   };
 
 
-$("searchBtn").onclick =
-  search;
+$("sendOtp").onclick =
+  async () => {
+
+    const email =
+      $("emailInput")
+        .value
+        .trim();
 
 
-$("searchInput")
-  .addEventListener(
-    "keydown",
-    e => {
+    if (!email) {
 
-      if (e.key === "Enter") {
+      $("loginMessage")
+        .textContent =
+        "Saisissez votre adresse e-mail.";
 
-        search();
-
-      }
+      return;
 
     }
-  );
 
 
-$("assistBtn").onclick =
-  () => {
+    const {
+      error
+    } =
+      await supabase.auth
+        .signInWithOtp({
 
-    showToast(
-      "L'assistance ZNAEDU sera accessible depuis votre espace connecté."
-    );
+          email,
+
+          options: {
+            emailRedirectTo:
+              location.origin
+          }
+
+        });
+
+
+    $("loginMessage")
+      .textContent =
+
+      error
+
+        ? error.message
+
+        : "Lien de connexion envoyé. Vérifiez votre e-mail.";
 
   };
 
 
 supabase.auth
   .onAuthStateChange(
-    (_event, session) => {
-
-      if (session) {
-
-        loadPortal();
-
-      }
-
-    }
+    () => loadPortal()
   );
 
 
-renderPlatforms();
+bindPlatformButtons();
 
 loadPlatforms();
 
-
-supabase.auth
-  .getSession()
-  .then(
-    ({ data }) => {
-
-      if (data.session) {
-
-        loadPortal();
-
-      }
-
-    }
-  );
+loadPortal();
