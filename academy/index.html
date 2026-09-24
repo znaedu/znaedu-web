@@ -4,98 +4,186 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Zénith Nova Academy — ZNAEDU</title>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f4f8ff;
       color: #10233f;
     }
+
     header {
       background: #0b4ea2;
       color: white;
       padding: 22px 18px;
     }
+
     header h1 {
-      margin: 0 0 6px;
-      font-size: 25px;
+      margin: 0 0 7px;
+      font-size: 26px;
     }
+
     header p {
       margin: 0;
-      opacity: .9;
+      opacity: .92;
     }
+
     main {
-      max-width: 900px;
+      max-width: 1050px;
       margin: auto;
-      padding: 24px 18px;
+      padding: 22px 16px 40px;
     }
-    .welcome {
+
+    .hero {
       background: white;
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 24px;
       box-shadow: 0 8px 25px rgba(16,35,63,.08);
+      margin-bottom: 20px;
     }
+
+    .hero h2 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+
+    .hero p {
+      line-height: 1.6;
+    }
+
+    .section-title {
+      margin: 28px 0 14px;
+      font-size: 21px;
+    }
+
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 16px;
-      margin-top: 20px;
     }
+
     .card {
       background: white;
-      border-radius: 14px;
-      padding: 20px;
       border: 1px solid #dce7f5;
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 5px 18px rgba(16,35,63,.05);
     }
-    .card h2 {
-      margin-top: 0;
+
+    .icon {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      margin: 0 0 9px;
       font-size: 19px;
     }
-    .back {
+
+    .card p {
+      line-height: 1.5;
+      color: #53657c;
+    }
+
+    .button {
       display: inline-block;
-      margin-top: 22px;
-      padding: 11px 16px;
+      margin-top: 10px;
+      padding: 11px 15px;
       border-radius: 10px;
       background: #0b4ea2;
       color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .info {
+      margin-top: 20px;
+      background: #eaf3ff;
+      border-radius: 15px;
+      padding: 18px;
+      line-height: 1.5;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 25px;
+      color: #0b4ea2;
+      font-weight: bold;
       text-decoration: none;
     }
   </style>
 </head>
 
 <body>
+
   <header>
     <h1>Zénith Nova Academy</h1>
     <p>Apprendre • Enseigner • Progresser</p>
   </header>
 
   <main>
-    <section class="welcome">
+
+    <section class="hero">
       <h2>Bienvenue dans Zénith Nova Academy</h2>
+
       <p>
-        Cet espace rassemble les fonctionnalités éducatives de ZNAEDU.
+        Un espace éducatif de ZNAEDU conçu pour réunir
+        l'apprentissage, l'évaluation et l'accompagnement
+        des enseignants et des apprenants.
       </p>
-
-      <div class="cards">
-        <div class="card">
-          <h2>Mondo Quiz</h2>
-          <p>Apprendre et tester ses connaissances.</p>
-        </div>
-
-        <div class="card">
-          <h2>ZNA Enseignants</h2>
-          <p>Espace dédié aux enseignants.</p>
-        </div>
-
-        <div class="card">
-          <h2>Zénith Nova Apprenants</h2>
-          <p>Espace dédié aux apprenants.</p>
-        </div>
-      </div>
-
-      <a class="back" href="../index.html">← Retour à ZNAEDU</a>
     </section>
+
+    <h2 class="section-title">Les espaces de l'Academy</h2>
+
+    <section class="cards">
+
+      <article class="card">
+        <div class="icon">🧠</div>
+        <h3>Mondo Quiz</h3>
+        <p>
+          Un espace de quiz et d'évaluation permettant
+          de tester ses connaissances et de progresser.
+        </p>
+        <a class="button" href="./mondo-quiz/">Accéder</a>
+      </article>
+
+      <article class="card">
+        <div class="icon">👨‍🏫</div>
+        <h3>ZNA Enseignants</h3>
+        <p>
+          Un espace destiné aux enseignants pour leurs
+          activités et leurs responsabilités pédagogiques.
+        </p>
+        <a class="button" href="./enseignants/">Accéder</a>
+      </article>
+
+      <article class="card">
+        <div class="icon">🎓</div>
+        <h3>Zénith Nova Apprenants</h3>
+        <p>
+          Un espace destiné aux apprenants pour suivre
+          leurs activités et leur progression.
+        </p>
+        <a class="button" href="./apprenants/">Accéder</a>
+      </article>
+
+    </section>
+
+    <div class="info">
+      <strong>Votre espace ZNAEDU</strong><br>
+      L'identité ZNAEDU permettra progressivement à chaque
+      utilisateur d'accéder uniquement aux fonctionnalités
+      correspondant à ses rôles et à ses autorisations.
+    </div>
+
+    <a class="back" href="../index.html">← Retour au portail ZNAEDU</a>
+
   </main>
+
 </body>
 </html>
