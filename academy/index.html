@@ -1,1 +1,101 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zénith Nova Academy — ZNAEDU</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f8ff;
+      color: #10233f;
+    }
+    header {
+      background: #0b4ea2;
+      color: white;
+      padding: 22px 18px;
+    }
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 25px;
+    }
+    header p {
+      margin: 0;
+      opacity: .9;
+    }
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 24px 18px;
+    }
+    .welcome {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 25px rgba(16,35,63,.08);
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid #dce7f5;
+    }
+    .card h2 {
+      margin-top: 0;
+      font-size: 19px;
+    }
+    .back {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 11px 16px;
+      border-radius: 10px;
+      background: #0b4ea2;
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+</head>
 
+<body>
+  <header>
+    <h1>Zénith Nova Academy</h1>
+    <p>Apprendre • Enseigner • Progresser</p>
+  </header>
+
+  <main>
+    <section class="welcome">
+      <h2>Bienvenue dans Zénith Nova Academy</h2>
+      <p>
+        Cet espace rassemble les fonctionnalités éducatives de ZNAEDU.
+      </p>
+
+      <div class="cards">
+        <div class="card">
+          <h2>Mondo Quiz</h2>
+          <p>Apprendre et tester ses connaissances.</p>
+        </div>
+
+        <div class="card">
+          <h2>ZNA Enseignants</h2>
+          <p>Espace dédié aux enseignants.</p>
+        </div>
+
+        <div class="card">
+          <h2>Zénith Nova Apprenants</h2>
+          <p>Espace dédié aux apprenants.</p>
+        </div>
+      </div>
+
+      <a class="back" href="../index.html">← Retour à ZNAEDU</a>
+    </section>
+  </main>
+</body>
+</html>
