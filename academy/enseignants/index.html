@@ -1,1 +1,861 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZNA Enseignants — ZNAEDU</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Arial,Helvetica,sans-serif;
+      background:#f4f8ff;
+      color:#10213f;
+      line-height:1.5
+    }
+    header{
+      background:linear-gradient(135deg,#0757c8,#0b78ff);
+      color:white;
+      padding:22px 16px;
+      position:sticky;
+      top:0;
+      z-index:10;
+      box-shadow:0 4px 15px rgba(0,0,0,.12)
+    }
+    .header-inner{
+      max-width:1000px;
+      margin:auto;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px
+    }
+    .brand{
+      font-weight:800;
+      font-size:21px
+    }
+    .brand small{
+      display:block;
+      font-size:11px;
+      opacity:.85;
+      font-weight:500
+    }
+    button{
+      border:0;
+      cursor:pointer;
+      font:inherit
+    }
+    .logout{
+      background:white;
+      color:#0757c8;
+      padding:9px 13px;
+      border-radius:9px;
+      font-weight:700
+    }
+    main{
+      max-width:1000px;
+      margin:auto;
+      padding:24px 15px 50px
+    }
+    .hero{
+      background:white;
+      border-radius:18px;
+      padding:24px;
+      box-shadow:0 8px 25px rgba(19,60,120,.08);
+      margin-bottom:20px
+    }
+    .hero h1{
+      font-size:28px;
+      margin-bottom:6px
+    }
+    .hero p{
+      color:#5b6d89
+    }
+    .status{
+      display:inline-block;
+      margin-top:13px;
+      padding:7px 11px;
+      border-radius:20px;
+      background:#e8f7ee;
+      color:#13733b;
+      font-size:13px;
+      font-weight:700
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px
+    }
+    .card{
+      background:white;
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 7px 22px rgba(19,60,120,.07)
+    }
+    .card h2{
+      font-size:19px;
+      margin-bottom:7px;
+      color:#0757c8
+    }
+    .card p{
+      color:#64748b;
+      font-size:14px;
+      margin-bottom:14px
+    }
+    .btn{
+      background:#0757c8;
+      color:white;
+      padding:11px 15px;
+      border-radius:9px;
+      font-weight:700
+    }
+    .btn.secondary{
+      background:#eaf2ff;
+      color:#0757c8
+    }
+    .section{
+      margin-top:20px
+    }
+    .section h2{
+      margin-bottom:12px
+    }
+    .info{
+      background:#eef6ff;
+      border-left:4px solid #0757c8;
+      padding:13px 15px;
+      border-radius:9px;
+      color:#35506f;
+      font-size:14px
+    }
+    .hidden{display:none!important}
+    .auth{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px
+    }
+    .auth-box{
+      width:100%;
+      max-width:430px;
+      background:white;
+      padding:26px;
+      border-radius:18px;
+      box-shadow:0 10px 35px rgba(19,60,120,.12)
+    }
+    .auth-box h1{
+      color:#0757c8;
+      margin-bottom:6px
+    }
+    .auth-box p{
+      color:#64748b;
+      margin-bottom:20px;
+      font-size:14px
+    }
+    input,textarea,select{
+      width:100%;
+      padding:12px;
+      border:1px solid #d7e1ef;
+      border-radius:9px;
+      margin-bottom:12px;
+      font:inherit;
+      background:white
+    }
+    textarea{
+      min-height:110px;
+      resize:vertical
+    }
+    label{
+      display:block;
+      margin-bottom:5px;
+      font-size:13px;
+      font-weight:700
+    }
+    .message{
+      margin-top:12px;
+      padding:11px;
+      border-radius:9px;
+      font-size:13px
+    }
+    .error{
+      background:#fff0f0;
+      color:#a32121
+    }
+    .success{
+      background:#edf9f1;
+      color:#176c38
+    }
+    .resource{
+      border:1px solid #e1e8f2;
+      padding:14px;
+      border-radius:12px;
+      margin-top:10px
+    }
+    .resource strong{
+      display:block;
+      margin-bottom:4px
+    }
+    .resource small{
+      color:#718096
+    }
+    .resource button{
+      margin-top:9px;
+      background:#fff0f0;
+      color:#a32121;
+      padding:7px 10px;
+      border-radius:7px;
+      font-size:12px
+    }
+    .course{
+      padding:13px;
+      background:#f7faff;
+      border-radius:10px;
+      margin-top:9px;
+      border:1px solid #e4ecf7
+    }
+    .course strong{
+      display:block
+    }
+    footer{
+      text-align:center;
+      color:#718096;
+      font-size:12px;
+      padding:25px
+    }
+    @media(max-width:700px){
+      .grid{grid-template-columns:1fr}
+      .hero h1{font-size:24px}
+    }
+  </style>
+</head>
 
+<body>
+
+<div id="authScreen" class="auth">
+  <div class="auth-box">
+    <h1>ZNA Enseignants</h1>
+    <p>Connectez-vous à votre espace enseignant ZNAEDU.</p>
+
+    <label for="email">Adresse e-mail</label>
+    <input id="email" type="email" placeholder="enseignant@exemple.com">
+
+    <button class="btn" style="width:100%" onclick="sendLoginLink()">
+      Recevoir le lien de connexion
+    </button>
+
+    <div id="authMessage"></div>
+  </div>
+</div>
+
+<div id="appScreen" class="hidden">
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        ZNAEDU
+        <small>ZNA Enseignants</small>
+      </div>
+      <button class="logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <h1 id="welcome">Bonjour 👋</h1>
+      <p>Votre espace personnel d'enseignant.</p>
+      <span class="status">Compte enseignant actif</span>
+    </section>
+
+    <div id="globalMessage"></div>
+
+    <section class="grid">
+
+      <div class="card">
+        <h2>🎓 Mes cours</h2>
+        <p>Consultez les cours qui vous sont attribués dans Zénith Nova Academy.</p>
+        <button class="btn" onclick="showSection('courses')">
+          Voir mes cours
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>🏫 School Control</h2>
+        <p>Accédez aux informations de vos cours et à votre planning scolaire.</p>
+        <button class="btn" onclick="showSection('school')">
+          Voir mon planning
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>📚 Mes ressources</h2>
+        <p>Créez et gérez vos cours, fiches, exercices et évaluations.</p>
+        <button class="btn" onclick="showSection('resources')">
+          Gérer mes ressources
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>👤 Mon profil</h2>
+        <p>Mettez à jour vos informations professionnelles.</p>
+        <button class="btn" onclick="showSection('profile')">
+          Modifier mon profil
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>📍 Présence</h2>
+        <p>Effectuez votre pointage lorsque vous êtes présent sur votre lieu de travail.</p>
+        <button class="btn" onclick="checkIn()">
+          Signaler ma présence
+        </button>
+      </div>
+
+    </section>
+
+    <section id="courses" class="section hidden">
+      <div class="card">
+        <h2>🎓 Mes cours</h2>
+        <div id="coursesList"></div>
+      </div>
+    </section>
+
+    <section id="school" class="section hidden">
+      <div class="card">
+        <h2>🏫 Mon planning scolaire</h2>
+        <div id="schoolList"></div>
+      </div>
+    </section>
+
+    <section id="resources" class="section hidden">
+      <div class="card">
+        <h2>📚 Mes ressources</h2>
+
+        <label>Titre</label>
+        <input id="resourceTitle" placeholder="Ex. Cours de mathématiques">
+
+        <label>Type</label>
+        <select id="resourceType">
+          <option value="cours">Cours</option>
+          <option value="fiche">Fiche</option>
+          <option value="evaluation">Évaluation</option>
+          <option value="exercice">Exercice</option>
+          <option value="planification">Planification</option>
+          <option value="autre">Autre</option>
+        </select>
+
+        <label>Contenu</label>
+        <textarea id="resourceContent" placeholder="Contenu de la ressource..."></textarea>
+
+        <button class="btn" onclick="createResource()">
+          Enregistrer la ressource
+        </button>
+
+        <div id="resourcesList"></div>
+      </div>
+    </section>
+
+    <section id="profile" class="section hidden">
+      <div class="card">
+        <h2>👤 Mon profil professionnel</h2>
+
+        <label>Spécialité</label>
+        <input id="specialty" placeholder="Ex. Mathématiques">
+
+        <label>Présentation</label>
+        <textarea id="bio" placeholder="Présentez brièvement votre parcours..."></textarea>
+
+        <label>Téléphone</label>
+        <input id="phone" placeholder="Votre numéro">
+
+        <label>Niveau préféré</label>
+        <input id="preferredLevel" placeholder="Ex. Primaire, Collège, Lycée">
+
+        <button class="btn" onclick="saveProfile()">
+          Enregistrer mon profil
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    ZNAEDU — ZNA Enseignants
+  </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+  "https://dpxghtjhjylofxhmnfxf.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKEs";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+let teacherData = null;
+
+function message(text, type="error", target="globalMessage"){
+  const el = document.getElementById(target);
+  if(!el) return;
+  el.innerHTML =
+    `<div class="message ${type}">${text}</div>`;
+}
+
+async function sendLoginLink(){
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  if(!email){
+    message(
+      "Veuillez saisir votre adresse e-mail.",
+      "error",
+      "authMessage"
+    );
+    return;
+  }
+
+  const {error} =
+    await supabaseClient.auth.signInWithOtp({
+      email,
+      options:{
+        emailRedirectTo: window.location.href
+      }
+    });
+
+  if(error){
+    message(
+      "Impossible d'envoyer le lien : " + error.message,
+      "error",
+      "authMessage"
+    );
+    return;
+  }
+
+  message(
+    "Le lien de connexion a été envoyé à votre adresse e-mail.",
+    "success",
+    "authMessage"
+  );
+}
+
+async function loadTeacher(){
+
+  const {
+    data:{session}
+  } = await supabaseClient.auth.getSession();
+
+  if(!session){
+    showAuth();
+    return;
+  }
+
+  const {data,error} =
+    await supabaseClient.rpc(
+      "get_my_teacher_portal"
+    );
+
+  if(error){
+    showAuth();
+    message(
+      "Accès enseignant refusé : " + error.message,
+      "error",
+      "authMessage"
+    );
+    return;
+  }
+
+  teacherData = data;
+
+  showApp();
+
+  renderTeacher();
+}
+
+function showAuth(){
+  document
+    .getElementById("authScreen")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("appScreen")
+    .classList.add("hidden");
+}
+
+function showApp(){
+  document
+    .getElementById("authScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("appScreen")
+    .classList.remove("hidden");
+}
+
+function renderTeacher(){
+
+  const profile =
+    teacherData?.profile || {};
+
+  const email =
+    teacherData?.email || "";
+
+  document.getElementById("welcome").textContent =
+    "Bonjour " +
+    (
+      profile.full_name ||
+      email ||
+      "enseignant"
+    ) +
+    " 👋";
+
+  document.getElementById("specialty").value =
+    profile.specialty || "";
+
+  document.getElementById("bio").value =
+    profile.bio || "";
+
+  document.getElementById("phone").value =
+    profile.phone || "";
+
+  document.getElementById("preferredLevel").value =
+    profile.preferred_level || "";
+
+  renderCourses();
+  renderSchool();
+  renderResources();
+}
+
+function renderCourses(){
+
+  const list =
+    document.getElementById("coursesList");
+
+  const courses =
+    teacherData?.academy_courses || [];
+
+  if(!courses.length){
+    list.innerHTML =
+      `<div class="info">Aucun cours Academy ne vous est actuellement attribué.</div>`;
+    return;
+  }
+
+  list.innerHTML =
+    courses.map(course => `
+      <div class="course">
+        <strong>${escapeHtml(
+          course.title ||
+          course.name ||
+          "Cours"
+        )}</strong>
+        <small>${escapeHtml(
+          course.description || ""
+        )}</small>
+      </div>
+    `).join("");
+}
+
+function renderSchool(){
+
+  const list =
+    document.getElementById("schoolList");
+
+  const lessons =
+    teacherData?.school_lessons || [];
+
+  if(!lessons.length){
+    list.innerHTML =
+      `<div class="info">Aucun cours scolaire planifié ne vous est actuellement associé.</div>`;
+    return;
+  }
+
+  list.innerHTML =
+    lessons.map(item => `
+      <div class="course">
+        <strong>${escapeHtml(
+          item.title ||
+          item.subject_name ||
+          item.name ||
+          "Cours"
+        )}</strong>
+        <small>
+          ${escapeHtml(
+            item.scheduled_at ||
+            item.start_at ||
+            ""
+          )}
+        </small>
+      </div>
+    `).join("");
+}
+
+function renderResources(){
+
+  const list =
+    document.getElementById("resourcesList");
+
+  const resources =
+    teacherData?.resources || [];
+
+  if(!resources.length){
+    list.innerHTML =
+      `<div class="info" style="margin-top:15px">
+        Vous n'avez encore créé aucune ressource.
+      </div>`;
+    return;
+  }
+
+  list.innerHTML =
+    resources.map(resource => `
+      <div class="resource">
+        <strong>${escapeHtml(resource.title)}</strong>
+        <small>
+          ${escapeHtml(resource.resource_type)}
+        </small>
+        <p style="margin-top:8px">
+          ${escapeHtml(resource.content)}
+        </p>
+        <button onclick="deleteResource('${resource.id}')">
+          Supprimer
+        </button>
+      </div>
+    `).join("");
+}
+
+async function saveProfile(){
+
+  const specialty =
+    document.getElementById("specialty").value.trim();
+
+  const bio =
+    document.getElementById("bio").value.trim();
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+  const preferredLevel =
+    document
+      .getElementById("preferredLevel")
+      .value.trim();
+
+  const {error} =
+    await supabaseClient.rpc(
+      "save_my_teacher_profile",
+      {
+        p_specialty:specialty,
+        p_bio:bio,
+        p_phone:phone,
+        p_preferred_level:preferredLevel
+      }
+    );
+
+  if(error){
+    message(
+      "Impossible d'enregistrer le profil : " +
+      error.message
+    );
+    return;
+  }
+
+  message(
+    "Votre profil a été enregistré.",
+    "success"
+  );
+
+  await loadTeacher();
+}
+
+async function createResource(){
+
+  const title =
+    document.getElementById("resourceTitle")
+      .value.trim();
+
+  const type =
+    document.getElementById("resourceType")
+      .value;
+
+  const content =
+    document.getElementById("resourceContent")
+      .value.trim();
+
+  if(!title || !content){
+    message(
+      "Le titre et le contenu sont obligatoires."
+    );
+    return;
+  }
+
+  const {error} =
+    await supabaseClient.rpc(
+      "create_my_teacher_resource",
+      {
+        p_title:title,
+        p_resource_type:type,
+        p_content:content
+      }
+    );
+
+  if(error){
+    message(
+      "Impossible d'enregistrer la ressource : " +
+      error.message
+    );
+    return;
+  }
+
+  document.getElementById("resourceTitle").value="";
+  document.getElementById("resourceContent").value="";
+
+  message(
+    "Ressource enregistrée.",
+    "success"
+  );
+
+  await loadTeacher();
+}
+
+async function deleteResource(id){
+
+  const {error} =
+    await supabaseClient.rpc(
+      "delete_my_teacher_resource",
+      {
+        p_resource_id:id
+      }
+    );
+
+  if(error){
+    message(
+      "Impossible de supprimer la ressource : " +
+      error.message
+    );
+    return;
+  }
+
+  await loadTeacher();
+}
+
+async function checkIn(){
+
+  if(!navigator.geolocation){
+    message(
+      "La géolocalisation n'est pas disponible sur cet appareil."
+    );
+    return;
+  }
+
+  message(
+    "Vérification de votre position..."
+    ,"success"
+  );
+
+  navigator.geolocation.getCurrentPosition(
+    async position => {
+
+      const latitude =
+        position.coords.latitude;
+
+      const longitude =
+        position.coords.longitude;
+
+      const {data,error} =
+        await supabaseClient.rpc(
+          "school_teacher_check_in",
+          {
+            p_latitude:latitude,
+            p_longitude:longitude
+          }
+        );
+
+      if(error){
+        message(
+          "Pointage impossible : " +
+          error.message
+        );
+        return;
+      }
+
+      message(
+        data?.message ||
+        "Présence enregistrée.",
+        "success"
+      );
+    },
+    error => {
+
+      message(
+        "Impossible de récupérer votre position : " +
+        error.message
+      );
+    },
+    {
+      enableHighAccuracy:true,
+      timeout:15000,
+      maximumAge:0
+    }
+  );
+}
+
+function showSection(id){
+
+  [
+    "courses",
+    "school",
+    "resources",
+    "profile"
+  ].forEach(section => {
+    document
+      .getElementById(section)
+      .classList.add("hidden");
+  });
+
+  document
+    .getElementById(id)
+    .classList.remove("hidden");
+
+  window.scrollTo({
+    top:document
+      .getElementById(id)
+      .offsetTop - 80,
+    behavior:"smooth"
+  });
+}
+
+async function logout(){
+
+  await supabaseClient.auth.signOut();
+
+  teacherData = null;
+
+  showAuth();
+}
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+supabaseClient.auth.onAuthStateChange(
+  () => {
+    setTimeout(loadTeacher,0);
+  }
+);
+
+loadTeacher();
+</script>
+
+</body>
+</html>
