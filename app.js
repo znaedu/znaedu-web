@@ -1,7 +1,512 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-const SUPABASE_URL="https://dpxghtjhjylofxhmnfxf.supabase.co";const SUPABASE_KEY="sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKE";const supabase=createClient(SUPABASE_URL,SUPABASE_KEY);const $=id=>document.getElementById(id);const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-async function loadPlatforms(){const{data,error}=await supabase.from("platform_catalog").select("code,name,short_description,route,icon,status").eq("status","active").order("sort_order");if(error){$("platforms").innerHTML="<div class='card'><h3>Univers indisponibles</h3><p>Impossible de charger les univers.</p></div>";return}$("platforms").innerHTML=(data||[]).map(p=>`<article class="card"><div class="small">${esc(p.icon||"ZNAEDU")}</div><h3>${esc(p.name)}</h3><p>${esc(p.short_description||"")}</p><button data-route="${esc(p.route||"#")}" class="btn btn-light open-platform" type="button">Ouvrir</button></article>`).join("");document.querySelectorAll(".open-platform").forEach(b=>b.onclick=()=>location.href=b.dataset.route)}
-async function loadPortal(){const{data:{session}}=await supabase.auth.getSession();if(!session){$("sessionState").textContent="Visiteur";$("personal").classList.add("hidden");return}$("sessionState").textContent="Connecté";$("personal").classList.remove("hidden");const{data,error}=await supabase.functions.invoke("znaedu-portal");if(error||!data){$("snapshot").innerHTML="<div class='card'><h3>Espace personnalisé</h3><p>Votre espace est temporairement indisponible.</p></div>";return}renderPortal(data)}
-function renderPortal(data){const roles=data?.actions?.roles||data?.home?.portal_context?.roles||[];$("roles").innerHTML=(roles.length?roles:["Utilisateur"]).map(r=>`<span class="chip">${esc(typeof r==="string"?r:(r.name||r.code||"Rôle"))}</span>`).join("");const actions=[];for(const[key,group]of Object.entries(data?.actions||{})){if(key==="roles"||!group?.enabled)continue;for(const a of(group.actions||[]))actions.push({...a,key})}$("actions").innerHTML=actions.map(a=>`<article class="card"><div class="small">${esc(a.key)}</div><h3>${esc(a.label||"Accéder")}</h3><p>${esc(a.description||"")}</p><button data-route="${esc(a.route||"#")}" class="btn btn-light open-action" type="button">Accéder</button></article>`).join("");document.querySelectorAll(".open-action").forEach(b=>b.onclick=()=>location.href=b.dataset.route);const u=data?.universes||{};const m=[["Academy","Inscriptions",u.academy?.enrollments??0],["Academy","Cours terminés",u.academy?.completed_courses??0],["BON PLAN 229","Panier",u.bon_plan_229?.cart_items??0],["BON PLAN 229","Commandes",u.bon_plan_229?.orders??0],["BON PLAN 229","Annonces",u.bon_plan_229?.seller_listings??0],["SCHOOL CONTROL","Enseignant",u.school_control?.teacher_records??0],["SCHOOL CONTROL","Apprenant",u.school_control?.learner_records??0],["SCHOOL CONTROL","Présences",u.school_control?.teacher_attendance??0]];$("snapshot").innerHTML=m.map(x=>`<div class="metric"><span>${esc(x[0])}</span><strong>${esc(x[2])}</strong><small>${esc(x[1])}</small></div>`).join("")}
-async function search(){const q=$("searchInput").value.trim();if(!q){$("searchResults").classList.add("hidden");return}const{data,error}=await supabase.rpc("search_public_znaedu",{p_query:q,p_limit:10});const rows=Array.isArray(data)?data:[];$("searchResults").innerHTML=error||!rows.length?"<div class='result'>Aucun résultat public.</div>":rows.map(r=>`<div class="result"><strong>${esc(r.title||"Résultat")}</strong><div>${esc(r.summary||"")}</div>${r.route?`<button data-route="${esc(r.route)}" class="btn btn-light open-result" type="button">Ouvrir</button>`:""}</div>`).join("");$("searchResults").classList.remove("hidden");document.querySelectorAll(".open-result").forEach(b=>b.onclick=()=>location.href=b.dataset.route)}
-$("loginBtn").onclick=()=>$("loginModal").classList.remove("hidden");$("closeLogin").onclick=()=>$("loginModal").classList.add("hidden");$("searchBtn").onclick=()=>$("searchInput").focus();$("searchSubmit").onclick=search;$("searchInput").addEventListener("keydown",e=>{if(e.key==="Enter")search()});$("supportBtn").onclick=()=>alert("L'assistance ZNAEDU sera ouverte dans votre espace utilisateur.");$("logoutBtn").onclick=async()=>{await supabase.auth.signOut();location.reload()};$("sendOtp").onclick=async()=>{const email=$("emailInput").value.trim();if(!email){$("loginMessage").textContent="Saisissez votre adresse e-mail.";return}const{error}=await supabase.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin}});$("loginMessage").textContent=error?error.message:"Lien de connexion envoyé. Vérifiez votre e-mail."};supabase.auth.onAuthStateChange(()=>loadPortal());loadPlatforms();loadPortal();
+const SUPABASE_URL =
+  "https://dpxghtjhjylofxhmnfxf.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKE";
+
+const supabase =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+const fallbackPlatforms = [
+
+  {
+    code: "academy",
+    name: "Zénith Nova Academy",
+    short_description: "Apprendre • Enseigner • Progresser",
+    description:
+      "Cours, quiz et espaces dédiés aux apprenants et enseignants.",
+    route: "/academy",
+    icon: "🎓"
+  },
+
+  {
+    code: "bon_plan_229",
+    name: "BON PLAN 229",
+    short_description: "Acheter • Vendre • Développer",
+    description:
+      "Marketplace pour découvrir, acheter, vendre et développer son activité.",
+    route: "/bon-plan-229",
+    icon: "🛍️"
+  },
+
+  {
+    code: "school_control",
+    name: "SCHOOL CONTROL",
+    short_description: "Organiser • Suivre • Contrôler",
+    description:
+      "Gestion et suivi des établissements, enseignants, apprenants et présences.",
+    route: "/school-control",
+    icon: "🏫"
+  }
+
+];
+
+
+const $ = id =>
+  document.getElementById(id);
+
+
+function showToast(message) {
+
+  $("toast").textContent = message;
+
+  $("toast").classList.remove("hidden");
+
+  setTimeout(() => {
+    $("toast").classList.add("hidden");
+  }, 3500);
+
+}
+
+
+function renderPlatforms(items = fallbackPlatforms) {
+
+  $("platforms").innerHTML = items.map(p => `
+
+    <a
+      class="platform-card"
+      href="${p.route || "#"}"
+    >
+
+      <div class="platform-icon">
+        ${p.icon || "◈"}
+      </div>
+
+      <h3>
+        ${p.name}
+      </h3>
+
+      <p>
+        <strong>
+          ${p.short_description || ""}
+        </strong>
+      </p>
+
+      <p>
+        ${p.description || ""}
+      </p>
+
+      <span class="route">
+        Ouvrir l'espace →
+      </span>
+
+    </a>
+
+  `).join("");
+
+}
+
+
+async function loadPlatforms() {
+
+  /*
+   * Les trois univers sont immédiatement affichés
+   * grâce au catalogue de secours.
+   */
+  renderPlatforms();
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabase
+      .from("platform_catalog")
+      .select(
+        "code,name,short_description,description,route,icon"
+      )
+      .eq("status", "active")
+      .order("sort_order");
+
+    if (!error && data && data.length) {
+
+      renderPlatforms(data);
+
+    }
+
+  } catch (e) {
+
+    console.warn(
+      "Catalogue distant indisponible, fallback conservé.",
+      e
+    );
+
+  }
+
+}
+
+
+async function loadPortal() {
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabase.functions.invoke(
+      "znaedu-portal"
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    if (
+      data?.home ||
+      data?.universes ||
+      data?.actions
+    ) {
+
+      renderPersonal(data);
+
+    }
+
+  } catch (e) {
+
+    console.warn(
+      "Portail personnel non chargé.",
+      e
+    );
+
+  }
+
+}
+
+
+function renderPersonal(data) {
+
+  $("personalSection")
+    .classList
+    .remove("hidden");
+
+
+  const home =
+    data.home || {};
+
+  const universes =
+    data.universes || {};
+
+  const actions =
+    Array.isArray(data.actions)
+      ? data.actions
+      : [];
+
+
+  const cart =
+    universes
+      .bon_plan_229
+      ?.cart_items || 0;
+
+  const orders =
+    universes
+      .bon_plan_229
+      ?.orders || 0;
+
+  const courses =
+    universes
+      .academy
+      ?.completed_courses || 0;
+
+
+  $("personalContent").innerHTML = `
+
+    <div class="stats">
+
+      <div class="stat">
+        <strong>${courses}</strong>
+        <span>Cours terminés</span>
+      </div>
+
+      <div class="stat">
+        <strong>${orders}</strong>
+        <span>Commandes</span>
+      </div>
+
+      <div class="stat">
+        <strong>${cart}</strong>
+        <span>Articles dans le panier</span>
+      </div>
+
+    </div>
+
+    <div class="actions">
+
+      ${actions
+        .slice(0, 8)
+        .map(a => `
+
+          <a
+            class="btn secondary"
+            href="${a.route || "#"}"
+          >
+            ${a.label || a.code || "Ouvrir"}
+          </a>
+
+        `)
+        .join("")}
+
+    </div>
+
+  `;
+
+}
+
+
+async function search() {
+
+  const q =
+    $("searchInput")
+      .value
+      .trim();
+
+
+  if (!q) {
+
+    $("searchResults")
+      .classList
+      .add("hidden");
+
+    return;
+
+  }
+
+
+  $("searchResults")
+    .classList
+    .remove("hidden");
+
+  $("searchResults")
+    .textContent =
+    "Recherche en cours…";
+
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabase.rpc(
+      "search_public_znaedu",
+      {
+        query_text: q,
+        result_limit: 8
+      }
+    );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    if (!data?.length) {
+
+      $("searchResults")
+        .textContent =
+        "Aucun résultat trouvé.";
+
+      return;
+
+    }
+
+
+    $("searchResults").innerHTML =
+      data
+        .map(x => `
+
+          <div style="padding:8px 0">
+
+            <strong>
+              ${x.title || x.name || "Résultat"}
+            </strong>
+
+            <div style="color:#667085">
+
+              ${x.description || x.content || ""}
+
+            </div>
+
+          </div>
+
+        `)
+        .join("");
+
+
+  } catch (e) {
+
+    $("searchResults")
+      .textContent =
+      "La recherche en ligne est momentanément indisponible.";
+
+  }
+
+}
+
+
+$("loginBtn").onclick = () => {
+
+  $("loginModal")
+    .classList
+    .remove("hidden");
+
+  $("emailInput")
+    .focus();
+
+};
+
+
+$("closeModal").onclick = () => {
+
+  $("loginModal")
+    .classList
+    .add("hidden");
+
+};
+
+
+$("loginModal")
+  .addEventListener(
+    "click",
+    e => {
+
+      if (
+        e.target.id ===
+        "loginModal"
+      ) {
+
+        $("loginModal")
+          .classList
+          .add("hidden");
+
+      }
+
+    }
+  );
+
+
+$("sendOtpBtn").onclick =
+  async () => {
+
+    const email =
+      $("emailInput")
+        .value
+        .trim();
+
+
+    if (!email) {
+
+      $("loginStatus")
+        .textContent =
+        "Entrez une adresse e-mail valide.";
+
+      return;
+
+    }
+
+
+    $("loginStatus")
+      .textContent =
+      "Envoi du lien…";
+
+
+    const {
+      error
+    } =
+      await supabase.auth
+        .signInWithOtp({
+
+          email,
+
+          options: {
+
+            emailRedirectTo:
+              location.href
+
+          }
+
+        });
+
+
+    $("loginStatus")
+      .textContent = error
+        ? error.message
+        : "Lien envoyé. Consultez votre e-mail.";
+
+  };
+
+
+$("logoutBtn").onclick =
+  async () => {
+
+    await supabase.auth.signOut();
+
+    location.reload();
+
+  };
+
+
+$("searchBtn").onclick =
+  search;
+
+
+$("searchInput")
+  .addEventListener(
+    "keydown",
+    e => {
+
+      if (e.key === "Enter") {
+
+        search();
+
+      }
+
+    }
+  );
+
+
+$("assistBtn").onclick =
+  () => {
+
+    showToast(
+      "L'assistance ZNAEDU sera accessible depuis votre espace connecté."
+    );
+
+  };
+
+
+supabase.auth
+  .onAuthStateChange(
+    (_event, session) => {
+
+      if (session) {
+
+        loadPortal();
+
+      }
+
+    }
+  );
+
+
+renderPlatforms();
+
+loadPlatforms();
+
+
+supabase.auth
+  .getSession()
+  .then(
+    ({ data }) => {
+
+      if (data.session) {
+
+        loadPortal();
+
+      }
+
+    }
+  );
