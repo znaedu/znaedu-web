@@ -3,968 +3,1265 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="theme-color" content="#08111f">
   <title>Mondo Quiz — ZNAEDU</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+    :root {
+      --bg: #07111f;
+      --panel: #0d1b2e;
+      --panel2: #12243b;
+      --text: #f4f7fb;
+      --muted: #aab8ca;
+      --primary: #4da3ff;
+      --primary2: #2176d2;
+      --success: #28c76f;
+      --danger: #ff5c6c;
+      --border: rgba(255,255,255,.09);
+      --shadow: 0 20px 50px rgba(0,0,0,.28);
+    }
+
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      color: #172033;
+      background:
+        radial-gradient(circle at top right, rgba(77,163,255,.16), transparent 35%),
+        linear-gradient(145deg, #050c16, var(--bg));
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
     }
 
-    header {
-      background: linear-gradient(135deg, #123c69, #1769aa);
-      color: white;
-      padding: 24px 16px;
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1100px, 94%);
+      margin: auto;
+      padding: 24px 0 60px;
+    }
+
+    .hero {
       text-align: center;
+      padding: 30px 15px;
     }
 
-    header h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-    }
-
-    header p {
+    .hero h1 {
       margin: 0;
-      opacity: .9;
+      font-size: clamp(2rem, 7vw, 4rem);
+      letter-spacing: -.04em;
     }
 
-    main {
-      width: min(900px, 94%);
-      margin: 22px auto;
+    .hero p {
+      color: var(--muted);
+      max-width: 760px;
+      margin: 14px auto 0;
+      line-height: 1.6;
     }
 
     .card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
+      background: rgba(13,27,46,.94);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow);
       margin-bottom: 18px;
-      box-shadow: 0 5px 20px rgba(0,0,0,.07);
-    }
-
-    .card h2 {
-      margin-top: 0;
-      font-size: 20px;
-    }
-
-    .categories-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .category-btn {
-      width: 100%;
-      min-height: 48px;
-      border: 1px solid #d8dee8;
-      border-radius: 10px;
-      background: #fff;
-      color: #172033;
-      padding: 10px 7px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: .2s;
-    }
-
-    .category-btn:hover {
-      border-color: #1769aa;
-      background: #f0f7ff;
-    }
-
-    .category-btn.active {
-      background: #1769aa;
-      border-color: #1769aa;
-      color: white;
-    }
-
-    .levels {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-
-    .level-btn {
-      padding: 12px 5px;
-      border: 1px solid #d8dee8;
-      border-radius: 9px;
-      background: white;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .level-btn.active {
-      background: #172033;
-      color: white;
-      border-color: #172033;
-    }
-
-    .count-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .count-box input {
-      width: 100px;
-      padding: 12px;
-      border: 1px solid #ccd3df;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    .primary-btn {
-      width: 100%;
-      border: 0;
-      border-radius: 10px;
-      padding: 14px;
-      background: #1769aa;
-      color: white;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .primary-btn:hover {
-      background: #12568e;
-    }
-
-    .secondary-btn {
-      border: 0;
-      border-radius: 9px;
-      padding: 11px 16px;
-      background: #e8edf5;
-      cursor: pointer;
-      font-weight: 600;
+      backdrop-filter: blur(12px);
     }
 
     .hidden {
       display: none !important;
     }
 
-    .question-number {
-      color: #1769aa;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    @media(max-width: 720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: .9rem;
+      margin-bottom: 7px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 13px 14px;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--primary);
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 13px 18px;
+      cursor: pointer;
+      color: white;
+      background: var(--primary2);
       font-weight: 700;
-      margin-bottom: 8px;
+    }
+
+    button:hover {
+      filter: brightness(1.12);
+    }
+
+    button.secondary {
+      background: #263a55;
+    }
+
+    button.danger {
+      background: #8e2431;
+    }
+
+    button.success {
+      background: #16834a;
+    }
+
+    .status {
+      padding: 12px 15px;
+      border-radius: 12px;
+      background: rgba(77,163,255,.09);
+      border: 1px solid rgba(77,163,255,.18);
+      color: var(--muted);
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .error {
+      background: rgba(255,92,108,.1);
+      border-color: rgba(255,92,108,.3);
+      color: #ffd8dc;
+    }
+
+    .success-box {
+      background: rgba(40,199,111,.1);
+      border-color: rgba(40,199,111,.3);
+      color: #d6ffe7;
+    }
+
+    .section-title {
+      margin: 0 0 15px;
+      font-size: 1.25rem;
+    }
+
+    .question-number {
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 10px;
     }
 
     .question-text {
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1.45;
-      margin-bottom: 18px;
+      font-size: clamp(1.1rem, 3vw, 1.45rem);
+      line-height: 1.55;
+      margin-bottom: 20px;
     }
 
-    .answers {
+    .options {
       display: grid;
       gap: 10px;
     }
 
-    .answer-btn {
+    .option {
       width: 100%;
       text-align: left;
-      padding: 14px;
-      border: 1px solid #d8dee8;
-      border-radius: 10px;
-      background: white;
-      cursor: pointer;
-      font-size: 15px;
+      background: #162b45;
+      border: 1px solid var(--border);
+      padding: 15px;
+      border-radius: 14px;
+      color: var(--text);
     }
 
-    .answer-btn:hover {
-      background: #f4f8fd;
-      border-color: #1769aa;
+    .option.selected {
+      border-color: var(--primary);
+      background: rgba(77,163,255,.17);
     }
 
-    .answer-btn.correct {
-      background: #dff6e6;
-      border-color: #28a745;
+    .option.correct {
+      background: rgba(40,199,111,.18);
+      border-color: var(--success);
     }
 
-    .answer-btn.wrong {
-      background: #ffe2e2;
-      border-color: #dc3545;
+    .option.wrong {
+      background: rgba(255,92,108,.16);
+      border-color: var(--danger);
     }
 
-    .score {
-      text-align: center;
-      font-size: 28px;
+    .progress {
+      height: 8px;
+      background: #172940;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 15px 0 22px;
+    }
+
+    .progress > div {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary2), var(--primary));
+      width: 0%;
+      transition: width .25s ease;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #172940;
+      color: var(--muted);
+      margin: 3px;
+      font-size: .82rem;
+    }
+
+    .auth {
+      max-width: 560px;
+      margin: auto;
+    }
+
+    .big-score {
+      font-size: clamp(3rem, 12vw, 7rem);
       font-weight: 800;
-      color: #1769aa;
+      text-align: center;
+      color: var(--primary);
     }
 
-    .status {
-      padding: 12px;
-      border-radius: 9px;
-      margin-bottom: 14px;
-      background: #eef5ff;
-      color: #174b78;
+    .center {
+      text-align: center;
     }
 
-    .error {
-      background: #ffe8e8;
-      color: #9d2020;
+    .small {
+      font-size: .85rem;
+      color: var(--muted);
     }
 
-    .success {
-      background: #e4f7e9;
-      color: #176b2e;
+    .search-results {
+      max-height: 250px;
+      overflow: auto;
+      margin-top: 8px;
+      border-radius: 12px;
+      background: #0a1728;
+      border: 1px solid var(--border);
     }
 
-    @media (max-width: 520px) {
-      .categories-grid {
-        gap: 7px;
-      }
+    .search-item {
+      padding: 11px 13px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+    }
 
-      .category-btn {
-        min-height: 45px;
-        font-size: 12px;
-      }
+    .search-item:last-child {
+      border-bottom: 0;
+    }
 
-      .levels {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    .search-item:hover {
+      background: #162b45;
+    }
 
-      .question-text {
-        font-size: 18px;
-      }
+    .search-item strong {
+      display: block;
+    }
+
+    .search-item span {
+      color: var(--muted);
+      font-size: .82rem;
     }
   </style>
 </head>
 
 <body>
 
-<header>
-  <h1>MONDO QUIZ</h1>
-  <p>Teste tes connaissances dans 26 disciplines</p>
-</header>
+<div class="app">
 
-<main>
+  <header class="hero">
+    <h1>MONDO QUIZ</h1>
+    <p>
+      Le quiz de ZNAEDU à l'échelle mondiale.
+      Choisis une discipline, un pays, une langue, un niveau et le nombre
+      de questions que tu veux réellement pratiquer.
+    </p>
+  </header>
+
+  <!-- AUTHENTIFICATION -->
+  <section id="authCard" class="card auth">
+
+    <h2 class="section-title">Accéder à Mondo Quiz</h2>
+
+    <div id="authStatus" class="status">
+      Connecte-toi pour commencer une partie.
+    </div>
+
+    <label for="email">Adresse e-mail</label>
+    <input
+      id="email"
+      type="email"
+      autocomplete="email"
+      placeholder="ton@email.com"
+    >
+
+    <div class="actions">
+      <button id="loginBtn">Recevoir le lien de connexion</button>
+    </div>
+
+    <p class="small">
+      Un lien sécurisé sera envoyé à ton adresse e-mail.
+    </p>
+
+  </section>
 
   <!-- CONFIGURATION -->
-  <section id="setupSection">
+  <section id="configCard" class="card hidden">
 
-    <div class="card">
-      <h2>Choisis une discipline</h2>
+    <h2 class="section-title">Configurer ta partie</h2>
 
-      <div id="categoriesGrid" class="categories-grid"></div>
+    <div id="configStatus" class="status">
+      Chargement du catalogue mondial...
     </div>
 
-    <div class="card">
-      <h2>Niveau</h2>
+    <div class="grid">
 
-      <div class="levels">
-        <button class="level-btn" data-level="beginner">
-          Débutant
-        </button>
-
-        <button class="level-btn active" data-level="intermediate">
-          Intermédiaire
-        </button>
-
-        <button class="level-btn" data-level="advanced">
-          Avancé
-        </button>
-
-        <button class="level-btn" data-level="expert">
-          Expert
-        </button>
+      <div>
+        <label for="scope">Portée</label>
+        <select id="scope">
+          <option value="international">International</option>
+          <option value="national">National</option>
+        </select>
       </div>
-    </div>
 
-    <div class="card">
-      <h2>Nombre de questions</h2>
+      <div>
+        <label for="country">Pays</label>
+        <select id="country">
+          <option value="">Tous les pays / non spécifié</option>
+        </select>
+      </div>
 
-      <div class="count-box">
+      <div class="full">
+        <label for="disciplineSearch">Rechercher une discipline</label>
+        <input
+          id="disciplineSearch"
+          type="search"
+          placeholder="Ex. football, astronomie, philosophie..."
+          autocomplete="off"
+        >
+        <div id="disciplineResults" class="search-results hidden"></div>
+      </div>
+
+      <div>
+        <label for="discipline">Discipline sélectionnée</label>
+        <select id="discipline">
+          <option value="">Toutes les disciplines</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="language">Langue</label>
+        <select id="language">
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="pt">Português</option>
+          <option value="de">Deutsch</option>
+          <option value="ar">العربية</option>
+          <option value="zh">中文</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="difficulty">Difficulté</label>
+        <select id="difficulty">
+          <option value="">Tous niveaux</option>
+          <option value="beginner">Débutant</option>
+          <option value="intermediate">Intermédiaire</option>
+          <option value="advanced">Avancé</option>
+          <option value="expert">Expert</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="questionType">Type de question</label>
+        <select id="questionType">
+          <option value="">Tous types</option>
+          <option value="single_choice">Choix unique</option>
+          <option value="multiple_choice">Choix multiples</option>
+          <option value="true_false">Vrai / Faux</option>
+          <option value="short_answer">Réponse courte</option>
+          <option value="numeric">Numérique</option>
+          <option value="ordering">Classement</option>
+          <option value="matching">Association</option>
+          <option value="image">Image</option>
+          <option value="audio">Audio</option>
+          <option value="video">Vidéo</option>
+          <option value="case_study">Étude de cas</option>
+          <option value="adaptive">Adaptatif</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="questionCount">Nombre de questions</label>
         <input
           id="questionCount"
           type="number"
           min="1"
-          max="100"
+          step="1"
           value="10"
+          inputmode="numeric"
         >
+      </div>
 
-        <span>Maximum : 100</span>
+      <div>
+        <label for="age">Âge du joueur (facultatif)</label>
+        <input
+          id="age"
+          type="number"
+          min="0"
+          max="130"
+          placeholder="Ex. 18"
+        >
+      </div>
+
+      <div>
+        <label for="region">Région / zone (facultatif)</label>
+        <input
+          id="region"
+          type="text"
+          placeholder="Code ou nom"
+        >
+      </div>
+
+      <div>
+        <label for="city">Ville (facultatif)</label>
+        <input
+          id="city"
+          type="text"
+          placeholder="Code ou nom"
+        >
+      </div>
+
+      <div class="full">
+        <label for="topic">Thème (facultatif)</label>
+        <input
+          id="topic"
+          type="text"
+          placeholder="Ex. Coupe du monde, physique quantique..."
+        >
+      </div>
+
+      <div class="full">
+        <label for="subdiscipline">Sous-discipline (facultatif)</label>
+        <input
+          id="subdiscipline"
+          type="text"
+          placeholder="Sous-discipline"
+        >
+      </div>
+
+      <div class="full">
+        <label for="subtopic">Sous-thème (facultatif)</label>
+        <input
+          id="subtopic"
+          type="text"
+          placeholder="Sous-thème"
+        >
+      </div>
+
+      <div class="full">
+        <label for="tags">Tags (facultatif, séparés par des virgules)</label>
+        <input
+          id="tags"
+          type="text"
+          placeholder="Afrique, finale, 2026"
+        >
+      </div>
+
+    </div>
+
+    <div class="actions">
+      <button id="startBtn">Commencer la partie</button>
+      <button id="logoutBtn" class="secondary">Déconnexion</button>
+    </div>
+
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quizCard" class="card hidden">
+
+    <div id="quizMeta"></div>
+
+    <div class="progress">
+      <div id="progressBar"></div>
+    </div>
+
+    <div id="questionContainer"></div>
+
+    <div class="actions">
+      <button id="submitBtn">Valider la réponse</button>
+      <button id="nextBtn" class="secondary hidden">Question suivante</button>
+    </div>
+
+    <div id="answerStatus" class="status hidden"></div>
+
+  </section>
+
+  <!-- RESULTAT -->
+  <section id="resultCard" class="card hidden">
+
+    <div class="center">
+      <h2>Partie terminée</h2>
+
+      <div id="score" class="big-score">0</div>
+
+      <p id="resultText"></p>
+
+      <div class="actions" style="justify-content:center">
+        <button id="newGameBtn">Nouvelle partie</button>
+        <button id="resultLogoutBtn" class="secondary">Déconnexion</button>
       </div>
     </div>
 
-    <div id="setupMessage"></div>
-
-    <div class="card">
-      <button id="startBtn" class="primary-btn">
-        Commencer le quiz
-      </button>
-    </div>
-
   </section>
 
-
-  <!-- QUIZ -->
-  <section id="quizSection" class="hidden">
-
-    <div class="card">
-
-      <div id="questionNumber" class="question-number"></div>
-
-      <div id="questionText" class="question-text"></div>
-
-      <div id="answers" class="answers"></div>
-
-      <br>
-
-      <button
-        id="nextBtn"
-        class="primary-btn hidden">
-        Question suivante
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- RESULTAT -->
-  <section id="resultSection" class="hidden">
-
-    <div class="card">
-
-      <h2 style="text-align:center;">
-        Résultat
-      </h2>
-
-      <div id="score" class="score"></div>
-
-      <p id="resultDetails" style="text-align:center;"></p>
-
-      <button
-        id="restartBtn"
-        class="primary-btn">
-        Recommencer
-      </button>
-
-    </div>
-
-  </section>
-
-</main>
-
+</div>
 
 <script>
+  const SUPABASE_URL = "https://dpxghtjhjylofxhmnfxf.supabase.co";
+  const SUPABASE_KEY =
+    "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKEs";
 
-const SUPABASE_URL =
-  "https://dpxghtjhjylofxhmnfxf.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKEs";
-
-const supabaseClient =
-  window.supabase.createClient(
+  const client = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
   );
 
+  let catalog = {
+    countries: [],
+    disciplines: []
+  };
 
-/* =====================================================
-   26 DISCIPLINES
-===================================================== */
+  let currentSessionId = null;
+  let questions = [];
+  let currentIndex = 0;
+  let currentAnswer = null;
+  let answered = false;
+  let score = 0;
 
-const categories = [
-  "Culture générale",
-  "Français",
-  "Géographie",
-  "Histoire",
-  "Mathématiques",
-  "Sciences",
+  const $ = id => document.getElementById(id);
 
-  "Athlétisme",
-  "Philosophie",
-  "Football",
-  "Basket-ball",
-  "Tennis",
-  "Handball",
-  "Volleyball",
-  "Cyclisme",
-  "Natation",
+  function show(id) {
+    $(id).classList.remove("hidden");
+  }
 
-  "Littérature",
-  "Musique",
-  "Cinéma",
-  "Informatique",
-  "Technologie",
-  "Économie",
-  "Entrepreneuriat",
-  "Psychologie",
-  "Environnement",
-  "Astronomie",
-  "Agriculture"
-];
+  function hide(id) {
+    $(id).classList.add("hidden");
+  }
 
+  function setStatus(id, message, type = "") {
+    const el = $(id);
+    el.textContent = message;
+    el.className = "status";
 
-/* =====================================================
-   ETAT
-===================================================== */
-
-let selectedCategory = null;
-
-let selectedLevel =
-  "intermediate";
-
-let questions = [];
-
-let currentQuestion = 0;
-
-let score = 0;
-
-let sessionId = null;
-
-let answered = false;
-
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
-const categoriesGrid =
-  document.getElementById("categoriesGrid");
-
-const setupSection =
-  document.getElementById("setupSection");
-
-const quizSection =
-  document.getElementById("quizSection");
-
-const resultSection =
-  document.getElementById("resultSection");
-
-const setupMessage =
-  document.getElementById("setupMessage");
-
-const questionCount =
-  document.getElementById("questionCount");
-
-const startBtn =
-  document.getElementById("startBtn");
-
-const nextBtn =
-  document.getElementById("nextBtn");
-
-const restartBtn =
-  document.getElementById("restartBtn");
-
-const questionNumber =
-  document.getElementById("questionNumber");
-
-const questionText =
-  document.getElementById("questionText");
-
-const answers =
-  document.getElementById("answers");
-
-const scoreElement =
-  document.getElementById("score");
-
-const resultDetails =
-  document.getElementById("resultDetails");
-
-
-/* =====================================================
-   AFFICHAGE DES DISCIPLINES
-===================================================== */
-
-categories.forEach(category => {
-
-  const button =
-    document.createElement("button");
-
-  button.type = "button";
-
-  button.className =
-    "category-btn";
-
-  button.textContent =
-    category;
-
-  button.addEventListener(
-    "click",
-    () => {
-
-      document
-        .querySelectorAll(".category-btn")
-        .forEach(btn =>
-          btn.classList.remove("active")
-        );
-
-      button.classList.add("active");
-
-      selectedCategory =
-        category;
-
+    if (type === "error") {
+      el.classList.add("error");
     }
-  );
 
-  categoriesGrid.appendChild(button);
+    if (type === "success") {
+      el.classList.add("success-box");
+    }
+  }
 
-});
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
 
+  async function init() {
+    const {
+      data: { session }
+    } = await client.auth.getSession();
 
-/* =====================================================
-   NIVEAUX
-===================================================== */
+    if (session) {
+      await enterAuthenticatedMode();
+    } else {
+      show("authCard");
+      hide("configCard");
+      hide("quizCard");
+      hide("resultCard");
+    }
+  }
 
-document
-  .querySelectorAll(".level-btn")
-  .forEach(button => {
+  async function enterAuthenticatedMode() {
+    hide("authCard");
+    hide("quizCard");
+    hide("resultCard");
+    show("configCard");
 
-    button.addEventListener(
-      "click",
-      () => {
+    setStatus(
+      "configStatus",
+      "Chargement du catalogue mondial..."
+    );
 
-        document
-          .querySelectorAll(".level-btn")
-          .forEach(btn =>
-            btn.classList.remove("active")
-          );
+    await loadCatalog();
 
-        button.classList.add("active");
+    setStatus(
+      "configStatus",
+      `${catalog.disciplines.length} disciplines et ${catalog.countries.length} pays actuellement disponibles dans le catalogue. Le moteur n'impose pas de plafond de questions.`,
+      "success"
+    );
+  }
 
-        selectedLevel =
-          button.dataset.level;
+  async function loadCatalog() {
+    const { data, error } = await client.rpc(
+      "mondo_quiz_catalog"
+    );
 
+    if (error) {
+      console.error(error);
+      setStatus(
+        "configStatus",
+        "Impossible de charger le catalogue.",
+        "error"
+      );
+      return;
+    }
+
+    catalog = data || {
+      countries: [],
+      disciplines: []
+    };
+
+    fillCountries();
+    fillDisciplines();
+  }
+
+  function fillCountries() {
+    const select = $("country");
+
+    select.innerHTML =
+      `<option value="">Tous les pays / non spécifié</option>`;
+
+    [...catalog.countries]
+      .sort((a, b) =>
+        (a.name_fr || a.name_en || "")
+          .localeCompare(b.name_fr || b.name_en || "")
+      )
+      .forEach(country => {
+        const option = document.createElement("option");
+
+        option.value = country.code;
+        option.textContent =
+          country.name_fr ||
+          country.name_en ||
+          country.code;
+
+        select.appendChild(option);
+      });
+  }
+
+  function fillDisciplines() {
+    const select = $("discipline");
+
+    select.innerHTML =
+      `<option value="">Toutes les disciplines</option>`;
+
+    [...catalog.disciplines]
+      .sort((a, b) =>
+        (a.name || "")
+          .localeCompare(b.name || "")
+      )
+      .forEach(discipline => {
+        const option = document.createElement("option");
+
+        option.value = discipline.slug;
+        option.textContent = discipline.name;
+
+        select.appendChild(option);
+      });
+  }
+
+  function searchDisciplines() {
+    const q = $("disciplineSearch")
+      .value
+      .trim()
+      .toLowerCase();
+
+    const results = $("disciplineResults");
+
+    if (!q) {
+      hide("disciplineResults");
+      return;
+    }
+
+    const matches = catalog.disciplines
+      .filter(d =>
+        (d.name || "").toLowerCase().includes(q) ||
+        (d.slug || "").toLowerCase().includes(q) ||
+        (d.description || "").toLowerCase().includes(q)
+      )
+      .slice(0, 100);
+
+    results.innerHTML = "";
+
+    if (!matches.length) {
+      results.innerHTML =
+        `<div class="search-item">Aucune discipline trouvée.</div>`;
+
+      show("disciplineResults");
+      return;
+    }
+
+    matches.forEach(d => {
+      const item = document.createElement("div");
+      item.className = "search-item";
+
+      item.innerHTML = `
+        <strong>${escapeHtml(d.name)}</strong>
+        <span>${escapeHtml(d.description || d.family || "")}</span>
+      `;
+
+      item.addEventListener("click", () => {
+        $("discipline").value = d.slug;
+        $("disciplineSearch").value = d.name;
+        hide("disciplineResults");
+      });
+
+      results.appendChild(item);
+    });
+
+    show("disciplineResults");
+  }
+
+  function normalizeAnswer(answer) {
+    if (Array.isArray(answer)) {
+      return JSON.stringify(answer);
+    }
+
+    return String(answer ?? "");
+  }
+
+  function renderQuestion() {
+    const q = questions[currentIndex];
+
+    currentAnswer = null;
+    answered = false;
+
+    $("answerStatus").className = "status hidden";
+    hide("nextBtn");
+    show("submitBtn");
+
+    const percentage =
+      ((currentIndex) / questions.length) * 100;
+
+    $("progressBar").style.width =
+      `${percentage}%`;
+
+    $("quizMeta").innerHTML = `
+      <span class="pill">
+        Question ${currentIndex + 1}/${questions.length}
+      </span>
+
+      <span class="pill">
+        ${escapeHtml(q.type)}
+      </span>
+
+      ${q.topic
+        ? `<span class="pill">${escapeHtml(q.topic)}</span>`
+        : ""}
+    `;
+
+    let html = `
+      <div class="question-number">
+        QUESTION ${currentIndex + 1}
+      </div>
+
+      <div class="question-text">
+        ${escapeHtml(q.question)}
+      </div>
+    `;
+
+    if (
+      q.type === "single_choice" ||
+      q.type === "true_false"
+    ) {
+      const options =
+        q.type === "true_false"
+          ? ["true", "false"]
+          : Array.isArray(q.options)
+            ? q.options
+            : Object.values(q.options || {});
+
+      html += `<div class="options">`;
+
+      options.forEach((option, index) => {
+        const value =
+          typeof option === "object"
+            ? option.value ?? option.label ?? option.text
+            : option;
+
+        const label =
+          typeof option === "object"
+            ? option.label ?? option.text ?? option.value
+            : option;
+
+        html += `
+          <button
+            class="option"
+            data-value="${escapeHtml(value)}"
+            type="button"
+          >
+            ${escapeHtml(label)}
+          </button>
+        `;
+      });
+
+      html += `</div>`;
+    }
+
+    else if (q.type === "multiple_choice") {
+      const options =
+        Array.isArray(q.options)
+          ? q.options
+          : Object.values(q.options || {});
+
+      html += `<div class="options">`;
+
+      options.forEach(option => {
+        const value =
+          typeof option === "object"
+            ? option.value ?? option.label ?? option.text
+            : option;
+
+        const label =
+          typeof option === "object"
+            ? option.label ?? option.text ?? option.value
+            : option;
+
+        html += `
+          <button
+            class="option multiple"
+            data-value="${escapeHtml(value)}"
+            type="button"
+          >
+            ${escapeHtml(label)}
+          </button>
+        `;
+      });
+
+      html += `</div>`;
+    }
+
+    else {
+      html += `
+        <input
+          id="freeAnswer"
+          type="text"
+          placeholder="Écris ta réponse..."
+          autocomplete="off"
+        >
+      `;
+    }
+
+    $("questionContainer").innerHTML = html;
+
+    document
+      .querySelectorAll(".option")
+      .forEach(button => {
+        button.addEventListener("click", () => {
+          if (answered) return;
+
+          if (button.classList.contains("multiple")) {
+            button.classList.toggle("selected");
+
+            const selected = [
+              ...document.querySelectorAll(
+                ".option.multiple.selected"
+              )
+            ].map(el => el.dataset.value);
+
+            currentAnswer = selected;
+          } else {
+            document
+              .querySelectorAll(".option")
+              .forEach(el =>
+                el.classList.remove("selected")
+              );
+
+            button.classList.add("selected");
+            currentAnswer = button.dataset.value;
+          }
+        });
+      });
+
+    const freeAnswer = $("freeAnswer");
+
+    if (freeAnswer) {
+      freeAnswer.addEventListener("input", () => {
+        currentAnswer = freeAnswer.value;
+      });
+    }
+  }
+
+  async function submitCurrentAnswer() {
+    if (answered) return;
+
+    if (
+      currentAnswer === null ||
+      currentAnswer === "" ||
+      (Array.isArray(currentAnswer) &&
+        currentAnswer.length === 0)
+    ) {
+      setStatus(
+        "answerStatus",
+        "Sélectionne ou écris une réponse.",
+        "error"
+      );
+
+      show("answerStatus");
+      return;
+    }
+
+    const q = questions[currentIndex];
+
+    const { data, error } = await client.rpc(
+      "mondo_quiz_submit_answer",
+      {
+        p_session_id: currentSessionId,
+        p_question_id: q.id,
+        p_answer: normalizeAnswer(currentAnswer)
       }
     );
 
-  });
+    if (error) {
+      console.error(error);
 
+      setStatus(
+        "answerStatus",
+        error.message || "Erreur lors de la validation.",
+        "error"
+      );
 
-/* =====================================================
-   MESSAGE
-===================================================== */
+      show("answerStatus");
+      return;
+    }
 
-function showMessage(
-  message,
-  type = ""
-) {
+    answered = true;
 
-  setupMessage.className =
-    "status " + type;
+    if (data.correct) {
+      score++;
+      setStatus(
+        "answerStatus",
+        `Bonne réponse. Score : ${data.score}/${data.answered_count}`,
+        "success"
+      );
+    } else {
+      setStatus(
+        "answerStatus",
+        `Réponse incorrecte. Réponse attendue : ${data.correct_answer || "voir la correction"}.`,
+        "error"
+      );
+    }
 
-  setupMessage.textContent =
-    message;
+    show("answerStatus");
+    hide("submitBtn");
 
-}
-
-
-/* =====================================================
-   DEMARRER LE QUIZ
-===================================================== */
-
-startBtn.addEventListener(
-  "click",
-  startQuiz
-);
-
-
-async function startQuiz() {
-
-  if (!selectedCategory) {
-
-    showMessage(
-      "Choisis d'abord une discipline.",
-      "error"
-    );
-
-    return;
+    if (data.completed) {
+      setTimeout(showResult, 500);
+    } else {
+      show("nextBtn");
+    }
   }
 
+  function nextQuestion() {
+    currentIndex++;
 
-  let count =
-    parseInt(
-      questionCount.value,
-      10
-    );
+    if (currentIndex >= questions.length) {
+      showResult();
+      return;
+    }
 
-
-  if (
-    isNaN(count) ||
-    count < 1 ||
-    count > 100
-  ) {
-
-    showMessage(
-      "Le nombre de questions doit être compris entre 1 et 100.",
-      "error"
-    );
-
-    return;
+    renderQuestion();
   }
 
+  function showResult() {
+    hide("quizCard");
+    show("resultCard");
 
-  startBtn.disabled = true;
+    $("progressBar").style.width = "100%";
 
-  startBtn.textContent =
-    "Chargement...";
+    $("score").textContent =
+      `${score}/${questions.length}`;
 
+    const percentage =
+      questions.length
+        ? Math.round((score / questions.length) * 100)
+        : 0;
 
-  showMessage(
-    "Préparation du quiz..."
-  );
+    $("resultText").textContent =
+      `Tu as obtenu ${percentage}% de réussite.`;
+  }
 
+  async function startQuiz() {
+    const requestedCount =
+      Number.parseInt(
+        $("questionCount").value,
+        10
+      );
 
-  try {
+    if (
+      !Number.isInteger(requestedCount) ||
+      requestedCount < 1
+    ) {
+      setStatus(
+        "configStatus",
+        "Le nombre de questions doit être un entier positif.",
+        "error"
+      );
+      return;
+    }
 
-    const {
-      data,
-      error
-    } = await supabaseClient.rpc(
+    const scope = $("scope").value;
+    const country = $("country").value || null;
+
+    if (scope === "national" && !country) {
+      setStatus(
+        "configStatus",
+        "Choisis un pays pour une partie nationale.",
+        "error"
+      );
+      return;
+    }
+
+    const tags =
+      $("tags").value
+        .split(",")
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    setStatus(
+      "configStatus",
+      "Recherche des questions disponibles..."
+    );
+
+    const { data, error } = await client.rpc(
       "mondo_quiz_start",
       {
         p_category:
-          selectedCategory,
+          $("discipline").value || null,
+
+        p_scope:
+          scope,
+
+        p_country_code:
+          country,
 
         p_difficulty:
-          selectedLevel,
+          $("difficulty").value || null,
 
         p_question_count:
-          count
+          requestedCount,
+
+        p_language_code:
+          $("language").value,
+
+        p_subdiscipline:
+          $("subdiscipline").value.trim() || null,
+
+        p_topic:
+          $("topic").value.trim() || null,
+
+        p_subtopic:
+          $("subtopic").value.trim() || null,
+
+        p_region_code:
+          $("region").value.trim() || null,
+
+        p_city_code:
+          $("city").value.trim() || null,
+
+        p_age:
+          $("age").value
+            ? Number.parseInt($("age").value, 10)
+            : null,
+
+        p_question_type:
+          $("questionType").value || null,
+
+        p_tags:
+          tags.length ? tags : null
       }
     );
 
+    if (error) {
+      console.error(error);
 
-    if (error)
-      throw error;
-
-
-    if (
-      !data ||
-      !data.questions ||
-      data.questions.length === 0
-    ) {
-
-      throw new Error(
-        "Aucune question disponible pour cette discipline et ce niveau."
+      setStatus(
+        "configStatus",
+        error.message ||
+        "Aucune question disponible avec ces critères.",
+        "error"
       );
-
-    }
-
-
-    sessionId =
-      data.session_id;
-
-    questions =
-      data.questions;
-
-    currentQuestion = 0;
-
-    score = 0;
-
-    answered = false;
-
-
-    setupSection
-      .classList
-      .add("hidden");
-
-    resultSection
-      .classList
-      .add("hidden");
-
-    quizSection
-      .classList
-      .remove("hidden");
-
-
-    displayQuestion();
-
-  }
-  catch(error) {
-
-    console.error(error);
-
-    showMessage(
-      error.message ||
-      "Impossible de démarrer le quiz.",
-      "error"
-    );
-
-  }
-  finally {
-
-    startBtn.disabled =
-      false;
-
-    startBtn.textContent =
-      "Commencer le quiz";
-
-  }
-
-}
-
-
-/* =====================================================
-   AFFICHER QUESTION
-===================================================== */
-
-function displayQuestion() {
-
-  const question =
-    questions[currentQuestion];
-
-
-  answered = false;
-
-  nextBtn
-    .classList
-    .add("hidden");
-
-
-  questionNumber.textContent =
-    `Question ${currentQuestion + 1} / ${questions.length}`;
-
-
-  questionText.textContent =
-    question.question;
-
-
-  answers.innerHTML =
-    "";
-
-
-  const options =
-    question.options || [];
-
-
-  options.forEach(option => {
-
-    const button =
-      document.createElement("button");
-
-    button.type =
-      "button";
-
-    button.className =
-      "answer-btn";
-
-    button.textContent =
-      option.text ||
-      option.label ||
-      option.answer ||
-      "";
-
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        submitAnswer(
-          option,
-          button
-        );
-
-      }
-    );
-
-
-    answers.appendChild(button);
-
-  });
-
-}
-
-
-/* =====================================================
-   REPONSE
-===================================================== */
-
-async function submitAnswer(
-  option,
-  clickedButton
-) {
-
-  if (answered)
-    return;
-
-
-  answered = true;
-
-
-  document
-    .querySelectorAll(".answer-btn")
-    .forEach(btn =>
-      btn.disabled = true
-    );
-
-
-  const question =
-    questions[currentQuestion];
-
-
-  let answerValue =
-    option.value ??
-    option.text ??
-    option.label ??
-    option.answer ??
-    "";
-
-
-  try {
-
-    const {
-      data,
-      error
-    } = await supabaseClient.rpc(
-      "mondo_quiz_submit_answer",
-      {
-        p_session_id:
-          sessionId,
-
-        p_question_id:
-          question.id,
-
-        p_answer:
-          String(answerValue)
-      }
-    );
-
-
-    if (error)
-      throw error;
-
-
-    if (data?.is_correct) {
-
-      clickedButton
-        .classList
-        .add("correct");
-
-      score++;
-
-    }
-    else {
-
-      clickedButton
-        .classList
-        .add("wrong");
-
-    }
-
-
-    nextBtn
-      .classList
-      .remove("hidden");
-
-
-  }
-  catch(error) {
-
-    console.error(error);
-
-    clickedButton
-      .classList
-      .add("wrong");
-
-    nextBtn
-      .classList
-      .remove("hidden");
-
-  }
-
-}
-
-
-/* =====================================================
-   QUESTION SUIVANTE
-===================================================== */
-
-nextBtn.addEventListener(
-  "click",
-  () => {
-
-    currentQuestion++;
-
-    if (
-      currentQuestion >=
-      questions.length
-    ) {
-
-      showResult();
 
       return;
     }
 
-    displayQuestion();
+    if (
+      !data ||
+      !Array.isArray(data.questions) ||
+      !data.questions.length
+    ) {
+      setStatus(
+        "configStatus",
+        "Aucune question disponible avec ces critères.",
+        "error"
+      );
 
+      return;
+    }
+
+    currentSessionId = data.session_id;
+    questions = data.questions;
+    currentIndex = 0;
+    score = 0;
+
+    hide("configCard");
+    hide("resultCard");
+    show("quizCard");
+
+    renderQuestion();
   }
-);
 
+  async function sendMagicLink() {
+    const email = $("email").value.trim();
 
-/* =====================================================
-   RESULTAT
-===================================================== */
+    if (!email) {
+      setStatus(
+        "authStatus",
+        "Entre ton adresse e-mail.",
+        "error"
+      );
+      return;
+    }
 
-function showResult() {
+    const { error } =
+      await client.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo:
+            window.location.href
+        }
+      });
 
-  quizSection
-    .classList
-    .add("hidden");
+    if (error) {
+      setStatus(
+        "authStatus",
+        error.message,
+        "error"
+      );
+      return;
+    }
 
-  resultSection
-    .classList
-    .remove("hidden");
-
-
-  const total =
-    questions.length;
-
-
-  const percentage =
-    Math.round(
-      (score / total) * 100
+    setStatus(
+      "authStatus",
+      "Le lien de connexion a été envoyé. Ouvre-le depuis ton e-mail.",
+      "success"
     );
-
-
-  scoreElement.textContent =
-    `${score} / ${total}`;
-
-
-  resultDetails.textContent =
-    `${percentage}% de réussite — ${selectedCategory}`;
-
-}
-
-
-/* =====================================================
-   RECOMMENCER
-===================================================== */
-
-restartBtn.addEventListener(
-  "click",
-  () => {
-
-    resultSection
-      .classList
-      .add("hidden");
-
-    setupSection
-      .classList
-      .remove("hidden");
-
-    setupMessage.textContent =
-      "";
-
-    questionCount.value =
-      10;
-
   }
-);
 
+  async function logout() {
+    await client.auth.signOut();
+
+    location.reload();
+  }
+
+  $("loginBtn")
+    .addEventListener("click", sendMagicLink);
+
+  $("startBtn")
+    .addEventListener("click", startQuiz);
+
+  $("submitBtn")
+    .addEventListener("click", submitCurrentAnswer);
+
+  $("nextBtn")
+    .addEventListener("click", nextQuestion);
+
+  $("newGameBtn")
+    .addEventListener("click", () => {
+      hide("resultCard");
+      show("configCard");
+      setStatus(
+        "configStatus",
+        "Configure une nouvelle partie."
+      );
+    });
+
+  $("logoutBtn")
+    .addEventListener("click", logout);
+
+  $("resultLogoutBtn")
+    .addEventListener("click", logout);
+
+  $("disciplineSearch")
+    .addEventListener("input", searchDisciplines);
+
+  $("scope")
+    .addEventListener("change", () => {
+      if ($("scope").value === "international") {
+        $("country").value = "";
+      }
+    });
+
+  client.auth.onAuthStateChange(
+    async (event, session) => {
+      if (
+        event === "SIGNED_IN" &&
+        session
+      ) {
+        await enterAuthenticatedMode();
+      }
+
+      if (event === "SIGNED_OUT") {
+        location.reload();
+      }
+    }
+  );
+
+  init();
 </script>
 
 </body>
