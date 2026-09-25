@@ -1,599 +1,363 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0b63ce">
-<title>Mondo Quiz — Zénith Nova Academy</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Mondo Quiz — ZNAEDU</title>
 
-<style>
-:root{
-  --blue:#0b63ce;
-  --blue-dark:#084b9c;
-  --blue-soft:#eaf3ff;
-  --white:#fff;
-  --text:#132238;
-  --muted:#6b7a90;
-  --border:#dce6f2;
-  --green:#159447;
-  --red:#d83a3a;
-}
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-*{box-sizing:border-box}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:#f2f7fd;
-  color:var(--text);
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #172033;
+    }
 
-.top{
-  background:linear-gradient(135deg,var(--blue),#1685e8);
-  color:#fff;
-  padding:16px;
-  position:sticky;
-  top:0;
-  z-index:5;
-}
+    header {
+      background: linear-gradient(135deg, #123c69, #1769aa);
+      color: white;
+      padding: 24px 16px;
+      text-align: center;
+    }
 
-.topin{
-  max-width:900px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
 
-.logo{
-  width:44px;
-  height:44px;
-  border-radius:14px;
-  background:#fff;
-  color:var(--blue);
-  display:grid;
-  place-items:center;
-  font-weight:900;
-  font-size:20px;
-}
+    header p {
+      margin: 0;
+      opacity: .9;
+    }
 
-.top h1{
-  font-size:20px;
-  margin:0;
-}
+    main {
+      width: min(900px, 94%);
+      margin: 22px auto;
+    }
 
-.top p{
-  font-size:12px;
-  margin:2px 0 0;
-  opacity:.85;
-}
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.07);
+    }
 
-main{
-  max-width:900px;
-  margin:auto;
-  padding:20px 12px 45px;
-}
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
 
-.screen{display:none}
-.screen.active{display:block}
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
 
-.card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 10px 30px #123a6615;
-  margin-bottom:15px;
-}
+    .category-btn {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid #d8dee8;
+      border-radius: 10px;
+      background: #fff;
+      color: #172033;
+      padding: 10px 7px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
 
-.eyebrow{
-  display:inline-block;
-  background:var(--blue-soft);
-  color:var(--blue);
-  padding:7px 11px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-}
+    .category-btn:hover {
+      border-color: #1769aa;
+      background: #f0f7ff;
+    }
 
-h2{
-  font-size:28px;
-  margin:14px 0 8px;
-}
+    .category-btn.active {
+      background: #1769aa;
+      border-color: #1769aa;
+      color: white;
+    }
 
-.lead{
-  color:var(--muted);
-  line-height:1.5;
-  margin:0;
-}
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
 
-.cats{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-  margin-top:14px;
-}
+    .level-btn {
+      padding: 12px 5px;
+      border: 1px solid #d8dee8;
+      border-radius: 9px;
+      background: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
 
-.cat{
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:15px;
-  padding:13px;
-  text-align:left;
-  font-weight:800;
-  cursor:pointer;
-}
+    .level-btn.active {
+      background: #172033;
+      color: white;
+      border-color: #172033;
+    }
 
-.cat.selected{
-  border:2px solid var(--blue);
-  background:var(--blue-soft);
-  color:var(--blue);
-  padding:12px;
-}
+    .count-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-.cat small{
-  display:block;
-  color:var(--muted);
-  font-weight:500;
-  margin-top:4px;
-}
+    .count-box input {
+      width: 100px;
+      padding: 12px;
+      border: 1px solid #ccd3df;
+      border-radius: 8px;
+      font-size: 16px;
+    }
 
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:16px;
-}
+    .primary-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 14px;
+      background: #1769aa;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
-label{
-  font-size:13px;
-  font-weight:800;
-  display:block;
-  margin-bottom:7px;
-}
+    .primary-btn:hover {
+      background: #12568e;
+    }
 
-select{
-  width:100%;
-  padding:13px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  background:#fff;
-  font-size:15px;
-}
+    .secondary-btn {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 16px;
+      background: #e8edf5;
+      cursor: pointer;
+      font-weight: 600;
+    }
 
-button{
-  font-family:inherit;
-}
+    .hidden {
+      display: none !important;
+    }
 
-.primary,
-.secondary{
-  width:100%;
-  border:0;
-  border-radius:14px;
-  padding:14px;
-  font-weight:900;
-  font-size:15px;
-  cursor:pointer;
-  margin-top:14px;
-}
+    .question-number {
+      color: #1769aa;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
 
-.primary{
-  background:var(--blue);
-  color:#fff;
-}
+    .question-text {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 18px;
+    }
 
-.primary:hover{
-  background:var(--blue-dark);
-}
+    .answers {
+      display: grid;
+      gap: 10px;
+    }
 
-.primary:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
+    .answer-btn {
+      width: 100%;
+      text-align: left;
+      padding: 14px;
+      border: 1px solid #d8dee8;
+      border-radius: 10px;
+      background: white;
+      cursor: pointer;
+      font-size: 15px;
+    }
 
-.secondary{
-  background:var(--blue-soft);
-  color:var(--blue);
-}
+    .answer-btn:hover {
+      background: #f4f8fd;
+      border-color: #1769aa;
+    }
 
-.notice{
-  margin-top:12px;
-  padding:11px 13px;
-  border-radius:12px;
-  background:#f7f9fc;
-  color:var(--muted);
-  font-size:13px;
-}
+    .answer-btn.correct {
+      background: #dff6e6;
+      border-color: #28a745;
+    }
 
-.error{
-  background:#fff0f0;
-  color:#a12626;
-}
+    .answer-btn.wrong {
+      background: #ffe2e2;
+      border-color: #dc3545;
+    }
 
-.success{
-  background:#edfff3;
-  color:#106a30;
-}
+    .score {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 800;
+      color: #1769aa;
+    }
 
-.qhead{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:12px;
-}
+    .status {
+      padding: 12px;
+      border-radius: 9px;
+      margin-bottom: 14px;
+      background: #eef5ff;
+      color: #174b78;
+    }
 
-.pill,
-.timer{
-  padding:8px 11px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:900;
-}
+    .error {
+      background: #ffe8e8;
+      color: #9d2020;
+    }
 
-.pill{
-  background:var(--blue-soft);
-  color:var(--blue);
-}
+    .success {
+      background: #e4f7e9;
+      color: #176b2e;
+    }
 
-.timer{
-  background:#fff3df;
-  color:#9b5a00;
-}
+    @media (max-width: 520px) {
+      .categories-grid {
+        gap: 7px;
+      }
 
-.progress{
-  height:8px;
-  background:#e7eef7;
-  border-radius:99px;
-  overflow:hidden;
-  margin-bottom:15px;
-}
+      .category-btn {
+        min-height: 45px;
+        font-size: 12px;
+      }
 
-.progress div{
-  height:100%;
-  background:linear-gradient(90deg,var(--blue),#2e9df1);
-  width:0%;
-  transition:.2s;
-}
+      .levels {
+        grid-template-columns: repeat(2, 1fr);
+      }
 
-.qnum{
-  font-size:12px;
-  color:var(--muted);
-  font-weight:800;
-}
-
-.question{
-  font-size:21px;
-  font-weight:850;
-  line-height:1.4;
-  margin:10px 0 18px;
-}
-
-.options{
-  display:grid;
-  gap:10px;
-}
-
-.option{
-  width:100%;
-  text-align:left;
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:15px;
-  padding:14px;
-  cursor:pointer;
-  font-size:15px;
-  font-weight:700;
-}
-
-.option:hover{
-  border-color:var(--blue);
-  background:var(--blue-soft);
-}
-
-.option.correct{
-  background:#edfff3;
-  border-color:#8bd6a7;
-  color:#106a30;
-}
-
-.option.wrong{
-  background:#fff0f0;
-  border-color:#f0a0a0;
-  color:#a12626;
-}
-
-.feedback{
-  display:none;
-  margin-top:14px;
-  padding:14px;
-  border-radius:14px;
-  line-height:1.5;
-}
-
-.feedback.show{
-  display:block;
-}
-
-.feedback.correct{
-  background:#edfff3;
-  border:1px solid #b9ebc8;
-  color:#106a30;
-}
-
-.feedback.wrong{
-  background:#fff0f0;
-  border:1px solid #ffd0d0;
-  color:#a12626;
-}
-
-.result{
-  text-align:center;
-}
-
-.circle{
-  width:118px;
-  height:118px;
-  border-radius:50%;
-  margin:0 auto 16px;
-  background:var(--blue-soft);
-  border:8px solid #d7e9ff;
-  display:grid;
-  place-items:center;
-  color:var(--blue);
-  font-size:30px;
-  font-weight:950;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:9px;
-  margin-top:18px;
-}
-
-.stat{
-  background:#f6f9fd;
-  border-radius:14px;
-  padding:12px;
-}
-
-.stat strong{
-  display:block;
-  font-size:19px;
-}
-
-.stat span{
-  font-size:11px;
-  color:var(--muted);
-}
-
-.loading{
-  text-align:center;
-  color:var(--muted);
-  padding:15px;
-}
-
-.footer{
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  margin-top:15px;
-}
-
-@media(max-width:600px){
-  .cats,
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  h2{
-    font-size:25px;
-  }
-
-  .question{
-    font-size:19px;
-  }
-}
-</style>
+      .question-text {
+        font-size: 18px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<header class="top">
-  <div class="topin">
-    <div class="logo">M</div>
-
-    <div>
-      <h1>Mondo Quiz</h1>
-      <p>Zénith Nova Academy · ZNAEDU</p>
-    </div>
-  </div>
+<header>
+  <h1>MONDO QUIZ</h1>
+  <p>Teste tes connaissances dans 26 disciplines</p>
 </header>
 
 <main>
 
-<section id="setup" class="screen active">
+  <!-- CONFIGURATION -->
+  <section id="setupSection">
 
-  <div class="card">
+    <div class="card">
+      <h2>Choisis une discipline</h2>
 
-    <span class="eyebrow">
-      🎓 ZÉNITH NOVA ACADEMY
-    </span>
+      <div id="categoriesGrid" class="categories-grid"></div>
+    </div>
 
-    <h2>
-      Teste tes connaissances.
-    </h2>
+    <div class="card">
+      <h2>Niveau</h2>
 
-    <p class="lead">
-      Mondo Quiz utilise maintenant son moteur central connecté à Supabase.
-      Les questions sont tirées depuis la base de données et les réponses
-      correctes restent côté serveur jusqu'à la validation.
-    </p>
+      <div class="levels">
+        <button class="level-btn" data-level="beginner">
+          Débutant
+        </button>
 
-  </div>
+        <button class="level-btn active" data-level="intermediate">
+          Intermédiaire
+        </button>
 
-  <div class="card">
+        <button class="level-btn" data-level="advanced">
+          Avancé
+        </button>
 
-    <label>
-      Discipline
-    </label>
-
-    <div id="cats" class="cats"></div>
-
-    <div class="grid">
-
-      <div>
-
-        <label for="difficulty">
-          Niveau
-        </label>
-
-        <select id="difficulty">
-          <option value="beginner">Débutant</option>
-          <option value="intermediate">Intermédiaire</option>
-        </select>
-
+        <button class="level-btn" data-level="expert">
+          Expert
+        </button>
       </div>
+    </div>
 
-      <div>
+    <div class="card">
+      <h2>Nombre de questions</h2>
 
-        <label for="count">
-          Nombre de questions
-        </label>
+      <div class="count-box">
+        <input
+          id="questionCount"
+          type="number"
+          min="1"
+          max="100"
+          value="10"
+        >
 
-        <select id="count">
-          <option value="5">5 questions</option>
-          <option value="10">10 questions</option>
-          <option value="20">20 questions</option>
-          <option value="50">50 questions</option>
-        </select>
-
+        <span>Maximum : 100</span>
       </div>
+    </div>
+
+    <div id="setupMessage"></div>
+
+    <div class="card">
+      <button id="startBtn" class="primary-btn">
+        Commencer le quiz
+      </button>
+    </div>
+
+  </section>
+
+
+  <!-- QUIZ -->
+  <section id="quizSection" class="hidden">
+
+    <div class="card">
+
+      <div id="questionNumber" class="question-number"></div>
+
+      <div id="questionText" class="question-text"></div>
+
+      <div id="answers" class="answers"></div>
+
+      <br>
+
+      <button
+        id="nextBtn"
+        class="primary-btn hidden">
+        Question suivante
+      </button>
 
     </div>
 
-    <button id="start" class="primary">
-      Commencer le quiz
-    </button>
-
-    <div id="msg" class="notice">
-      Choisis une discipline pour commencer.
-    </div>
-
-  </div>
-
-  <div class="footer">
-    600 questions actuellement disponibles dans Supabase ·
-    100 par discipline.
-  </div>
-
-</section>
+  </section>
 
 
-<section id="quiz" class="screen">
+  <!-- RESULTAT -->
+  <section id="resultSection" class="hidden">
 
-  <div class="qhead">
+    <div class="card">
 
-    <span id="qcat" class="pill"></span>
+      <h2 style="text-align:center;">
+        Résultat
+      </h2>
 
-    <span id="timer" class="timer">
-      30 s
-    </span>
+      <div id="score" class="score"></div>
 
-  </div>
+      <p id="resultDetails" style="text-align:center;"></p>
 
-  <div class="progress">
-    <div id="bar"></div>
-  </div>
-
-  <div class="card">
-
-    <div id="qnum" class="qnum"></div>
-
-    <div id="question" class="question"></div>
-
-    <div id="options" class="options"></div>
-
-    <div id="feedback" class="feedback"></div>
-
-    <button
-      id="next"
-      class="primary"
-      style="display:none"
-    >
-      Question suivante
-    </button>
-
-  </div>
-
-</section>
-
-
-<section id="result" class="screen">
-
-  <div class="card result">
-
-    <div id="circle" class="circle">
-      0%
-    </div>
-
-    <h2 id="rtitle">
-      Quiz terminé
-    </h2>
-
-    <p id="rtext" class="lead"></p>
-
-    <div class="stats">
-
-      <div class="stat">
-        <strong id="score">0</strong>
-        <span>Points</span>
-      </div>
-
-      <div class="stat">
-        <strong id="answered">0</strong>
-        <span>Réponses</span>
-      </div>
-
-      <div class="stat">
-        <strong id="total">0</strong>
-        <span>Questions</span>
-      </div>
+      <button
+        id="restartBtn"
+        class="primary-btn">
+        Recommencer
+      </button>
 
     </div>
 
-    <button id="replay" class="primary">
-      Rejouer
-    </button>
-
-    <button id="back" class="secondary">
-      Choisir une autre partie
-    </button>
-
-  </div>
-
-</section>
-
-
-<div
-  id="loading"
-  class="loading"
-  style="display:none"
->
-  Connexion au moteur Mondo Quiz…
-</div>
+  </section>
 
 </main>
 
 
 <script>
-
-/* =========================================================
-   CONNEXION SUPABASE
-   Clé publishable officielle du projet ZNAEDU
-========================================================= */
 
 const SUPABASE_URL =
   "https://dpxghtjhjylofxhmnfxf.supabase.co";
@@ -601,741 +365,605 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKEs";
 
-const sb =
+const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-      auth:{
-        autoRefreshToken:true,
-        persistSession:true,
-        detectSessionInUrl:true
-      }
-    }
+    SUPABASE_KEY
   );
 
 
-/* =========================================================
-   ÉTAT DU QUIZ
-========================================================= */
+/* =====================================================
+   26 DISCIPLINES
+===================================================== */
 
 const categories = [
-  ["Culture générale","🧠"],
-  ["Sciences","🔬"],
-  ["Mathématiques","📐"],
-  ["Histoire","🏛️"],
-  ["Géographie","🌍"],
-  ["Français","📚"]
+  "Culture générale",
+  "Français",
+  "Géographie",
+  "Histoire",
+  "Mathématiques",
+  "Sciences",
+
+  "Athlétisme",
+  "Philosophie",
+  "Football",
+  "Basket-ball",
+  "Tennis",
+  "Handball",
+  "Volleyball",
+  "Cyclisme",
+  "Natation",
+
+  "Littérature",
+  "Musique",
+  "Cinéma",
+  "Informatique",
+  "Technologie",
+  "Économie",
+  "Entrepreneuriat",
+  "Psychologie",
+  "Environnement",
+  "Astronomie",
+  "Agriculture"
 ];
 
-const state = {
-  category:null,
-  difficulty:"beginner",
-  count:5,
-  session:null,
-  questions:[],
-  index:0,
-  score:0,
-  answered:0,
-  locked:false,
-  timer:null,
-  seconds:30
-};
+
+/* =====================================================
+   ETAT
+===================================================== */
+
+let selectedCategory = null;
+
+let selectedLevel =
+  "intermediate";
+
+let questions = [];
+
+let currentQuestion = 0;
+
+let score = 0;
+
+let sessionId = null;
+
+let answered = false;
 
 
-const $ = id =>
-  document.getElementById(id);
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const categoriesGrid =
+  document.getElementById("categoriesGrid");
+
+const setupSection =
+  document.getElementById("setupSection");
+
+const quizSection =
+  document.getElementById("quizSection");
+
+const resultSection =
+  document.getElementById("resultSection");
+
+const setupMessage =
+  document.getElementById("setupMessage");
+
+const questionCount =
+  document.getElementById("questionCount");
+
+const startBtn =
+  document.getElementById("startBtn");
+
+const nextBtn =
+  document.getElementById("nextBtn");
+
+const restartBtn =
+  document.getElementById("restartBtn");
+
+const questionNumber =
+  document.getElementById("questionNumber");
+
+const questionText =
+  document.getElementById("questionText");
+
+const answers =
+  document.getElementById("answers");
+
+const scoreElement =
+  document.getElementById("score");
+
+const resultDetails =
+  document.getElementById("resultDetails");
 
 
-/* =========================================================
-   AFFICHAGE
-========================================================= */
+/* =====================================================
+   AFFICHAGE DES DISCIPLINES
+===================================================== */
 
-function showScreen(id){
+categories.forEach(category => {
 
-  document
-    .querySelectorAll(".screen")
-    .forEach(element =>
-      element.classList.remove("active")
-    );
+  const button =
+    document.createElement("button");
 
-  $(id).classList.add("active");
-}
+  button.type = "button";
+
+  button.className =
+    "category-btn";
+
+  button.textContent =
+    category;
+
+  button.addEventListener(
+    "click",
+    () => {
+
+      document
+        .querySelectorAll(".category-btn")
+        .forEach(btn =>
+          btn.classList.remove("active")
+        );
+
+      button.classList.add("active");
+
+      selectedCategory =
+        category;
+
+    }
+  );
+
+  categoriesGrid.appendChild(button);
+
+});
 
 
-function setLoading(value){
+/* =====================================================
+   NIVEAUX
+===================================================== */
 
-  $("loading").style.display =
-    value ? "block" : "none";
+document
+  .querySelectorAll(".level-btn")
+  .forEach(button => {
 
-  $("start").disabled = value;
-}
-
-
-function escapeHTML(value){
-
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-
-/* =========================================================
-   CATÉGORIES
-========================================================= */
-
-function initializeCategories(){
-
-  $("cats").innerHTML =
-    categories
-      .map(category => `
-        <button
-          class="cat"
-          data-category="${escapeHTML(category[0])}"
-        >
-          ${category[1]} ${escapeHTML(category[0])}
-
-          <small>
-            100 questions disponibles
-          </small>
-        </button>
-      `)
-      .join("");
-
-  document
-    .querySelectorAll(".cat")
-    .forEach(button => {
-
-      button.onclick = () => {
+    button.addEventListener(
+      "click",
+      () => {
 
         document
-          .querySelectorAll(".cat")
-          .forEach(element =>
-            element.classList.remove("selected")
+          .querySelectorAll(".level-btn")
+          .forEach(btn =>
+            btn.classList.remove("active")
           );
 
-        button.classList.add("selected");
+        button.classList.add("active");
 
-        state.category =
-          button.dataset.category;
+        selectedLevel =
+          button.dataset.level;
 
-        $("msg").className =
-          "notice";
+      }
+    );
 
-        $("msg").textContent =
-          state.category +
-          " sélectionné.";
+  });
 
-      };
 
-    });
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(
+  message,
+  type = ""
+) {
+
+  setupMessage.className =
+    "status " + type;
+
+  setupMessage.textContent =
+    message;
+
 }
 
 
-/* =========================================================
-   DÉMARRER UNE PARTIE
-========================================================= */
+/* =====================================================
+   DEMARRER LE QUIZ
+===================================================== */
 
-async function startQuiz(){
+startBtn.addEventListener(
+  "click",
+  startQuiz
+);
 
-  if(!state.category){
 
-    $("msg").className =
-      "notice error";
+async function startQuiz() {
 
-    $("msg").textContent =
-      "Sélectionne d’abord une discipline.";
+  if (!selectedCategory) {
+
+    showMessage(
+      "Choisis d'abord une discipline.",
+      "error"
+    );
 
     return;
   }
 
 
-  state.difficulty =
-    $("difficulty").value;
-
-  state.count =
-    Number($("count").value);
-
-  state.index = 0;
-  state.score = 0;
-  state.answered = 0;
-  state.session = null;
-  state.questions = [];
-  state.locked = false;
-
-
-  setLoading(true);
-
-
-  try{
-
-    const response =
-      await sb.rpc(
-        "mondo_quiz_start",
-        {
-          p_category:
-            state.category,
-
-          p_difficulty:
-            state.difficulty,
-
-          p_question_count:
-            state.count
-        }
-      );
-
-
-    const data =
-      response.data;
-
-    const error =
-      response.error;
-
-
-    if(error){
-
-      console.error(
-        "MONDO QUIZ RPC ERROR:",
-        error
-      );
-
-      throw new Error(
-        error.message ||
-        error.details ||
-        error.hint ||
-        "Erreur Supabase lors du démarrage."
-      );
-
-    }
-
-
-    if(
-      !data ||
-      !data.session_id ||
-      !Array.isArray(data.questions) ||
-      data.questions.length === 0
-    ){
-
-      throw new Error(
-        "Le serveur n'a retourné aucune question."
-      );
-
-    }
-
-
-    state.session =
-      data.session_id;
-
-    state.questions =
-      data.questions;
-
-
-    $("qcat").textContent =
-      data.category +
-      " · " +
-      (
-        data.difficulty === "beginner"
-          ? "Débutant"
-          : "Intermédiaire"
-      );
-
-
-    showScreen("quiz");
-
-    renderQuestion();
-
-  }
-
-  catch(error){
-
-    console.error(
-      "ERREUR MONDO QUIZ :",
-      error
+  let count =
+    parseInt(
+      questionCount.value,
+      10
     );
 
 
-    $("msg").className =
-      "notice error";
+  if (
+    isNaN(count) ||
+    count < 1 ||
+    count > 100
+  ) {
+
+    showMessage(
+      "Le nombre de questions doit être compris entre 1 et 100.",
+      "error"
+    );
+
+    return;
+  }
 
 
-    $("msg").textContent =
-      "Impossible de démarrer la partie : " +
-      (
-        error?.message ||
-        "Erreur inconnue."
+  startBtn.disabled = true;
+
+  startBtn.textContent =
+    "Chargement...";
+
+
+  showMessage(
+    "Préparation du quiz..."
+  );
+
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient.rpc(
+      "mondo_quiz_start",
+      {
+        p_category:
+          selectedCategory,
+
+        p_difficulty:
+          selectedLevel,
+
+        p_question_count:
+          count
+      }
+    );
+
+
+    if (error)
+      throw error;
+
+
+    if (
+      !data ||
+      !data.questions ||
+      data.questions.length === 0
+    ) {
+
+      throw new Error(
+        "Aucune question disponible pour cette discipline et ce niveau."
       );
 
+    }
+
+
+    sessionId =
+      data.session_id;
+
+    questions =
+      data.questions;
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    answered = false;
+
+
+    setupSection
+      .classList
+      .add("hidden");
+
+    resultSection
+      .classList
+      .add("hidden");
+
+    quizSection
+      .classList
+      .remove("hidden");
+
+
+    displayQuestion();
+
   }
+  catch(error) {
 
-  finally{
+    console.error(error);
 
-    setLoading(false);
+    showMessage(
+      error.message ||
+      "Impossible de démarrer le quiz.",
+      "error"
+    );
+
+  }
+  finally {
+
+    startBtn.disabled =
+      false;
+
+    startBtn.textContent =
+      "Commencer le quiz";
 
   }
 
 }
 
 
-/* =========================================================
-   CHRONOMÈTRE
-========================================================= */
-
-function startTimer(){
-
-  clearInterval(state.timer);
-
-  state.seconds = 30;
-
-  $("timer").textContent =
-    "30 s";
-
-
-  state.timer =
-    setInterval(() => {
-
-      state.seconds--;
-
-      $("timer").textContent =
-        state.seconds + " s";
-
-
-      if(state.seconds <= 0){
-
-        clearInterval(state.timer);
-
-        submitAnswer("",true);
-
-      }
-
-    },1000);
-
-}
-
-
-/* =========================================================
+/* =====================================================
    AFFICHER QUESTION
-========================================================= */
+===================================================== */
 
-function renderQuestion(){
-
-  clearInterval(state.timer);
-
+function displayQuestion() {
 
   const question =
-    state.questions[state.index];
+    questions[currentQuestion];
 
 
-  state.locked = false;
+  answered = false;
+
+  nextBtn
+    .classList
+    .add("hidden");
 
 
-  $("qnum").textContent =
-    `Question ${
-      state.index + 1
-    } sur ${
-      state.questions.length
-    }`;
+  questionNumber.textContent =
+    `Question ${currentQuestion + 1} / ${questions.length}`;
 
 
-  $("question").textContent =
+  questionText.textContent =
     question.question;
 
 
-  $("bar").style.width =
-    (
-      state.index /
-      state.questions.length *
-      100
-    ) + "%";
-
-
-  $("feedback").className =
-    "feedback";
-
-  $("feedback").textContent =
+  answers.innerHTML =
     "";
 
 
-  $("next").style.display =
-    "none";
-
-
   const options =
-    Array.isArray(question.options)
-      ? question.options
-      : [];
+    question.options || [];
 
 
-  $("options").innerHTML =
-    options
-      .map((option,index) => `
-        <button
-          class="option"
-          data-index="${index}"
-        >
-          ${escapeHTML(option)}
-        </button>
-      `)
-      .join("");
+  options.forEach(option => {
+
+    const button =
+      document.createElement("button");
+
+    button.type =
+      "button";
+
+    button.className =
+      "answer-btn";
+
+    button.textContent =
+      option.text ||
+      option.label ||
+      option.answer ||
+      "";
 
 
-  document
-    .querySelectorAll(".option")
-    .forEach(button => {
-
-      button.onclick = () => {
-
-        const index =
-          Number(button.dataset.index);
+    button.addEventListener(
+      "click",
+      () => {
 
         submitAnswer(
-          options[index],
-          false
+          option,
+          button
         );
 
-      };
+      }
+    );
 
-    });
 
+    answers.appendChild(button);
 
-  startTimer();
+  });
 
 }
 
 
-/* =========================================================
-   VALIDER RÉPONSE
-========================================================= */
+/* =====================================================
+   REPONSE
+===================================================== */
 
 async function submitAnswer(
-  answer,
-  timeout
-){
+  option,
+  clickedButton
+) {
 
-  if(state.locked){
+  if (answered)
     return;
-  }
 
 
-  state.locked = true;
+  answered = true;
 
-  clearInterval(state.timer);
+
+  document
+    .querySelectorAll(".answer-btn")
+    .forEach(btn =>
+      btn.disabled = true
+    );
 
 
   const question =
-    state.questions[state.index];
+    questions[currentQuestion];
 
 
-  try{
-
-    const response =
-      await sb.rpc(
-        "mondo_quiz_submit_answer",
-        {
-          p_session_id:
-            state.session,
-
-          p_question_id:
-            question.id,
-
-          p_answer:
-            answer ?? ""
-        }
-      );
+  let answerValue =
+    option.value ??
+    option.text ??
+    option.label ??
+    option.answer ??
+    "";
 
 
-    const data =
-      response.data;
+  try {
 
-    const error =
-      response.error;
+    const {
+      data,
+      error
+    } = await supabaseClient.rpc(
+      "mondo_quiz_submit_answer",
+      {
+        p_session_id:
+          sessionId,
+
+        p_question_id:
+          question.id,
+
+        p_answer:
+          String(answerValue)
+      }
+    );
 
 
-    if(error){
+    if (error)
+      throw error;
 
-      console.error(
-        "MONDO QUIZ ANSWER ERROR:",
-        error
-      );
 
-      throw new Error(
-        error.message ||
-        error.details ||
-        error.hint ||
-        "Erreur lors de la validation."
-      );
+    if (data?.is_correct) {
+
+      clickedButton
+        .classList
+        .add("correct");
+
+      score++;
+
+    }
+    else {
+
+      clickedButton
+        .classList
+        .add("wrong");
 
     }
 
 
-    state.score =
-      Number(data?.score || 0);
+    nextBtn
+      .classList
+      .remove("hidden");
 
-
-    state.answered =
-      Number(
-        data?.answered_count ||
-        state.answered + 1
-      );
-
-
-    const correct =
-      data?.correct === true;
-
-
-    $("feedback").className =
-      "feedback show " +
-      (
-        correct
-          ? "correct"
-          : "wrong"
-      );
-
-
-    $("feedback").textContent =
-      (
-        timeout
-          ? "Temps écoulé. "
-          : ""
-      ) +
-
-      (
-        correct
-          ? "Bonne réponse. "
-          : "Réponse incorrecte. "
-      ) +
-
-      (
-        data?.explanation || ""
-      ) +
-
-      " Réponse correcte : " +
-
-      (
-        data?.correct_answer || ""
-      );
-
-
-    document
-      .querySelectorAll(".option")
-      .forEach(button => {
-
-        const text =
-          button.textContent.trim();
-
-        const correctAnswer =
-          String(
-            data?.correct_answer ?? ""
-          ).trim();
-
-
-        if(text === correctAnswer){
-
-          button.classList.add("correct");
-
-        }
-
-
-        if(
-          !correct &&
-          text === String(answer ?? "").trim()
-        ){
-
-          button.classList.add("wrong");
-
-        }
-
-      });
-
-
-    $("bar").style.width =
-      (
-        (state.index + 1) /
-        state.questions.length *
-        100
-      ) + "%";
-
-
-    $("next").textContent =
-      state.index + 1 >=
-      state.questions.length
-
-        ? "Voir le résultat"
-
-        : "Question suivante";
-
-
-    $("next").style.display =
-      "block";
 
   }
+  catch(error) {
 
-  catch(error){
+    console.error(error);
 
-    console.error(
-      "ERREUR VALIDATION MONDO QUIZ :",
-      error
-    );
+    clickedButton
+      .classList
+      .add("wrong");
 
-
-    state.locked = false;
-
-
-    $("feedback").className =
-      "feedback show wrong";
-
-
-    $("feedback").textContent =
-      "La validation a échoué : " +
-      (
-        error?.message ||
-        "erreur inconnue."
-      );
+    nextBtn
+      .classList
+      .remove("hidden");
 
   }
 
 }
 
 
-/* =========================================================
+/* =====================================================
    QUESTION SUIVANTE
-========================================================= */
+===================================================== */
 
-function nextQuestion(){
+nextBtn.addEventListener(
+  "click",
+  () => {
 
-  if(
-    state.index + 1 >=
-    state.questions.length
-  ){
+    currentQuestion++;
 
-    showResult();
+    if (
+      currentQuestion >=
+      questions.length
+    ) {
 
-    return;
+      showResult();
+
+      return;
+    }
+
+    displayQuestion();
+
   }
+);
 
 
-  state.index++;
+/* =====================================================
+   RESULTAT
+===================================================== */
 
-  renderQuestion();
+function showResult() {
 
-}
+  quizSection
+    .classList
+    .add("hidden");
 
-
-/* =========================================================
-   RÉSULTAT
-========================================================= */
-
-function showResult(){
-
-  clearInterval(state.timer);
+  resultSection
+    .classList
+    .remove("hidden");
 
 
   const total =
-    state.questions.length;
+    questions.length;
 
 
   const percentage =
-    total
-      ? Math.round(
-          state.score /
-          total *
-          100
-        )
-      : 0;
+    Math.round(
+      (score / total) * 100
+    );
 
 
-  $("circle").textContent =
-    percentage + "%";
+  scoreElement.textContent =
+    `${score} / ${total}`;
 
 
-  $("score").textContent =
-    state.score;
-
-
-  $("answered").textContent =
-    state.answered;
-
-
-  $("total").textContent =
-    total;
-
-
-  if(percentage >= 80){
-
-    $("rtitle").textContent =
-      "Excellent travail !";
-
-  }
-
-  else if(percentage >= 60){
-
-    $("rtitle").textContent =
-      "Très bon parcours.";
-
-  }
-
-  else if(percentage >= 40){
-
-    $("rtitle").textContent =
-      "Bonne progression.";
-
-  }
-
-  else{
-
-    $("rtitle").textContent =
-      "Continue à t’entraîner.";
-
-  }
-
-
-  $("rtext").textContent =
-    `${state.category} · ${
-      state.difficulty === "beginner"
-        ? "Débutant"
-        : "Intermédiaire"
-    } · score ${
-      state.score
-    }/${total}.`;
-
-
-  showScreen("result");
+  resultDetails.textContent =
+    `${percentage}% de réussite — ${selectedCategory}`;
 
 }
 
 
-/* =========================================================
-   BOUTONS
-========================================================= */
+/* =====================================================
+   RECOMMENCER
+===================================================== */
 
-$("start").onclick =
-  startQuiz;
+restartBtn.addEventListener(
+  "click",
+  () => {
 
+    resultSection
+      .classList
+      .add("hidden");
 
-$("next").onclick =
-  nextQuestion;
+    setupSection
+      .classList
+      .remove("hidden");
 
+    setupMessage.textContent =
+      "";
 
-$("replay").onclick =
-  startQuiz;
+    questionCount.value =
+      10;
 
-
-$("back").onclick = () => {
-
-  clearInterval(state.timer);
-
-  showScreen("setup");
-
-};
-
-
-/* =========================================================
-   INITIALISATION
-========================================================= */
-
-initializeCategories();
+  }
+);
 
 </script>
 
