@@ -3,24 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#08111f">
   <title>Mondo Quiz — ZNAEDU</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
-      --bg: #07111f;
-      --panel: #0d1b2e;
-      --panel2: #12243b;
-      --text: #f4f7fb;
-      --muted: #aab8ca;
-      --primary: #4da3ff;
-      --primary2: #2176d2;
-      --success: #28c76f;
-      --danger: #ff5c6c;
-      --border: rgba(255,255,255,.09);
-      --shadow: 0 20px 50px rgba(0,0,0,.28);
+      --primary: #174ea6;
+      --secondary: #0b8043;
+      --accent: #f9ab00;
+      --danger: #d93025;
+      --dark: #17202a;
+      --light: #f5f7fa;
+      --white: #ffffff;
+      --border: #dfe3e8;
+      --muted: #687078;
     }
 
     * {
@@ -29,327 +26,338 @@
 
     body {
       margin: 0;
-      background:
-        radial-gradient(circle at top right, rgba(77,163,255,.16), transparent 35%),
-        linear-gradient(145deg, #050c16, var(--bg));
-      color: var(--text);
       font-family: Arial, Helvetica, sans-serif;
-      min-height: 100vh;
+      background: var(--light);
+      color: var(--dark);
     }
 
-    button,
-    input,
-    select {
-      font: inherit;
-    }
-
-    .app {
-      width: min(1100px, 94%);
-      margin: auto;
-      padding: 24px 0 60px;
-    }
-
-    .hero {
+    header {
+      background: linear-gradient(135deg, #174ea6, #0b8043);
+      color: white;
+      padding: 22px 16px;
       text-align: center;
-      padding: 30px 15px;
     }
 
-    .hero h1 {
+    header h1 {
       margin: 0;
-      font-size: clamp(2rem, 7vw, 4rem);
-      letter-spacing: -.04em;
+      font-size: 30px;
     }
 
-    .hero p {
-      color: var(--muted);
-      max-width: 760px;
-      margin: 14px auto 0;
-      line-height: 1.6;
+    header p {
+      margin: 8px 0 0;
+      opacity: .92;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 18px;
     }
 
     .card {
-      background: rgba(13,27,46,.94);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 22px;
-      box-shadow: var(--shadow);
+      background: var(--white);
+      border-radius: 14px;
+      padding: 20px;
       margin-bottom: 18px;
-      backdrop-filter: blur(12px);
+      box-shadow: 0 3px 15px rgba(0,0,0,.07);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      min-height: 44px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      font-size: 15px;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      font-weight: bold;
+    }
+
+    .primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .secondary {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .warning {
+      background: var(--accent);
+      color: #222;
+    }
+
+    .danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
     }
 
     .hidden {
       display: none !important;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 15px;
-    }
-
-    @media(max-width: 720px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    label {
-      display: block;
-      color: var(--muted);
-      font-size: .9rem;
-      margin-bottom: 7px;
-    }
-
-    input,
-    select {
-      width: 100%;
-      border: 1px solid var(--border);
-      background: var(--panel2);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 13px 14px;
-      outline: none;
-    }
-
-    input:focus,
-    select:focus {
-      border-color: var(--primary);
-    }
-
-    .full {
-      grid-column: 1 / -1;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    button {
-      border: 0;
-      border-radius: 12px;
-      padding: 13px 18px;
-      cursor: pointer;
-      color: white;
-      background: var(--primary2);
-      font-weight: 700;
-    }
-
-    button:hover {
-      filter: brightness(1.12);
-    }
-
-    button.secondary {
-      background: #263a55;
-    }
-
-    button.danger {
-      background: #8e2431;
-    }
-
-    button.success {
-      background: #16834a;
-    }
-
     .status {
-      padding: 12px 15px;
+      padding: 12px;
+      border-radius: 9px;
+      margin-bottom: 14px;
+      background: #eef3f8;
+    }
+
+    .status.success {
+      background: #e8f5e9;
+      color: #146c2e;
+    }
+
+    .status.error {
+      background: #fdecea;
+      color: #a50e0e;
+    }
+
+    .question {
+      border: 1px solid var(--border);
       border-radius: 12px;
-      background: rgba(77,163,255,.09);
-      border: 1px solid rgba(77,163,255,.18);
-      color: var(--muted);
-      margin-bottom: 15px;
-      line-height: 1.5;
+      padding: 18px;
+      margin-bottom: 16px;
+      background: #fff;
     }
 
-    .error {
-      background: rgba(255,92,108,.1);
-      border-color: rgba(255,92,108,.3);
-      color: #ffd8dc;
-    }
-
-    .success-box {
-      background: rgba(40,199,111,.1);
-      border-color: rgba(40,199,111,.3);
-      color: #d6ffe7;
-    }
-
-    .section-title {
-      margin: 0 0 15px;
-      font-size: 1.25rem;
-    }
-
-    .question-number {
-      color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .question-text {
-      font-size: clamp(1.1rem, 3vw, 1.45rem);
-      line-height: 1.55;
-      margin-bottom: 20px;
-    }
-
-    .options {
-      display: grid;
-      gap: 10px;
+    .question h3 {
+      margin-top: 0;
     }
 
     .option {
-      width: 100%;
-      text-align: left;
-      background: #162b45;
+      display: block;
+      padding: 12px;
       border: 1px solid var(--border);
-      padding: 15px;
-      border-radius: 14px;
-      color: var(--text);
+      border-radius: 8px;
+      margin: 8px 0;
+      cursor: pointer;
     }
 
-    .option.selected {
-      border-color: var(--primary);
-      background: rgba(77,163,255,.17);
+    .option:hover {
+      background: #f5f8fc;
     }
 
-    .option.correct {
-      background: rgba(40,199,111,.18);
-      border-color: var(--success);
-    }
-
-    .option.wrong {
-      background: rgba(255,92,108,.16);
-      border-color: var(--danger);
-    }
-
-    .progress {
-      height: 8px;
-      background: #172940;
-      border-radius: 999px;
-      overflow: hidden;
-      margin: 15px 0 22px;
-    }
-
-    .progress > div {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary2), var(--primary));
-      width: 0%;
-      transition: width .25s ease;
-    }
-
-    .pill {
+    .badge {
       display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #172940;
-      color: var(--muted);
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
       margin: 3px;
-      font-size: .82rem;
+      background: #e8eef8;
     }
 
-    .auth {
-      max-width: 560px;
-      margin: auto;
+    .premium {
+      border: 2px solid var(--accent);
+      background: #fffaf0;
     }
 
-    .big-score {
-      font-size: clamp(3rem, 12vw, 7rem);
-      font-weight: 800;
-      text-align: center;
+    .price {
+      font-size: 30px;
+      font-weight: bold;
       color: var(--primary);
     }
 
-    .center {
+    .plan {
       text-align: center;
     }
 
-    .small {
-      font-size: .85rem;
+    .referral-box {
+      background: #f0f7ff;
+      border: 1px dashed var(--primary);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    footer {
+      text-align: center;
       color: var(--muted);
-    }
-
-    .search-results {
-      max-height: 250px;
-      overflow: auto;
-      margin-top: 8px;
-      border-radius: 12px;
-      background: #0a1728;
-      border: 1px solid var(--border);
-    }
-
-    .search-item {
-      padding: 11px 13px;
-      cursor: pointer;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .search-item:last-child {
-      border-bottom: 0;
-    }
-
-    .search-item:hover {
-      background: #162b45;
-    }
-
-    .search-item strong {
-      display: block;
-    }
-
-    .search-item span {
-      color: var(--muted);
-      font-size: .82rem;
+      padding: 25px;
+      font-size: 13px;
     }
   </style>
 </head>
 
 <body>
 
-<div class="app">
+<header>
+  <h1>MONDO QUIZ</h1>
+  <p>Apprendre • S'exercer • Progresser • Réussir</p>
+</header>
 
-  <header class="hero">
-    <h1>MONDO QUIZ</h1>
-    <p>
-      Le quiz de ZNAEDU à l'échelle mondiale.
-      Choisis une discipline, un pays, une langue, un niveau et le nombre
-      de questions que tu veux réellement pratiquer.
-    </p>
-  </header>
+<div class="container">
 
   <!-- AUTHENTIFICATION -->
-  <section id="authCard" class="card auth">
-
-    <h2 class="section-title">Accéder à Mondo Quiz</h2>
+  <section class="card" id="authCard">
+    <h2>Connexion</h2>
 
     <div id="authStatus" class="status">
-      Connecte-toi pour commencer une partie.
+      Connecte-toi pour accéder à ton espace Mondo Quiz.
     </div>
 
-    <label for="email">Adresse e-mail</label>
-    <input
-      id="email"
-      type="email"
-      autocomplete="email"
-      placeholder="ton@email.com"
+    <div id="loginForm">
+      <label for="email">Adresse e-mail</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="exemple@email.com"
+        autocomplete="email"
+      >
+
+      <br>
+
+      <button class="primary" id="sendMagicLink">
+        Recevoir mon lien de connexion
+      </button>
+    </div>
+
+    <button
+      class="danger hidden"
+      id="logoutBtn"
+      style="margin-top:10px;"
     >
-
-    <div class="actions">
-      <button id="loginBtn">Recevoir le lien de connexion</button>
-    </div>
-
-    <p class="small">
-      Un lien sécurisé sera envoyé à ton adresse e-mail.
-    </p>
-
+      Se déconnecter
+    </button>
   </section>
 
-  <!-- CONFIGURATION -->
-  <section id="configCard" class="card hidden">
+  <!-- PROFIL -->
+  <section class="card hidden" id="profileCard">
+    <h2>Mon profil</h2>
 
-    <h2 class="section-title">Configurer ta partie</h2>
+    <div id="profileInfo"></div>
 
-    <div id="configStatus" class="status">
-      Chargement du catalogue mondial...
+    <div class="grid">
+      <div>
+        <label for="userType">Profil</label>
+        <select id="userType">
+          <option value="student">Élève</option>
+          <option value="teacher">Enseignant</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="schoolLevel">Niveau</label>
+        <select id="schoolLevel">
+          <option value="">Sélectionner</option>
+          <option value="maternelle">Maternelle</option>
+          <option value="primaire">Primaire</option>
+          <option value="secondaire_general">Secondaire général</option>
+          <option value="secondaire_technique">Secondaire technique</option>
+          <option value="professionnel">Technique et professionnel</option>
+          <option value="superieur">Supérieur</option>
+          <option value="international">International</option>
+        </select>
+      </div>
     </div>
+  </section>
+
+  <!-- ABONNEMENTS -->
+  <section class="card hidden" id="subscriptionCard">
+    <h2>Abonnement Mondo Quiz</h2>
+
+    <p class="muted">
+      L'abonnement donne accès aux fonctionnalités premium selon le profil choisi.
+    </p>
+
+    <div class="grid">
+
+      <div class="card plan">
+        <h3>Élève</h3>
+        <div class="price">500 FCFA</div>
+        <p>par mois</p>
+        <button
+          class="primary subscribeBtn"
+          data-plan="student"
+        >
+          S'abonner
+        </button>
+      </div>
+
+      <div class="card plan">
+        <h3>Enseignant</h3>
+        <div class="price">1 000 FCFA</div>
+        <p>par mois</p>
+        <button
+          class="secondary subscribeBtn"
+          data-plan="teacher"
+        >
+          S'abonner
+        </button>
+      </div>
+
+    </div>
+
+    <div id="subscriptionStatus" class="status"></div>
+
+    <div class="referral-box">
+      <h3>Parrainage</h3>
+
+      <p>
+        Invite un ami à s'abonner. Lorsqu'une nouvelle souscription admissible
+        est confirmée, le système peut appliquer une réduction de 20 % au
+        parrain selon les règles du programme de parrainage.
+      </p>
+
+      <label for="referralCode">Ton code de parrainage</label>
+      <input id="referralCode" readonly>
+
+      <button
+        class="warning"
+        id="copyReferral"
+        style="margin-top:8px;"
+      >
+        Copier mon code
+      </button>
+
+      <br><br>
+
+      <label for="referrerCode">
+        Code de la personne qui t'a invité
+      </label>
+
+      <input
+        id="referrerCode"
+        placeholder="Code du parrain"
+      >
+
+      <button
+        class="primary"
+        id="saveReferral"
+        style="margin-top:8px;"
+      >
+        Enregistrer le parrain
+      </button>
+    </div>
+  </section>
+
+  <!-- PARAMÈTRES DU QUIZ -->
+  <section class="card hidden" id="quizSetupCard">
+    <h2>Préparer mon quiz</h2>
 
     <div class="grid">
 
@@ -357,52 +365,73 @@
         <label for="scope">Portée</label>
         <select id="scope">
           <option value="international">International</option>
-          <option value="national">National</option>
+          <option value="national">Programme national</option>
         </select>
       </div>
 
       <div>
         <label for="country">Pays</label>
         <select id="country">
-          <option value="">Tous les pays / non spécifié</option>
+          <option value="">Chargement...</option>
         </select>
       </div>
 
-      <div class="full">
-        <label for="disciplineSearch">Rechercher une discipline</label>
-        <input
-          id="disciplineSearch"
-          type="search"
-          placeholder="Ex. football, astronomie, philosophie..."
-          autocomplete="off"
-        >
-        <div id="disciplineResults" class="search-results hidden"></div>
-      </div>
-
       <div>
-        <label for="discipline">Discipline sélectionnée</label>
+        <label for="discipline">Discipline</label>
         <select id="discipline">
-          <option value="">Toutes les disciplines</option>
+          <option value="">Chargement...</option>
         </select>
       </div>
 
       <div>
-        <label for="language">Langue</label>
-        <select id="language">
-          <option value="fr">Français</option>
-          <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="pt">Português</option>
-          <option value="de">Deutsch</option>
-          <option value="ar">العربية</option>
-          <option value="zh">中文</option>
+        <label for="subdiscipline">Sous-discipline</label>
+        <input
+          id="subdiscipline"
+          placeholder="Ex. Algèbre"
+        >
+      </div>
+
+      <div>
+        <label for="level">Classe / niveau</label>
+        <input
+          id="level"
+          placeholder="Ex. CM2, 3e, Terminale..."
+        >
+      </div>
+
+      <div>
+        <label for="programYear">Année / version du programme</label>
+        <input
+          id="programYear"
+          placeholder="Ex. 2026-2027"
+        >
+      </div>
+
+      <div>
+        <label for="competency">Compétence</label>
+        <input
+          id="competency"
+          placeholder="Compétence ciblée"
+        >
+      </div>
+
+      <div>
+        <label for="bloom">Niveau de Bloom</label>
+        <select id="bloom">
+          <option value="">Tous les niveaux</option>
+          <option value="remember">Mémoriser</option>
+          <option value="understand">Comprendre</option>
+          <option value="apply">Appliquer</option>
+          <option value="analyze">Analyser</option>
+          <option value="evaluate">Évaluer</option>
+          <option value="create">Créer</option>
         </select>
       </div>
 
       <div>
         <label for="difficulty">Difficulté</label>
         <select id="difficulty">
-          <option value="">Tous niveaux</option>
+          <option value="">Toutes</option>
           <option value="beginner">Débutant</option>
           <option value="intermediate">Intermédiaire</option>
           <option value="advanced">Avancé</option>
@@ -413,7 +442,7 @@
       <div>
         <label for="questionType">Type de question</label>
         <select id="questionType">
-          <option value="">Tous types</option>
+          <option value="">Tous</option>
           <option value="single_choice">Choix unique</option>
           <option value="multiple_choice">Choix multiples</option>
           <option value="true_false">Vrai / Faux</option>
@@ -421,847 +450,1251 @@
           <option value="numeric">Numérique</option>
           <option value="ordering">Classement</option>
           <option value="matching">Association</option>
-          <option value="image">Image</option>
-          <option value="audio">Audio</option>
-          <option value="video">Vidéo</option>
           <option value="case_study">Étude de cas</option>
           <option value="adaptive">Adaptatif</option>
         </select>
       </div>
 
       <div>
-        <label for="questionCount">Nombre de questions</label>
+        <label for="questionCount">
+          Nombre de questions
+        </label>
+
         <input
           id="questionCount"
           type="number"
           min="1"
-          step="1"
           value="10"
-          inputmode="numeric"
-        >
-      </div>
-
-      <div>
-        <label for="age">Âge du joueur (facultatif)</label>
-        <input
-          id="age"
-          type="number"
-          min="0"
-          max="130"
-          placeholder="Ex. 18"
-        >
-      </div>
-
-      <div>
-        <label for="region">Région / zone (facultatif)</label>
-        <input
-          id="region"
-          type="text"
-          placeholder="Code ou nom"
-        >
-      </div>
-
-      <div>
-        <label for="city">Ville (facultatif)</label>
-        <input
-          id="city"
-          type="text"
-          placeholder="Code ou nom"
-        >
-      </div>
-
-      <div class="full">
-        <label for="topic">Thème (facultatif)</label>
-        <input
-          id="topic"
-          type="text"
-          placeholder="Ex. Coupe du monde, physique quantique..."
-        >
-      </div>
-
-      <div class="full">
-        <label for="subdiscipline">Sous-discipline (facultatif)</label>
-        <input
-          id="subdiscipline"
-          type="text"
-          placeholder="Sous-discipline"
-        >
-      </div>
-
-      <div class="full">
-        <label for="subtopic">Sous-thème (facultatif)</label>
-        <input
-          id="subtopic"
-          type="text"
-          placeholder="Sous-thème"
-        >
-      </div>
-
-      <div class="full">
-        <label for="tags">Tags (facultatif, séparés par des virgules)</label>
-        <input
-          id="tags"
-          type="text"
-          placeholder="Afrique, finale, 2026"
         >
       </div>
 
     </div>
 
-    <div class="actions">
-      <button id="startBtn">Commencer la partie</button>
-      <button id="logoutBtn" class="secondary">Déconnexion</button>
-    </div>
+    <br>
 
+    <button
+      class="primary"
+      id="startQuiz"
+    >
+      Commencer le quiz
+    </button>
   </section>
 
   <!-- QUIZ -->
-  <section id="quizCard" class="card hidden">
+  <section class="card hidden" id="quizCard">
+    <h2>Quiz en cours</h2>
 
     <div id="quizMeta"></div>
 
-    <div class="progress">
-      <div id="progressBar"></div>
-    </div>
+    <div id="questionsContainer"></div>
 
-    <div id="questionContainer"></div>
-
-    <div class="actions">
-      <button id="submitBtn">Valider la réponse</button>
-      <button id="nextBtn" class="secondary hidden">Question suivante</button>
-    </div>
-
-    <div id="answerStatus" class="status hidden"></div>
-
+    <button
+      class="secondary"
+      id="submitQuiz"
+    >
+      Valider mes réponses
+    </button>
   </section>
 
-  <!-- RESULTAT -->
-  <section id="resultCard" class="card hidden">
+  <!-- RESULTATS -->
+  <section class="card hidden" id="resultCard">
+    <h2>Résultats</h2>
 
-    <div class="center">
-      <h2>Partie terminée</h2>
+    <div id="resultContent"></div>
 
-      <div id="score" class="big-score">0</div>
-
-      <p id="resultText"></p>
-
-      <div class="actions" style="justify-content:center">
-        <button id="newGameBtn">Nouvelle partie</button>
-        <button id="resultLogoutBtn" class="secondary">Déconnexion</button>
-      </div>
-    </div>
-
+    <button
+      class="primary"
+      id="newQuiz"
+    >
+      Nouveau quiz
+    </button>
   </section>
 
 </div>
 
-<script>
-  const SUPABASE_URL = "https://dpxghtjhjylofxhmnfxf.supabase.co";
-  const SUPABASE_KEY =
-    "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKEs";
+<footer>
+  Mondo Quiz — ZNAEDU
+</footer>
 
-  const client = window.supabase.createClient(
+<script>
+"use strict";
+
+/* =========================================================
+   CONFIGURATION SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+  "https://dpxghtjhjylofxhmnfxf.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKEs";
+
+const supabaseClient =
+  window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_KEY
+    SUPABASE_KEY,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
   );
 
-  let catalog = {
-    countries: [],
-    disciplines: []
-  };
 
-  let currentSessionId = null;
-  let questions = [];
-  let currentIndex = 0;
-  let currentAnswer = null;
-  let answered = false;
-  let score = 0;
+/* =========================================================
+   ÉTAT
+========================================================= */
 
-  const $ = id => document.getElementById(id);
+let currentUser = null;
+let currentSession = null;
+let currentQuiz = null;
+let catalog = null;
 
-  function show(id) {
-    $(id).classList.remove("hidden");
+
+/* =========================================================
+   OUTILS
+========================================================= */
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function show(id) {
+  $(id).classList.remove("hidden");
+}
+
+function hide(id) {
+  $(id).classList.add("hidden");
+}
+
+function setStatus(id, message, type = "") {
+  const el = $(id);
+  el.textContent = message;
+  el.className = "status";
+
+  if (type) {
+    el.classList.add(type);
   }
+}
 
-  function hide(id) {
-    $(id).classList.add("hidden");
-  }
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
-  function setStatus(id, message, type = "") {
-    const el = $(id);
-    el.textContent = message;
-    el.className = "status";
 
-    if (type === "error") {
-      el.classList.add("error");
+/* =========================================================
+   AUTHENTIFICATION
+========================================================= */
+
+async function initializeAuth() {
+
+  const {
+    data: {
+      session
     }
+  } = await supabaseClient.auth.getSession();
 
-    if (type === "success") {
-      el.classList.add("success-box");
+  currentSession = session;
+  currentUser = session?.user ?? null;
+
+  await refreshInterface();
+
+  supabaseClient.auth.onAuthStateChange(
+    async (_event, session) => {
+
+      currentSession = session;
+      currentUser = session?.user ?? null;
+
+      await refreshInterface();
     }
+  );
+}
+
+
+async function sendMagicLink() {
+
+  const email = $("email").value.trim();
+
+  if (!email) {
+    setStatus(
+      "authStatus",
+      "Veuillez saisir une adresse e-mail.",
+      "error"
+    );
+    return;
   }
 
-  function escapeHtml(value) {
-    return String(value ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
+  try {
 
-  async function init() {
+    const redirectTo =
+      window.location.origin +
+      window.location.pathname;
+
     const {
-      data: { session }
-    } = await client.auth.getSession();
-
-    if (session) {
-      await enterAuthenticatedMode();
-    } else {
-      show("authCard");
-      hide("configCard");
-      hide("quizCard");
-      hide("resultCard");
-    }
-  }
-
-  async function enterAuthenticatedMode() {
-    hide("authCard");
-    hide("quizCard");
-    hide("resultCard");
-    show("configCard");
-
-    setStatus(
-      "configStatus",
-      "Chargement du catalogue mondial..."
-    );
-
-    await loadCatalog();
-
-    setStatus(
-      "configStatus",
-      `${catalog.disciplines.length} disciplines et ${catalog.countries.length} pays actuellement disponibles dans le catalogue. Le moteur n'impose pas de plafond de questions.`,
-      "success"
-    );
-  }
-
-  async function loadCatalog() {
-    const { data, error } = await client.rpc(
-      "mondo_quiz_catalog"
-    );
-
-    if (error) {
-      console.error(error);
-      setStatus(
-        "configStatus",
-        "Impossible de charger le catalogue.",
-        "error"
-      );
-      return;
-    }
-
-    catalog = data || {
-      countries: [],
-      disciplines: []
-    };
-
-    fillCountries();
-    fillDisciplines();
-  }
-
-  function fillCountries() {
-    const select = $("country");
-
-    select.innerHTML =
-      `<option value="">Tous les pays / non spécifié</option>`;
-
-    [...catalog.countries]
-      .sort((a, b) =>
-        (a.name_fr || a.name_en || "")
-          .localeCompare(b.name_fr || b.name_en || "")
-      )
-      .forEach(country => {
-        const option = document.createElement("option");
-
-        option.value = country.code;
-        option.textContent =
-          country.name_fr ||
-          country.name_en ||
-          country.code;
-
-        select.appendChild(option);
-      });
-  }
-
-  function fillDisciplines() {
-    const select = $("discipline");
-
-    select.innerHTML =
-      `<option value="">Toutes les disciplines</option>`;
-
-    [...catalog.disciplines]
-      .sort((a, b) =>
-        (a.name || "")
-          .localeCompare(b.name || "")
-      )
-      .forEach(discipline => {
-        const option = document.createElement("option");
-
-        option.value = discipline.slug;
-        option.textContent = discipline.name;
-
-        select.appendChild(option);
-      });
-  }
-
-  function searchDisciplines() {
-    const q = $("disciplineSearch")
-      .value
-      .trim()
-      .toLowerCase();
-
-    const results = $("disciplineResults");
-
-    if (!q) {
-      hide("disciplineResults");
-      return;
-    }
-
-    const matches = catalog.disciplines
-      .filter(d =>
-        (d.name || "").toLowerCase().includes(q) ||
-        (d.slug || "").toLowerCase().includes(q) ||
-        (d.description || "").toLowerCase().includes(q)
-      )
-      .slice(0, 100);
-
-    results.innerHTML = "";
-
-    if (!matches.length) {
-      results.innerHTML =
-        `<div class="search-item">Aucune discipline trouvée.</div>`;
-
-      show("disciplineResults");
-      return;
-    }
-
-    matches.forEach(d => {
-      const item = document.createElement("div");
-      item.className = "search-item";
-
-      item.innerHTML = `
-        <strong>${escapeHtml(d.name)}</strong>
-        <span>${escapeHtml(d.description || d.family || "")}</span>
-      `;
-
-      item.addEventListener("click", () => {
-        $("discipline").value = d.slug;
-        $("disciplineSearch").value = d.name;
-        hide("disciplineResults");
-      });
-
-      results.appendChild(item);
+      error
+    } = await supabaseClient.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: redirectTo
+      }
     });
 
-    show("disciplineResults");
-  }
-
-  function normalizeAnswer(answer) {
-    if (Array.isArray(answer)) {
-      return JSON.stringify(answer);
-    }
-
-    return String(answer ?? "");
-  }
-
-  function renderQuestion() {
-    const q = questions[currentIndex];
-
-    currentAnswer = null;
-    answered = false;
-
-    $("answerStatus").className = "status hidden";
-    hide("nextBtn");
-    show("submitBtn");
-
-    const percentage =
-      ((currentIndex) / questions.length) * 100;
-
-    $("progressBar").style.width =
-      `${percentage}%`;
-
-    $("quizMeta").innerHTML = `
-      <span class="pill">
-        Question ${currentIndex + 1}/${questions.length}
-      </span>
-
-      <span class="pill">
-        ${escapeHtml(q.type)}
-      </span>
-
-      ${q.topic
-        ? `<span class="pill">${escapeHtml(q.topic)}</span>`
-        : ""}
-    `;
-
-    let html = `
-      <div class="question-number">
-        QUESTION ${currentIndex + 1}
-      </div>
-
-      <div class="question-text">
-        ${escapeHtml(q.question)}
-      </div>
-    `;
-
-    if (
-      q.type === "single_choice" ||
-      q.type === "true_false"
-    ) {
-      const options =
-        q.type === "true_false"
-          ? ["true", "false"]
-          : Array.isArray(q.options)
-            ? q.options
-            : Object.values(q.options || {});
-
-      html += `<div class="options">`;
-
-      options.forEach((option, index) => {
-        const value =
-          typeof option === "object"
-            ? option.value ?? option.label ?? option.text
-            : option;
-
-        const label =
-          typeof option === "object"
-            ? option.label ?? option.text ?? option.value
-            : option;
-
-        html += `
-          <button
-            class="option"
-            data-value="${escapeHtml(value)}"
-            type="button"
-          >
-            ${escapeHtml(label)}
-          </button>
-        `;
-      });
-
-      html += `</div>`;
-    }
-
-    else if (q.type === "multiple_choice") {
-      const options =
-        Array.isArray(q.options)
-          ? q.options
-          : Object.values(q.options || {});
-
-      html += `<div class="options">`;
-
-      options.forEach(option => {
-        const value =
-          typeof option === "object"
-            ? option.value ?? option.label ?? option.text
-            : option;
-
-        const label =
-          typeof option === "object"
-            ? option.label ?? option.text ?? option.value
-            : option;
-
-        html += `
-          <button
-            class="option multiple"
-            data-value="${escapeHtml(value)}"
-            type="button"
-          >
-            ${escapeHtml(label)}
-          </button>
-        `;
-      });
-
-      html += `</div>`;
-    }
-
-    else {
-      html += `
-        <input
-          id="freeAnswer"
-          type="text"
-          placeholder="Écris ta réponse..."
-          autocomplete="off"
-        >
-      `;
-    }
-
-    $("questionContainer").innerHTML = html;
-
-    document
-      .querySelectorAll(".option")
-      .forEach(button => {
-        button.addEventListener("click", () => {
-          if (answered) return;
-
-          if (button.classList.contains("multiple")) {
-            button.classList.toggle("selected");
-
-            const selected = [
-              ...document.querySelectorAll(
-                ".option.multiple.selected"
-              )
-            ].map(el => el.dataset.value);
-
-            currentAnswer = selected;
-          } else {
-            document
-              .querySelectorAll(".option")
-              .forEach(el =>
-                el.classList.remove("selected")
-              );
-
-            button.classList.add("selected");
-            currentAnswer = button.dataset.value;
-          }
-        });
-      });
-
-    const freeAnswer = $("freeAnswer");
-
-    if (freeAnswer) {
-      freeAnswer.addEventListener("input", () => {
-        currentAnswer = freeAnswer.value;
-      });
-    }
-  }
-
-  async function submitCurrentAnswer() {
-    if (answered) return;
-
-    if (
-      currentAnswer === null ||
-      currentAnswer === "" ||
-      (Array.isArray(currentAnswer) &&
-        currentAnswer.length === 0)
-    ) {
-      setStatus(
-        "answerStatus",
-        "Sélectionne ou écris une réponse.",
-        "error"
-      );
-
-      show("answerStatus");
-      return;
-    }
-
-    const q = questions[currentIndex];
-
-    const { data, error } = await client.rpc(
-      "mondo_quiz_submit_answer",
-      {
-        p_session_id: currentSessionId,
-        p_question_id: q.id,
-        p_answer: normalizeAnswer(currentAnswer)
-      }
-    );
-
     if (error) {
-      console.error(error);
-
-      setStatus(
-        "answerStatus",
-        error.message || "Erreur lors de la validation.",
-        "error"
-      );
-
-      show("answerStatus");
-      return;
-    }
-
-    answered = true;
-
-    if (data.correct) {
-      score++;
-      setStatus(
-        "answerStatus",
-        `Bonne réponse. Score : ${data.score}/${data.answered_count}`,
-        "success"
-      );
-    } else {
-      setStatus(
-        "answerStatus",
-        `Réponse incorrecte. Réponse attendue : ${data.correct_answer || "voir la correction"}.`,
-        "error"
-      );
-    }
-
-    show("answerStatus");
-    hide("submitBtn");
-
-    if (data.completed) {
-      setTimeout(showResult, 500);
-    } else {
-      show("nextBtn");
-    }
-  }
-
-  function nextQuestion() {
-    currentIndex++;
-
-    if (currentIndex >= questions.length) {
-      showResult();
-      return;
-    }
-
-    renderQuestion();
-  }
-
-  function showResult() {
-    hide("quizCard");
-    show("resultCard");
-
-    $("progressBar").style.width = "100%";
-
-    $("score").textContent =
-      `${score}/${questions.length}`;
-
-    const percentage =
-      questions.length
-        ? Math.round((score / questions.length) * 100)
-        : 0;
-
-    $("resultText").textContent =
-      `Tu as obtenu ${percentage}% de réussite.`;
-  }
-
-  async function startQuiz() {
-    const requestedCount =
-      Number.parseInt(
-        $("questionCount").value,
-        10
-      );
-
-    if (
-      !Number.isInteger(requestedCount) ||
-      requestedCount < 1
-    ) {
-      setStatus(
-        "configStatus",
-        "Le nombre de questions doit être un entier positif.",
-        "error"
-      );
-      return;
-    }
-
-    const scope = $("scope").value;
-    const country = $("country").value || null;
-
-    if (scope === "national" && !country) {
-      setStatus(
-        "configStatus",
-        "Choisis un pays pour une partie nationale.",
-        "error"
-      );
-      return;
-    }
-
-    const tags =
-      $("tags").value
-        .split(",")
-        .map(x => x.trim())
-        .filter(Boolean);
-
-    setStatus(
-      "configStatus",
-      "Recherche des questions disponibles..."
-    );
-
-    const { data, error } = await client.rpc(
-      "mondo_quiz_start",
-      {
-        p_category:
-          $("discipline").value || null,
-
-        p_scope:
-          scope,
-
-        p_country_code:
-          country,
-
-        p_difficulty:
-          $("difficulty").value || null,
-
-        p_question_count:
-          requestedCount,
-
-        p_language_code:
-          $("language").value,
-
-        p_subdiscipline:
-          $("subdiscipline").value.trim() || null,
-
-        p_topic:
-          $("topic").value.trim() || null,
-
-        p_subtopic:
-          $("subtopic").value.trim() || null,
-
-        p_region_code:
-          $("region").value.trim() || null,
-
-        p_city_code:
-          $("city").value.trim() || null,
-
-        p_age:
-          $("age").value
-            ? Number.parseInt($("age").value, 10)
-            : null,
-
-        p_question_type:
-          $("questionType").value || null,
-
-        p_tags:
-          tags.length ? tags : null
-      }
-    );
-
-    if (error) {
-      console.error(error);
-
-      setStatus(
-        "configStatus",
-        error.message ||
-        "Aucune question disponible avec ces critères.",
-        "error"
-      );
-
-      return;
-    }
-
-    if (
-      !data ||
-      !Array.isArray(data.questions) ||
-      !data.questions.length
-    ) {
-      setStatus(
-        "configStatus",
-        "Aucune question disponible avec ces critères.",
-        "error"
-      );
-
-      return;
-    }
-
-    currentSessionId = data.session_id;
-    questions = data.questions;
-    currentIndex = 0;
-    score = 0;
-
-    hide("configCard");
-    hide("resultCard");
-    show("quizCard");
-
-    renderQuestion();
-  }
-
-  async function sendMagicLink() {
-    const email = $("email").value.trim();
-
-    if (!email) {
-      setStatus(
-        "authStatus",
-        "Entre ton adresse e-mail.",
-        "error"
-      );
-      return;
-    }
-
-    const { error } =
-      await client.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo:
-            window.location.href
-        }
-      });
-
-    if (error) {
-      setStatus(
-        "authStatus",
-        error.message,
-        "error"
-      );
-      return;
+      throw error;
     }
 
     setStatus(
       "authStatus",
-      "Le lien de connexion a été envoyé. Ouvre-le depuis ton e-mail.",
+      "Le lien de connexion a été envoyé. Ouvre ton e-mail puis utilise le lien.",
       "success"
     );
+
+  } catch (error) {
+
+    console.error(error);
+
+    setStatus(
+      "authStatus",
+      "Impossible d'envoyer le lien : " + error.message,
+      "error"
+    );
+  }
+}
+
+
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  currentUser = null;
+  currentSession = null;
+
+  await refreshInterface();
+}
+
+
+/* =========================================================
+   INTERFACE APRÈS CONNEXION
+========================================================= */
+
+async function refreshInterface() {
+
+  if (!currentUser) {
+
+    show("authCard");
+    hide("profileCard");
+    hide("subscriptionCard");
+    hide("quizSetupCard");
+    hide("quizCard");
+    hide("resultCard");
+
+    show("loginForm");
+    hide("logoutBtn");
+
+    return;
   }
 
-  async function logout() {
-    await client.auth.signOut();
+  hide("loginForm");
+  show("logoutBtn");
 
-    location.reload();
+  setStatus(
+    "authStatus",
+    "Connexion réussie : " + currentUser.email,
+    "success"
+  );
+
+  show("profileCard");
+  show("subscriptionCard");
+  show("quizSetupCard");
+
+  await loadProfile();
+  await loadSubscription();
+  await loadCatalog();
+}
+
+
+/* =========================================================
+   PROFIL
+========================================================= */
+
+async function loadProfile() {
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq("id", currentUser.id)
+    .maybeSingle();
+
+  if (error) {
+    console.error(error);
+    return;
   }
 
-  $("loginBtn")
-    .addEventListener("click", sendMagicLink);
+  $("profileInfo").innerHTML = `
+    <p>
+      <strong>Compte :</strong>
+      ${escapeHtml(currentUser.email)}
+    </p>
 
-  $("startBtn")
-    .addEventListener("click", startQuiz);
+    <p>
+      <strong>Nom :</strong>
+      ${escapeHtml(data?.display_name || "Non renseigné")}
+    </p>
+  `;
 
-  $("submitBtn")
-    .addEventListener("click", submitCurrentAnswer);
+  if (data?.language) {
+    // Langue utilisateur récupérée depuis le profil.
+  }
+}
 
-  $("nextBtn")
-    .addEventListener("click", nextQuestion);
 
-  $("newGameBtn")
-    .addEventListener("click", () => {
-      hide("resultCard");
-      show("configCard");
-      setStatus(
-        "configStatus",
-        "Configure une nouvelle partie."
+/* =========================================================
+   CATALOGUE MONDO QUIZ
+========================================================= */
+
+async function loadCatalog() {
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient.rpc(
+      "mondo_quiz_catalog"
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    catalog = data;
+
+    populateCatalog();
+
+  } catch (error) {
+
+    console.error(error);
+
+    setStatus(
+      "authStatus",
+      "Impossible de charger le catalogue Mondo Quiz : " +
+      error.message,
+      "error"
+    );
+  }
+}
+
+
+function populateCatalog() {
+
+  if (!catalog) return;
+
+  const countrySelect = $("country");
+  const disciplineSelect = $("discipline");
+
+  countrySelect.innerHTML =
+    `<option value="">Sélectionner un pays</option>`;
+
+  disciplineSelect.innerHTML =
+    `<option value="">Sélectionner une discipline</option>`;
+
+  if (Array.isArray(catalog.countries)) {
+
+    catalog.countries.forEach(country => {
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        country.country_code ||
+        country.code ||
+        "";
+
+      option.textContent =
+        country.name ||
+        country.label ||
+        country.country_name ||
+        option.value;
+
+      countrySelect.appendChild(option);
+    });
+  }
+
+  if (Array.isArray(catalog.disciplines)) {
+
+    catalog.disciplines.forEach(discipline => {
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        discipline.slug ||
+        discipline.code ||
+        "";
+
+      option.textContent =
+        discipline.name ||
+        discipline.label ||
+        discipline.slug;
+
+      disciplineSelect.appendChild(option);
+    });
+  }
+}
+
+
+/* =========================================================
+   ABONNEMENT
+========================================================= */
+
+async function loadSubscription() {
+
+  /*
+    La vérification définitive doit être effectuée
+    côté serveur.
+
+    Cette interface ne considère jamais qu'un simple
+    clic sur un bouton constitue un paiement.
+  */
+
+  $("subscriptionStatus").textContent =
+    "Vérification de l'état de l'abonnement...";
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("profiles")
+      .select("status")
+      .eq("id", currentUser.id)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    $("subscriptionStatus").textContent =
+      "Compte actif. L'état premium est vérifié côté serveur lors des opérations nécessitant un abonnement.";
+
+  } catch (error) {
+
+    console.error(error);
+
+    $("subscriptionStatus").textContent =
+      "État de l'abonnement indisponible.";
+  }
+
+}
+
+
+/*
+  Début du flux de paiement.
+
+  Le frontend NE valide PAS lui-même le paiement.
+
+  Le backend devra créer une transaction auprès
+  du prestataire choisi puis retourner l'URL
+  de paiement.
+*/
+
+async function startSubscription(plan) {
+
+  if (!currentUser) {
+    alert("Connecte-toi d'abord.");
+    return;
+  }
+
+  const amount =
+    plan === "teacher"
+      ? 1000
+      : 500;
+
+  const label =
+    plan === "teacher"
+      ? "Enseignant"
+      : "Élève";
+
+  setStatus(
+    "subscriptionStatus",
+    `Préparation de l'abonnement ${label} à ${amount} FCFA...`
+  );
+
+  /*
+    Point d'intégration sécurisé :
+
+    POST /functions/v1/create-subscription-payment
+
+    Le serveur devra :
+      1. vérifier l'utilisateur ;
+      2. déterminer son rôle ;
+      3. déterminer le montant ;
+      4. créer la transaction ;
+      5. enregistrer la référence ;
+      6. retourner l'URL de paiement.
+
+    Aucun secret de paiement ne doit être placé
+    dans ce fichier HTML.
+  */
+
+  try {
+
+    const {
+      data,
+      error
+    } = await supabaseClient.functions.invoke(
+      "create-subscription-payment",
+      {
+        body: {
+          plan,
+          amount,
+          currency: "XOF"
+        }
+      }
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data?.payment_url) {
+      throw new Error(
+        "Le serveur n'a pas fourni d'URL de paiement."
       );
-    });
+    }
 
-  $("logoutBtn")
-    .addEventListener("click", logout);
+    window.location.href =
+      data.payment_url;
 
-  $("resultLogoutBtn")
-    .addEventListener("click", logout);
+  } catch (error) {
 
-  $("disciplineSearch")
-    .addEventListener("input", searchDisciplines);
+    console.error(error);
 
-  $("scope")
-    .addEventListener("change", () => {
-      if ($("scope").value === "international") {
-        $("country").value = "";
+    setStatus(
+      "subscriptionStatus",
+      "Le paiement n'est pas encore disponible sur le serveur : " +
+      error.message,
+      "error"
+    );
+  }
+}
+
+
+/* =========================================================
+   PARRAINAGE
+========================================================= */
+
+async function loadReferralCode() {
+
+  /*
+    Le code réel doit idéalement être généré
+    côté serveur afin d'éviter les collisions
+    et les manipulations.
+  */
+
+  const code =
+    "ZNA-" +
+    currentUser.id
+      .replace(/-/g, "")
+      .substring(0, 8)
+      .toUpperCase();
+
+  $("referralCode").value = code;
+}
+
+
+async function saveReferral() {
+
+  const code =
+    $("referrerCode").value.trim();
+
+  if (!code) {
+    alert("Saisis le code de ton parrain.");
+    return;
+  }
+
+  try {
+
+    /*
+      La validation définitive du parrainage doit
+      être réalisée côté serveur.
+
+      Cela évite qu'un utilisateur :
+      - s'auto-parraine ;
+      - crée de faux comptes ;
+      - obtienne plusieurs réductions ;
+      - modifie directement sa réduction.
+    */
+
+    const {
+      data,
+      error
+    } = await supabaseClient.functions.invoke(
+      "register-referral",
+      {
+        body: {
+          referrer_code: code
+        }
       }
-    });
+    );
 
-  client.auth.onAuthStateChange(
-    async (event, session) => {
-      if (
-        event === "SIGNED_IN" &&
-        session
-      ) {
-        await enterAuthenticatedMode();
+    if (error) {
+      throw error;
+    }
+
+    alert(
+      data?.message ||
+      "Parrainage enregistré."
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Impossible d'enregistrer le parrainage : " +
+      error.message
+    );
+  }
+}
+
+
+/* =========================================================
+   DÉMARRAGE DU QUIZ
+========================================================= */
+
+async function startQuiz() {
+
+  if (!currentUser) {
+    alert("Connecte-toi d'abord.");
+    return;
+  }
+
+  const questionCount =
+    parseInt(
+      $("questionCount").value,
+      10
+    );
+
+  if (
+    !Number.isInteger(questionCount) ||
+    questionCount < 1
+  ) {
+    alert(
+      "Le nombre de questions doit être supérieur ou égal à 1."
+    );
+    return;
+  }
+
+  const payload = {
+
+    p_category:
+      $("discipline").value || null,
+
+    p_scope:
+      $("scope").value || "international",
+
+    p_country_code:
+      $("country").value || null,
+
+    p_difficulty:
+      $("difficulty").value || null,
+
+    p_question_count:
+      questionCount,
+
+    p_language_code:
+      "fr",
+
+    p_subdiscipline:
+      $("subdiscipline").value || null,
+
+    p_topic:
+      null,
+
+    p_subtopic:
+      null,
+
+    p_region_code:
+      null,
+
+    p_city_code:
+      null,
+
+    p_age:
+      null,
+
+    p_question_type:
+      $("questionType").value || null,
+
+    p_tags:
+      null
+  };
+
+
+  try {
+
+    setStatus(
+      "authStatus",
+      "Recherche des questions correspondant à tes critères..."
+    );
+
+    const {
+      data,
+      error
+    } = await supabaseClient.rpc(
+      "mondo_quiz_start",
+      payload
+    );
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data) {
+      throw new Error(
+        "Aucun résultat retourné."
+      );
+    }
+
+    currentQuiz = data;
+
+    renderQuiz(data);
+
+    hide("quizSetupCard");
+    show("quizCard");
+    hide("resultCard");
+
+  } catch (error) {
+
+    console.error(error);
+
+    setStatus(
+      "authStatus",
+      "Impossible de démarrer le quiz : " +
+      error.message,
+      "error"
+    );
+  }
+}
+
+
+/* =========================================================
+   AFFICHAGE DES QUESTIONS
+========================================================= */
+
+function renderQuiz(data) {
+
+  const questions =
+    data.questions ||
+    data.items ||
+    [];
+
+  $("quizMeta").innerHTML = `
+    <div>
+      <span class="badge">
+        ${escapeHtml($("scope").value)}
+      </span>
+
+      <span class="badge">
+        ${escapeHtml(
+          $("discipline").selectedOptions[0]?.textContent || ""
+        )}
+      </span>
+
+      <span class="badge">
+        ${escapeHtml($("level").value || "Tous niveaux")}
+      </span>
+
+      <span class="badge">
+        ${escapeHtml(
+          $("bloom").selectedOptions[0]?.textContent || "Tous niveaux Bloom"
+        )}
+      </span>
+    </div>
+  `;
+
+  const container =
+    $("questionsContainer");
+
+  container.innerHTML = "";
+
+  if (!questions.length) {
+
+    container.innerHTML = `
+      <div class="status">
+        Aucune question disponible pour ces critères.
+      </div>
+    `;
+
+    return;
+  }
+
+  questions.forEach(
+    (question, index) => {
+
+      container.appendChild(
+        buildQuestionElement(
+          question,
+          index
+        )
+      );
+    }
+  );
+}
+
+
+function buildQuestionElement(
+  question,
+  index
+) {
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    "question";
+
+  const type =
+    question.question_type ||
+    question.type ||
+    "single_choice";
+
+  let html = `
+    <h3>
+      Question ${index + 1}
+    </h3>
+
+    <p>
+      ${escapeHtml(
+        question.question_text ||
+        question.question ||
+        ""
+      )}
+    </p>
+  `;
+
+  if (
+    question.bloom_level ||
+    question.competency ||
+    question.program_year
+  ) {
+
+    html += `
+      <div>
+        ${
+          question.bloom_level
+            ? `<span class="badge">
+                Bloom : ${escapeHtml(question.bloom_level)}
+               </span>`
+            : ""
+        }
+
+        ${
+          question.competency
+            ? `<span class="badge">
+                Compétence
+               </span>`
+            : ""
+        }
+
+        ${
+          question.program_year
+            ? `<span class="badge">
+                ${escapeHtml(question.program_year)}
+               </span>`
+            : ""
+        }
+      </div>
+    `;
+  }
+
+
+  if (
+    type === "single_choice" ||
+    type === "multiple_choice"
+  ) {
+
+    const options =
+      question.options ||
+      [];
+
+    options.forEach(
+      (option, optionIndex) => {
+
+        const optionValue =
+          typeof option === "string"
+            ? option
+            : option.value ||
+              option.label ||
+              "";
+
+        const inputType =
+          type === "multiple_choice"
+            ? "checkbox"
+            : "radio";
+
+        html += `
+          <label class="option">
+            <input
+              type="${inputType}"
+              name="question-${question.id}"
+              value="${escapeHtml(optionValue)}"
+            >
+            ${escapeHtml(optionValue)}
+          </label>
+        `;
+      }
+    );
+
+  } else if (
+    type === "true_false"
+  ) {
+
+    html += `
+      <label class="option">
+        <input
+          type="radio"
+          name="question-${question.id}"
+          value="true"
+        >
+        Vrai
+      </label>
+
+      <label class="option">
+        <input
+          type="radio"
+          name="question-${question.id}"
+          value="false"
+        >
+        Faux
+      </label>
+    `;
+
+  } else {
+
+    html += `
+      <input
+        type="text"
+        data-short-answer="${question.id}"
+        placeholder="Ta réponse"
+      >
+    `;
+  }
+
+  div.innerHTML = html;
+
+  div.dataset.questionId =
+    question.id;
+
+  return div;
+}
+
+
+/* =========================================================
+   SOUMISSION
+========================================================= */
+
+async function submitQuiz() {
+
+  if (!currentQuiz) {
+    return;
+  }
+
+  const questions =
+    currentQuiz.questions ||
+    currentQuiz.items ||
+    [];
+
+  let answered =
+    0;
+
+  let score =
+    0;
+
+  for (
+    const question
+    of questions
+  ) {
+
+    const questionId =
+      question.id;
+
+    const type =
+      question.question_type ||
+      question.type ||
+      "single_choice";
+
+    let answer = null;
+
+    if (
+      type === "single_choice" ||
+      type === "true_false"
+    ) {
+
+      const selected =
+        document.querySelector(
+          `input[name="question-${questionId}"]:checked`
+        );
+
+      if (selected) {
+        answer = selected.value;
       }
 
-      if (event === "SIGNED_OUT") {
-        location.reload();
+    } else if (
+      type === "multiple_choice"
+    ) {
+
+      const selected =
+        document.querySelectorAll(
+          `input[name="question-${questionId}"]:checked`
+        );
+
+      answer =
+        Array.from(selected)
+          .map(
+            element => element.value
+          );
+
+    } else {
+
+      const field =
+        document.querySelector(
+          `[data-short-answer="${questionId}"]`
+        );
+
+      if (field) {
+        answer =
+          field.value.trim();
+      }
+    }
+
+
+    if (
+      answer === null ||
+      answer === "" ||
+      (
+        Array.isArray(answer) &&
+        answer.length === 0
+      )
+    ) {
+      continue;
+    }
+
+    answered++;
+
+    try {
+
+      const {
+        data,
+        error
+      } = await supabaseClient.rpc(
+        "mondo_quiz_submit_answer",
+        {
+          p_session_id:
+            currentQuiz.session_id,
+
+          p_question_id:
+            questionId,
+
+          p_answer:
+            answer
+        }
+      );
+
+      if (error) {
+        throw error;
+      }
+
+      if (data?.is_correct) {
+        score++;
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Erreur question",
+        questionId,
+        error
+      );
+    }
+  }
+
+  renderResults(
+    score,
+    answered,
+    questions.length
+  );
+}
+
+
+function renderResults(
+  score,
+  answered,
+  total
+) {
+
+  hide("quizCard");
+  show("resultCard");
+
+  const percentage =
+    total > 0
+      ? Math.round(
+          (score / total) * 100
+        )
+      : 0;
+
+  $("resultContent").innerHTML = `
+    <div class="card">
+      <h3>Résultat</h3>
+
+      <p>
+        <strong>Score :</strong>
+        ${score} / ${total}
+      </p>
+
+      <p>
+        <strong>Réponses données :</strong>
+        ${answered} / ${total}
+      </p>
+
+      <p>
+        <strong>Pourcentage :</strong>
+        ${percentage} %
+      </p>
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   ÉVÉNEMENTS
+========================================================= */
+
+$("sendMagicLink")
+  .addEventListener(
+    "click",
+    sendMagicLink
+  );
+
+$("logoutBtn")
+  .addEventListener(
+    "click",
+    logout
+  );
+
+$("startQuiz")
+  .addEventListener(
+    "click",
+    startQuiz
+  );
+
+$("submitQuiz")
+  .addEventListener(
+    "click",
+    submitQuiz
+  );
+
+$("newQuiz")
+  .addEventListener(
+    "click",
+    () => {
+      hide("resultCard");
+      show("quizSetupCard");
+    }
+  );
+
+
+document
+  .querySelectorAll(".subscribeBtn")
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          startSubscription(
+            button.dataset.plan
+          );
+        }
+      );
+    }
+  );
+
+
+$("copyReferral")
+  .addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        await navigator.clipboard.writeText(
+          $("referralCode").value
+        );
+
+        alert(
+          "Code de parrainage copié."
+        );
+
+      } catch {
+
+        alert(
+          "Impossible de copier automatiquement le code."
+        );
       }
     }
   );
 
-  init();
+
+$("saveReferral")
+  .addEventListener(
+    "click",
+    saveReferral
+  );
+
+
+/* =========================================================
+   INITIALISATION
+========================================================= */
+
+(async function () {
+
+  try {
+
+    await initializeAuth();
+
+    if (currentUser) {
+      await loadReferralCode();
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Erreur d'initialisation",
+      error
+    );
+
+    setStatus(
+      "authStatus",
+      "Erreur d'initialisation de Mondo Quiz.",
+      "error"
+    );
+  }
+
+})();
 </script>
 
 </body>
