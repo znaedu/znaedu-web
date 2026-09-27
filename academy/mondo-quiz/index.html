@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>Mondo Quiz — ZNAEDU</title>
 
@@ -10,36 +10,35 @@
 
 <style>
 :root{
-  --blue:#0b5ed7;
-  --blue2:#1677ff;
-  --sky:#eaf5ff;
-  --light:#f6faff;
-  --dark:#12304f;
-  --muted:#60758b;
-  --border:#dbe8f5;
+  --blue:#1769aa;
+  --blue2:#2196d3;
+  --sky:#eaf7ff;
+  --bg:#f6fbff;
+  --text:#16324f;
+  --muted:#6d7f90;
+  --border:#dceaf4;
   --white:#fff;
-  --success:#16844a;
+  --shadow:0 6px 20px rgba(25,90,130,.08);
+  --radius:16px;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
-  background:var(--light);
-  color:var(--dark);
+  background:var(--bg);
+  color:var(--text);
 }
 
-button{
-  font:inherit;
+button,select,input{
+  font-family:inherit;
 }
 
 .header{
-  background:linear-gradient(135deg,#0758c9,#1b82ff);
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
   color:white;
-  padding:22px 18px 26px;
+  padding:20px 15px;
 }
 
 .header-inner{
@@ -48,235 +47,235 @@ button{
 }
 
 .brand{
-  font-size:28px;
+  font-size:26px;
   font-weight:800;
 }
 
 .subtitle{
-  margin-top:6px;
-  opacity:.92;
+  margin-top:5px;
   font-size:14px;
+  opacity:.92;
 }
 
 .container{
   max-width:1100px;
   margin:auto;
-  padding:20px 16px 60px;
+  padding:18px 14px 45px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:15px;
 }
 
 .breadcrumb{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  align-items:center;
-  margin-bottom:18px;
+  color:var(--muted);
   font-size:13px;
-  color:var(--muted);
-}
-
-.crumb{
-  cursor:pointer;
-}
-
-.crumb.active{
-  color:var(--blue);
-  font-weight:700;
-}
-
-.crumb-separator{
-  color:#9eb2c7;
-}
-
-.screen-title{
-  margin:5px 0 7px;
-  font-size:25px;
-}
-
-.screen-description{
-  margin:0 0 22px;
-  color:var(--muted);
   line-height:1.5;
 }
 
-.back{
+.back-btn{
   border:1px solid var(--border);
   background:white;
   color:var(--blue);
   border-radius:10px;
-  padding:9px 14px;
-  cursor:pointer;
-  margin-bottom:18px;
+  padding:9px 13px;
   font-weight:700;
+  cursor:pointer;
+}
+
+.view{display:none}
+.view.active{display:block}
+
+.hero{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:21px;
+  box-shadow:var(--shadow);
+  margin-bottom:16px;
+}
+
+.hero h1{
+  margin:0 0 8px;
+  font-size:23px;
+}
+
+.hero p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.55;
 }
 
 .grid{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:13px;
+  gap:12px;
 }
 
 .card{
   background:white;
   border:1px solid var(--border);
-  border-radius:14px;
+  border-radius:var(--radius);
   padding:16px;
+  min-height:110px;
+  box-shadow:var(--shadow);
   cursor:pointer;
-  transition:.15s;
-  min-height:115px;
-  box-shadow:0 2px 8px rgba(20,70,120,.04);
+  transition:.18s;
 }
 
 .card:hover{
-  border-color:#8bbcf0;
-  transform:translateY(-1px);
-  box-shadow:0 5px 16px rgba(20,70,120,.09);
+  transform:translateY(-2px);
+  border-color:#a9d6ef;
 }
 
 .card-icon{
-  font-size:24px;
+  font-size:25px;
   margin-bottom:9px;
 }
 
 .card-title{
   font-weight:800;
-  font-size:16px;
-  margin-bottom:5px;
-}
-
-.card-code{
-  display:inline-block;
-  background:var(--sky);
-  color:var(--blue);
-  border-radius:6px;
-  padding:3px 7px;
-  font-size:11px;
-  font-weight:800;
   margin-bottom:6px;
 }
 
-.card-info{
+.card-desc{
   color:var(--muted);
-  font-size:12px;
-  line-height:1.4;
-}
-
-.section{
-  margin-top:25px;
-}
-
-.section-title{
-  font-size:16px;
-  font-weight:800;
-  margin-bottom:11px;
-}
-
-.question-box{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:20px;
-  box-shadow:0 4px 15px rgba(20,70,120,.05);
-}
-
-.question-number{
-  color:var(--blue);
-  font-weight:800;
   font-size:13px;
-  margin-bottom:12px;
-}
-
-.question-text{
-  font-size:20px;
   line-height:1.45;
-  font-weight:700;
-  margin-bottom:18px;
-}
-
-.answers{
-  display:grid;
-  gap:10px;
-}
-
-.answer{
-  width:100%;
-  text-align:left;
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:10px;
-  padding:13px 15px;
-  cursor:pointer;
-  color:var(--dark);
-}
-
-.answer:hover{
-  border-color:#80b6ec;
-  background:#f5faff;
-}
-
-.answer.correct{
-  border-color:#4caf78;
-  background:#effbf4;
-}
-
-.answer.wrong{
-  border-color:#e09b9b;
-  background:#fff4f4;
-}
-
-.explanation{
-  margin-top:16px;
-  padding:13px;
-  background:#f2f8ff;
-  border-radius:10px;
-  color:#35546f;
-  line-height:1.5;
-  display:none;
-}
-
-.next{
-  margin-top:16px;
-  border:0;
-  background:var(--blue);
-  color:white;
-  border-radius:10px;
-  padding:12px 18px;
-  font-weight:800;
-  cursor:pointer;
-  display:none;
-}
-
-.status{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:14px;
-  color:var(--muted);
-  margin-bottom:18px;
-}
-
-.empty{
-  background:white;
-  border:1px dashed #aac7df;
-  border-radius:14px;
-  padding:25px;
-  text-align:center;
-  color:var(--muted);
-}
-
-.loading{
-  padding:30px;
-  text-align:center;
-  color:var(--muted);
 }
 
 .badge{
   display:inline-block;
-  padding:4px 8px;
-  border-radius:7px;
-  background:#eef6ff;
+  margin-top:9px;
+  background:var(--sky);
   color:var(--blue);
+  padding:4px 8px;
+  border-radius:20px;
   font-size:11px;
+  font-weight:700;
+}
+
+.loading,
+.empty,
+.error{
+  background:white;
+  border-radius:14px;
+  padding:20px;
+  text-align:center;
+  border:1px solid var(--border);
+}
+
+.empty{
+  color:var(--muted);
+}
+
+.error{
+  color:#7d4545;
+  background:#fff8f8;
+  border-color:#edcccc;
+}
+
+.info{
+  background:var(--sky);
+  border:1px solid #cde8f8;
+  border-radius:12px;
+  padding:13px 15px;
+  margin-bottom:15px;
+  color:#245a7c;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.searchbar{
+  display:flex;
+  gap:8px;
+  margin-bottom:15px;
+}
+
+.searchbar input,
+.searchbar select{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 12px;
+  background:white;
+  color:var(--text);
+}
+
+.searchbar input{
+  flex:1;
+}
+
+.question{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:19px;
+  margin-bottom:13px;
+  box-shadow:var(--shadow);
+}
+
+.question-number{
+  color:var(--blue);
+  font-size:12px;
   font-weight:800;
+  margin-bottom:7px;
+}
+
+.question-text{
+  font-size:17px;
+  font-weight:700;
+  line-height:1.55;
+  margin-bottom:13px;
+}
+
+.options{
+  display:grid;
+  gap:8px;
+}
+
+.option{
+  width:100%;
+  text-align:left;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:11px 13px;
+  cursor:pointer;
+}
+
+.option:hover{
+  background:var(--sky);
+}
+
+.option.correct{
+  background:#edf9f1;
+  border-color:#59a878;
+}
+
+.option.wrong{
+  background:#fff3f3;
+  border-color:#d89191;
+}
+
+.explanation{
+  display:none;
+  margin-top:11px;
+  background:var(--sky);
+  padding:11px;
+  border-radius:10px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:30px;
 }
 
 @media(max-width:800px){
@@ -287,21 +286,11 @@ button{
 
 @media(max-width:520px){
   .grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:9px;
+    grid-template-columns:1fr;
   }
 
-  .card{
-    padding:12px;
-    min-height:105px;
-  }
-
-  .card-title{
-    font-size:14px;
-  }
-
-  .screen-title{
-    font-size:22px;
+  .searchbar{
+    flex-direction:column;
   }
 }
 </style>
@@ -313,1236 +302,709 @@ button{
   <div class="header-inner">
     <div class="brand">🌍 Mondo Quiz</div>
     <div class="subtitle">
-      Connaissances • Apprentissage • Exercices • Évaluation
+      Connaissances • Apprentissage • Orientation • Évaluation
     </div>
   </div>
 </header>
 
 <main class="container">
 
-  <div id="breadcrumb" class="breadcrumb"></div>
+<div class="topbar">
 
-  <div id="app">
-    <div class="loading">Chargement du catalogue…</div>
+  <div id="breadcrumb" class="breadcrumb">
+    Mondo Quiz
   </div>
+
+  <button id="backBtn" class="back-btn" style="display:none">
+    ← Retour
+  </button>
+
+</div>
+
+
+<!-- =====================================================
+     ACCUEIL
+===================================================== -->
+
+<section id="homeView" class="view active">
+
+  <div class="hero">
+    <h1>Bienvenue dans Mondo Quiz</h1>
+
+    <p>
+      Choisis ton univers de connaissances.
+      L'espace international et l'espace scolaire/ académique
+      restent totalement séparés.
+    </p>
+  </div>
+
+  <div class="grid">
+
+    <article class="card" onclick="openInternational()">
+
+      <div class="card-icon">🌍</div>
+
+      <div class="card-title">
+        Culture générale, connaissances & loisirs
+      </div>
+
+      <div class="card-desc">
+        Le catalogue international de Mondo Quiz.
+      </div>
+
+      <span class="badge">
+        119 disciplines
+      </span>
+
+    </article>
+
+
+    <article class="card" onclick="openAcademic()">
+
+      <div class="card-icon">🎓</div>
+
+      <div class="card-title">
+        Apprentissage scolaire & académique
+      </div>
+
+      <div class="card-desc">
+        Maternelle, primaire, secondaire et enseignement supérieur.
+      </div>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     INTERNATIONAL
+     LES 119 DISCIPLINES RESTENT INTACTES
+===================================================== -->
+
+<section id="internationalView" class="view">
+
+  <div class="hero">
+    <h1>🌍 Culture générale, connaissances & loisirs</h1>
+    <p>
+      Catalogue international de Mondo Quiz.
+    </p>
+  </div>
+
+  <div id="internationalLoading" class="loading">
+    Chargement...
+  </div>
+
+  <div id="internationalGrid" class="grid"></div>
+
+</section>
+
+
+<!-- =====================================================
+     NIVEAUX SCOLAIRES
+===================================================== -->
+
+<section id="academicLevelView" class="view">
+
+  <div class="hero">
+
+    <h1>🎓 Apprentissage scolaire & académique</h1>
+
+    <p>
+      <strong>Étape 1 :</strong>
+      choisis ton niveau.
+    </p>
+
+  </div>
+
+  <div id="academicLevelGrid" class="grid"></div>
+
+</section>
+
+
+<!-- =====================================================
+     CLASSES
+===================================================== -->
+
+<section id="academicClassView" class="view">
+
+  <div class="hero">
+
+    <h1>Choisis ta classe</h1>
+
+    <p>
+      <strong>Étape 2 :</strong>
+      seules les classes du niveau sélectionné apparaissent.
+    </p>
+
+  </div>
+
+  <div id="academicClassGrid" class="grid"></div>
+
+</section>
+
+
+<!-- =====================================================
+     SERIES
+===================================================== -->
+
+<section id="academicTrackView" class="view">
+
+  <div class="hero">
+
+    <h1>Choisis ta série</h1>
+
+    <p>
+      Cette étape apparaît uniquement lorsqu'une série
+      est applicable.
+    </p>
+
+  </div>
+
+  <div id="academicTrackGrid" class="grid"></div>
+
+</section>
+
+
+<!-- =====================================================
+     DISCIPLINES
+===================================================== -->
+
+<section id="academicDisciplineView" class="view">
+
+  <div class="hero">
+
+    <h1 id="disciplineTitle">
+      Choisis ta discipline
+    </h1>
+
+    <p>
+      Seules les disciplines correspondant à ta classe
+      et, lorsque nécessaire, à ta série sont affichées.
+    </p>
+
+  </div>
+
+  <div id="academicDisciplineGrid" class="grid"></div>
+
+</section>
+
+
+<!-- =====================================================
+     THEMES
+===================================================== -->
+
+<section id="academicTopicView" class="view">
+
+  <div class="hero">
+
+    <h1 id="topicTitle">
+      Choisis une sous-discipline ou un thème
+    </h1>
+
+    <p>
+      Sélectionne ensuite le thème pédagogique à travailler.
+    </p>
+
+  </div>
+
+  <div id="academicTopicGrid" class="grid"></div>
+
+</section>
+
+
+<!-- =====================================================
+     SUPERIEUR — CATEGORIES
+===================================================== -->
+
+<section id="higherCategoryView" class="view">
+
+  <div class="hero">
+
+    <h1>🏛️ Enseignement supérieur</h1>
+
+    <p>
+      Choisis le type de structure d'enseignement supérieur.
+    </p>
+
+  </div>
+
+  <div class="info">
+    Base de référence : Guide d'information et de sensibilisation
+    des nouveaux bacheliers 2026-2027 du MESRS.
+  </div>
+
+  <div id="higherCategoryGrid" class="grid"></div>
+
+</section>
+
+
+<!-- =====================================================
+     SUPERIEUR — STRUCTURES
+===================================================== -->
+
+<section id="higherInstitutionView" class="view">
+
+  <div class="hero">
+
+    <h1 id="higherInstitutionTitle">
+      Choisis une structure
+    </h1>
+
+    <p>
+      Les structures sont classées selon leur statut.
+    </p>
+
+  </div>
+
+  <div class="searchbar">
+
+    <input
+      id="higherInstitutionSearch"
+      type="search"
+      placeholder="Rechercher une université, école ou institution..."
+    >
+
+  </div>
+
+  <div id="higherInstitutionGrid" class="grid"></div>
+
+</section>
+
+
+<!-- =====================================================
+     SUPERIEUR — ETABLISSEMENTS
+===================================================== -->
+
+<section id="higherEstablishmentView" class="view">
+
+  <div class="hero">
+
+    <h1 id="higherEstablishmentTitle">
+      Choisis un établissement
+    </h1>
+
+    <p>
+      Faculté, institut, école ou entité de formation.
+    </p>
+
+  </div>
+
+  <div id="higherEstablishmentGrid" class="grid"></div>
+
+</section>
+
+
+<!-- =====================================================
+     SUPERIEUR — FILIERES
+===================================================== -->
+
+<section id="higherProgramView" class="view">
+
+  <div class="hero">
+
+    <h1 id="higherProgramTitle">
+      Choisis une filière
+    </h1>
+
+    <p>
+      Les formations sont présentées avec leurs informations
+      d'accès lorsqu'elles sont disponibles.
+    </p>
+
+  </div>
+
+  <div class="searchbar">
+
+    <input
+      id="higherProgramSearch"
+      type="search"
+      placeholder="Rechercher une filière..."
+    >
+
+    <select id="bacFilter">
+
+      <option value="">
+        Tous les BAC
+      </option>
+
+      <option value="A1">BAC A1</option>
+      <option value="A2">BAC A2</option>
+      <option value="B">BAC B</option>
+      <option value="C">BAC C</option>
+      <option value="D">BAC D</option>
+      <option value="E">BAC E</option>
+      <option value="F">BAC F</option>
+      <option value="G">BAC G</option>
+      <option value="DT">DT</option>
+      <option value="DEAT">DEAT</option>
+      <option value="STI">STI</option>
+
+    </select>
+
+  </div>
+
+  <div id="higherProgramGrid" class="grid"></div>
+
+</section>
+
+
+<!-- =====================================================
+     SUPERIEUR — DETAIL FILIERE
+===================================================== -->
+
+<section id="higherProgramDetailView" class="view">
+
+  <div id="higherProgramDetail"></div>
+
+</section>
+
+
+<!-- =====================================================
+     QUESTIONS
+===================================================== -->
+
+<section id="questionView" class="view">
+
+  <div class="hero">
+
+    <h1 id="questionTitle">
+      Questions
+    </h1>
+
+    <p id="questionSubtitle">
+      Questions Mondo Quiz.
+    </p>
+
+  </div>
+
+  <div class="searchbar">
+
+    <select id="difficultyFilter">
+
+      <option value="">
+        Toutes les difficultés
+      </option>
+
+      <option value="easy">
+        Facile
+      </option>
+
+      <option value="medium">
+        Moyenne
+      </option>
+
+      <option value="hard">
+        Difficile
+      </option>
+
+    </select>
+
+  </div>
+
+  <div id="questionsContainer"></div>
+
+</section>
+
+
+<div class="footer">
+  Mondo Quiz • ZNAEDU
+</div>
 
 </main>
 
+
 <script>
+
 /* =========================================================
-   1. SUPABASE
+   SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
-  "https://dpxghtjhjylofxhmnfxf.supabase.co";
+"https://dpxghtjhjylofxhmnfxf.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKEs";
+"sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKEs";
 
-let supabaseClient = null;
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
+    }
+  }
+);
 
-try{
-  supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY,
-      {
-        auth:{
-          persistSession:true,
-          autoRefreshToken:true,
-          detectSessionInUrl:true
-        }
-      }
-    );
-}catch(error){
-  console.warn("Supabase indisponible :",error);
+
+/* =========================================================
+   ETAT
+========================================================= */
+
+let academicData={
+  curricula:[]
+};
+
+let internationalData=[];
+
+let higherData=[];
+
+let higherState={
+  category:null,
+  institution:null,
+  establishment:null,
+  program:null
+};
+
+let academicState={
+  level:null,
+  curriculum:null,
+  classNode:null,
+  trackNode:null,
+  disciplineNode:null,
+  topicNode:null
+};
+
+let currentView="homeView";
+
+
+/* =========================================================
+   VUES
+========================================================= */
+
+const views=[
+  "homeView",
+  "internationalView",
+  "academicLevelView",
+  "academicClassView",
+  "academicTrackView",
+  "academicDisciplineView",
+  "academicTopicView",
+  "higherCategoryView",
+  "higherInstitutionView",
+  "higherEstablishmentView",
+  "higherProgramView",
+  "higherProgramDetailView",
+  "questionView"
+];
+
+function showView(id){
+
+  views.forEach(v=>{
+    document.getElementById(v).classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
+
+  currentView=id;
+
+  updateBreadcrumb();
+  updateBackButton();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
 
 
 /* =========================================================
-   2. CATALOGUE DE SECOURS
-   Ce catalogue garantit que Mondo Quiz ne reste jamais vide.
+   BREADCRUMB
 ========================================================= */
 
-const LOCAL_CATALOG = [
+function updateBreadcrumb(){
 
-  {
-    id:"preschool",
-    code:"MAT",
-    name:"Maternelle",
-    icon:"🧸",
-    description:"Éveil, langage, motricité, découverte et premières notions.",
-    classes:[
-      {
-        code:"PS",
-        name:"Petite Section",
-        disciplines:[
-          {
-            code:"LANG",
-            name:"Langage",
-            icon:"🗣️",
-            topics:["Communication orale","Vocabulaire","Écoute et compréhension"],
-            questions:[]
-          },
-          {
-            code:"EVEIL",
-            name:"Éveil et découverte",
-            icon:"🌱",
-            topics:["Le corps","La nature","L'environnement"],
-            questions:[]
-          },
-          {
-            code:"MOT",
-            name:"Motricité",
-            icon:"🤸",
-            topics:["Motricité globale","Motricité fine"],
-            questions:[]
-          }
-        ]
-      },
-      {
-        code:"MS",
-        name:"Moyenne Section",
-        disciplines:[
-          {
-            code:"LANG",
-            name:"Langage",
-            icon:"🗣️",
-            topics:["Expression orale","Vocabulaire","Préparation à l'écrit"],
-            questions:[]
-          },
-          {
-            code:"EVEIL",
-            name:"Éveil",
-            icon:"🌱",
-            topics:["Corps humain","Animaux","Plantes"],
-            questions:[]
-          },
-          {
-            code:"PREMATH",
-            name:"Premières notions mathématiques",
-            icon:"🔢",
-            topics:["Quantités","Formes","Classement"],
-            questions:[]
-          }
-        ]
-      },
-      {
-        code:"GS",
-        name:"Grande Section",
-        disciplines:[
-          {
-            code:"LANG",
-            name:"Langage et communication",
-            icon:"🗣️",
-            topics:["Compréhension","Expression","Prélecture"],
-            questions:[]
-          },
-          {
-            code:"MATH",
-            name:"Premières mathématiques",
-            icon:"🔢",
-            topics:["Nombres","Quantités","Formes et grandeurs"],
-            questions:[]
-          },
-          {
-            code:"EVEIL",
-            name:"Découverte du monde",
-            icon:"🌍",
-            topics:["Corps humain","Nature","Vie quotidienne"],
-            questions:[]
-          }
-        ]
-      }
-    ]
-  },
+  const parts=["Mondo Quiz"];
 
-  {
-    id:"primary",
-    code:"PRIM",
-    name:"Primaire",
-    icon:"📘",
-    description:"Enseignement primaire : du CI au CM2.",
-    classes:[
-      {
-        code:"CI",
-        name:"CI — Cours d'Initiation",
-        disciplines:[
-          {
-            code:"MATH",
-            name:"Mathématiques",
-            icon:"🔢",
-            topics:["Nombres","Petites quantités","Addition","Soustraction"],
-            questions:[
-              {
-                question:"Combien font 2 + 3 ?",
-                options:["4","5","6","7"],
-                answer:"5",
-                explanation:"2 + 3 = 5."
-              }
-            ]
-          },
-          {
-            code:"FR",
-            name:"Français",
-            icon:"📖",
-            topics:["Alphabet","Sons","Lecture","Vocabulaire"],
-            questions:[]
-          },
-          {
-            code:"EM",
-            name:"Éducation au milieu",
-            icon:"🌱",
-            topics:["Le corps","La famille","L'environnement"],
-            questions:[]
-          }
-        ]
-      },
-
-      {
-        code:"CP",
-        name:"CP — Cours Préparatoire",
-        disciplines:[
-          {
-            code:"MATH",
-            name:"Mathématiques",
-            icon:"🔢",
-            topics:["Nombres","Addition","Soustraction","Comparaison"],
-            questions:[]
-          },
-          {
-            code:"FR",
-            name:"Français",
-            icon:"📖",
-            topics:["Lecture","Écriture","Grammaire","Vocabulaire"],
-            questions:[]
-          },
-          {
-            code:"EM",
-            name:"Éducation au milieu",
-            icon:"🌱",
-            topics:["Corps humain","Animaux","Plantes","Milieu de vie"],
-            questions:[]
-          }
-        ]
-      },
-
-      {
-        code:"CE1",
-        name:"CE1",
-        disciplines:[
-          {
-            code:"MATH",
-            name:"Mathématiques",
-            icon:"🔢",
-            topics:["Nombres","Addition","Soustraction","Multiplication","Problèmes"],
-            questions:[]
-          },
-          {
-            code:"FR",
-            name:"Français",
-            icon:"📖",
-            topics:["Lecture","Grammaire","Conjugaison","Orthographe","Vocabulaire"],
-            questions:[]
-          },
-          {
-            code:"EST",
-            name:"Éveil scientifique et technologique",
-            icon:"🔬",
-            topics:["Corps humain","Animaux","Plantes","Matière"],
-            questions:[]
-          },
-          {
-            code:"ECM",
-            name:"Éducation civique et morale",
-            icon:"🤝",
-            topics:["Règles de vie","Citoyenneté","Respect"],
-            questions:[]
-          }
-        ]
-      },
-
-      {
-        code:"CE2",
-        name:"CE2",
-        disciplines:[
-          {
-            code:"MATH",
-            name:"Mathématiques",
-            icon:"🔢",
-            topics:[
-              "Nombres et calcul",
-              "Addition et soustraction",
-              "Multiplication",
-              "Division et partage",
-              "Fractions simples",
-              "Problèmes"
-            ],
-            questions:[
-              {
-                question:"Quelle est la moitié de 10 ?",
-                options:["2","5","10","20"],
-                answer:"5",
-                explanation:"La moitié de 10 est 5."
-              },
-              {
-                question:"Combien font 6 × 4 ?",
-                options:["10","20","24","28"],
-                answer:"24",
-                explanation:"6 × 4 = 24."
-              }
-            ]
-          },
-          {
-            code:"FR",
-            name:"Français",
-            icon:"📖",
-            topics:[
-              "Compréhension",
-              "Grammaire",
-              "Conjugaison",
-              "Orthographe",
-              "Vocabulaire",
-              "Production écrite"
-            ],
-            questions:[]
-          },
-          {
-            code:"EST",
-            name:"Éveil scientifique et technologique",
-            icon:"🔬",
-            topics:[
-              "Corps humain",
-              "Respiration",
-              "Circulation sanguine",
-              "États de la matière",
-              "Énergie",
-              "Environnement"
-            ],
-            questions:[]
-          },
-          {
-            code:"ECM",
-            name:"Éducation civique et morale",
-            icon:"🤝",
-            topics:[
-              "Citoyenneté",
-              "Règles de vie collective",
-              "Respect",
-              "Sécurité",
-              "Responsabilités"
-            ],
-            questions:[]
-          }
-        ]
-      },
-
-      {
-        code:"CM1",
-        name:"CM1",
-        disciplines:[
-          {
-            code:"MATH",
-            name:"Mathématiques",
-            icon:"🔢",
-            topics:[
-              "Nombres entiers",
-              "Opérations",
-              "Fractions",
-              "Géométrie",
-              "Mesures",
-              "Problèmes"
-            ],
-            questions:[]
-          },
-          {
-            code:"FR",
-            name:"Français",
-            icon:"📖",
-            topics:[
-              "Lecture",
-              "Grammaire",
-              "Conjugaison",
-              "Orthographe",
-              "Vocabulaire",
-              "Expression écrite"
-            ],
-            questions:[]
-          },
-          {
-            code:"EST",
-            name:"Éveil scientifique et technologique",
-            icon:"🔬",
-            topics:[
-              "Biologie",
-              "Matière",
-              "Énergie",
-              "Technologie",
-              "Environnement"
-            ],
-            questions:[]
-          },
-          {
-            code:"ECM",
-            name:"Éducation civique et morale",
-            icon:"🤝",
-            topics:[
-              "Citoyenneté",
-              "Institutions",
-              "Droits et devoirs",
-              "Vie collective"
-            ],
-            questions:[]
-          }
-        ]
-      },
-
-      {
-        code:"CM2",
-        name:"CM2",
-        disciplines:[
-          {
-            code:"MATH",
-            name:"Mathématiques",
-            icon:"🔢",
-            topics:[
-              "Nombres",
-              "Opérations",
-              "Fractions",
-              "Géométrie",
-              "Mesures",
-              "Problèmes"
-            ],
-            questions:[]
-          },
-          {
-            code:"FR",
-            name:"Français",
-            icon:"📖",
-            topics:[
-              "Compréhension",
-              "Grammaire",
-              "Conjugaison",
-              "Orthographe",
-              "Vocabulaire",
-              "Production écrite"
-            ],
-            questions:[]
-          },
-          {
-            code:"EST",
-            name:"Éveil scientifique et technologique",
-            icon:"🔬",
-            topics:[
-              "Corps humain",
-              "Sciences physiques",
-              "Technologie",
-              "Environnement",
-              "Énergie"
-            ],
-            questions:[]
-          },
-          {
-            code:"ECM",
-            name:"Éducation civique et morale",
-            icon:"🤝",
-            topics:[
-              "Citoyenneté",
-              "Institutions",
-              "Droits et devoirs",
-              "Élections",
-              "Vie collective"
-            ],
-            questions:[]
-          }
-        ]
-      }
-    ]
-  },
-
-  {
-    id:"secondary_general",
-    code:"SEG",
-    name:"Secondaire général",
-    icon:"🏫",
-    description:"Enseignement secondaire général.",
-    classes:[
-      "6e","5e","4e","3e","2nde","1ère","Terminale"
-    ].map(code=>({
-      code,
-      name:code,
-      disciplines:[
-        {code:"FR",name:"Français",icon:"📖",topics:["Langue","Littérature","Expression"],questions:[]},
-        {code:"MATH",name:"Mathématiques",icon:"🔢",topics:["Calcul","Algèbre","Géométrie","Problèmes"],questions:[]},
-        {code:"SVT",name:"Sciences de la Vie et de la Terre",icon:"🧬",topics:["Biologie","Terre","Environnement"],questions:[]},
-        {code:"HIST",name:"Histoire",icon:"🏛️",topics:["Histoire du Bénin","Afrique","Monde"],questions:[]},
-        {code:"GEO",name:"Géographie",icon:"🌍",topics:["Espaces","Population","Environnement"],questions:[]},
-        {code:"ANG",name:"Anglais",icon:"🇬🇧",topics:["Grammar","Vocabulary","Reading"],questions:[]},
-        {code:"ECM",name:"Éducation civique et morale",icon:"⚖️",topics:["Citoyenneté","Institutions","Droits"],questions:[]}
-      ]
-    }))
-  },
-
-  {
-    id:"secondary_technical",
-    code:"SET",
-    name:"Secondaire technique",
-    icon:"🔧",
-    description:"Enseignement secondaire technique.",
-    classes:[
-      {
-        code:"TECH",
-        name:"Parcours technique",
-        disciplines:[
-          {code:"TECH",name:"Technologie",icon:"⚙️",topics:["Technologie générale","Systèmes","Procédés"],questions:[]},
-          {code:"MATH",name:"Mathématiques",icon:"🔢",topics:["Calcul","Géométrie","Applications"],questions:[]},
-          {code:"SCI",name:"Sciences appliquées",icon:"🔬",topics:["Sciences","Mesures","Applications"],questions:[]}
-        ]
-      }
-    ]
-  },
-
-  {
-    id:"vocational",
-    code:"PRO",
-    name:"Formation professionnelle",
-    icon:"🛠️",
-    description:"Métiers, compétences et formation professionnelle.",
-    classes:[
-      {
-        code:"PRO",
-        name:"Formation professionnelle",
-        disciplines:[
-          {code:"METIER",name:"Compétences professionnelles",icon:"🛠️",topics:["Compétences","Pratiques professionnelles"],questions:[]},
-          {code:"TECH",name:"Technologie professionnelle",icon:"⚙️",topics:["Techniques","Matériels","Sécurité"],questions:[]},
-          {code:"ENT",name:"Entrepreneuriat",icon:"💼",topics:["Projet","Entreprise","Gestion"],questions:[]}
-        ]
-      }
-    ]
-  },
-
-  {
-    id:"higher",
-    code:"SUP",
-    name:"Enseignement supérieur",
-    icon:"🎓",
-    description:"Filières, disciplines et apprentissages universitaires.",
-    classes:[
-      {
-        code:"L1",
-        name:"Licence — 1ère année",
-        disciplines:[
-          {code:"MED",name:"Médecine",icon:"🩺",topics:["Sciences fondamentales","Anatomie","Biologie"],questions:[]},
-          {code:"GEO",name:"Géographie",icon:"🌍",topics:["Géographie physique","Géographie humaine"],questions:[]},
-          {code:"ECO",name:"Économie",icon:"📈",topics:["Microéconomie","Macroéconomie"],questions:[]},
-          {code:"INFO",name:"Informatique",icon:"💻",topics:["Algorithmique","Programmation","Systèmes"],questions:[]}
-        ]
-      }
-    ]
+  if(currentView==="internationalView"){
+    parts.push("Culture générale");
   }
 
-];
+  if(
+    [
+      "academicLevelView",
+      "academicClassView",
+      "academicTrackView",
+      "academicDisciplineView",
+      "academicTopicView",
+      "questionView"
+    ].includes(currentView)
+  ){
+    parts.push("Apprentissage scolaire & académique");
+  }
+
+  if(
+    [
+      "higherCategoryView",
+      "higherInstitutionView",
+      "higherEstablishmentView",
+      "higherProgramView",
+      "higherProgramDetailView"
+    ].includes(currentView)
+  ){
+    parts.push("Enseignement supérieur");
+  }
+
+  if(academicState.level)
+    parts.push(academicState.level.name);
+
+  if(academicState.classNode)
+    parts.push(academicState.classNode.name);
+
+  if(academicState.trackNode)
+    parts.push(academicState.trackNode.name);
+
+  if(academicState.disciplineNode)
+    parts.push(academicState.disciplineNode.name);
+
+  if(academicState.topicNode)
+    parts.push(academicState.topicNode.name);
+
+  if(higherState.category)
+    parts.push(higherState.category.name);
+
+  if(higherState.institution)
+    parts.push(higherState.institution.name);
+
+  if(higherState.establishment)
+    parts.push(higherState.establishment.name);
+
+  if(higherState.program)
+    parts.push(higherState.program.name);
+
+  document.getElementById("breadcrumb").textContent=
+    parts.join(" › ");
+}
 
 
 /* =========================================================
-   3. ÉTAT DE NAVIGATION
+   RETOUR
 ========================================================= */
 
-let catalog = LOCAL_CATALOG;
+function updateBackButton(){
 
-let state = {
-  level:null,
-  classItem:null,
-  discipline:null,
-  topic:null,
-  questions:[],
-  questionIndex:0,
-  score:0,
-  answered:false
+  const button=
+    document.getElementById("backBtn");
+
+  button.style.display=
+    currentView==="homeView"
+      ?"none"
+      :"block";
+}
+
+document.getElementById("backBtn").onclick=function(){
+
+  switch(currentView){
+
+    case "internationalView":
+      showView("homeView");
+      break;
+
+    case "academicLevelView":
+      showView("homeView");
+      break;
+
+    case "academicClassView":
+      academicState.level=null;
+      showView("academicLevelView");
+      break;
+
+    case "academicTrackView":
+      academicState.trackNode=null;
+      showView("academicClassView");
+      break;
+
+    case "academicDisciplineView":
+
+      if(academicState.trackNode)
+        showView("academicTrackView");
+      else
+        showView("academicClassView");
+
+      break;
+
+    case "academicTopicView":
+      academicState.topicNode=null;
+      showView("academicDisciplineView");
+      break;
+
+    case "higherCategoryView":
+      showView("academicLevelView");
+      break;
+
+    case "higherInstitutionView":
+      higherState.institution=null;
+      showView("higherCategoryView");
+      break;
+
+    case "higherEstablishmentView":
+      higherState.establishment=null;
+      showView("higherInstitutionView");
+      break;
+
+    case "higherProgramView":
+      higherState.program=null;
+      showView("higherEstablishmentView");
+      break;
+
+    case "higherProgramDetailView":
+      showView("higherProgramView");
+      break;
+
+    case "questionView":
+
+      if(academicState.topicNode)
+        showView("academicTopicView");
+
+      else if(academicState.disciplineNode)
+        showView("academicDisciplineView");
+
+      else
+        showView("homeView");
+
+      break;
+  }
+
+  updateBreadcrumb();
 };
 
 
 /* =========================================================
-   4. OUTILS
+   ACADEMIQUE
 ========================================================= */
 
-const app = document.getElementById("app");
-const breadcrumb = document.getElementById("breadcrumb");
+function openAcademic(){
 
-function escapeHtml(value){
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
+  academicState={
+    level:null,
+    curriculum:null,
+    classNode:null,
+    trackNode:null,
+    disciplineNode:null,
+    topicNode:null
+  };
 
-function normalizeProgram(program){
+  showView("academicLevelView");
 
-  if(!program.classes){
-    return program;
-  }
-
-  if(!Array.isArray(program.classes)){
-    return program;
-  }
-
-  return program;
-}
-
-function getLevel(){
-  return catalog.find(x=>x.id===state.level);
-}
-
-function getClass(){
-  const level=getLevel();
-  if(!level) return null;
-
-  return level.classes.find(
-    x=>typeof x==="object" && x.code===state.classItem
-  );
-}
-
-function getDiscipline(){
-  const cls=getClass();
-  if(!cls) return null;
-
-  return cls.disciplines.find(
-    x=>x.code===state.discipline
-  );
-}
-
-function setBreadcrumb(items){
-
-  breadcrumb.innerHTML = items.map((item,index)=>{
-
-    if(index===items.length-1){
-      return `<span class="crumb active">${escapeHtml(item.label)}</span>`;
-    }
-
-    return `
-      <span
-        class="crumb"
-        onclick="${item.action}"
-      >
-        ${escapeHtml(item.label)}
-      </span>
-      <span class="crumb-separator">›</span>
-    `;
-
-  }).join("");
+  loadAcademicTree();
 }
 
 
-/* =========================================================
-   5. ÉCRAN 1 — NIVEAUX
-========================================================= */
+async function loadAcademicTree(){
 
-function renderLevels(){
+  const grid=
+    document.getElementById("academicLevelGrid");
 
-  state.level=null;
-  state.classItem=null;
-  state.discipline=null;
-  state.topic=null;
-
-  setBreadcrumb([
-    {label:"Mondo Quiz",action:"renderLevels()"},
-    {label:"Choisir un niveau"}
-  ]);
-
-  app.innerHTML=`
-
-    <h1 class="screen-title">Choisis ton niveau</h1>
-
-    <p class="screen-description">
-      Sélectionne d'abord le niveau d'enseignement. 
-      Les classes correspondant à ce niveau apparaîtront ensuite.
-    </p>
-
-    <div class="grid">
-
-      ${catalog.map(level=>`
-
-        <div
-          class="card"
-          onclick="selectLevel('${level.id}')"
-        >
-
-          <div class="card-icon">${level.icon}</div>
-
-          <div class="card-title">
-            ${escapeHtml(level.name)}
-          </div>
-
-          <div class="card-info">
-            ${escapeHtml(level.description)}
-          </div>
-
-        </div>
-
-      `).join("")}
-
-    </div>
-  `;
-}
-
-
-/* =========================================================
-   6. ÉCRAN 2 — CLASSES
-========================================================= */
-
-function selectLevel(levelId){
-
-  state.level=levelId;
-  state.classItem=null;
-  state.discipline=null;
-  state.topic=null;
-
-  const level=getLevel();
-
-  setBreadcrumb([
-    {label:"Mondo Quiz",action:"renderLevels()"},
-    {label:level.name}
-  ]);
-
-  app.innerHTML=`
-
-    <button class="back" onclick="renderLevels()">
-      ← Retour aux niveaux
-    </button>
-
-    <h1 class="screen-title">
-      ${level.icon} ${escapeHtml(level.name)}
-    </h1>
-
-    <p class="screen-description">
-      Choisis maintenant la classe ou le parcours correspondant.
-    </p>
-
-    <div class="grid">
-
-      ${level.classes.map(cls=>{
-
-        if(typeof cls==="string"){
-          return `
-            <div
-              class="card"
-              onclick="selectClass('${cls}')"
-            >
-              <div class="card-icon">📚</div>
-              <div class="card-title">${escapeHtml(cls)}</div>
-              <div class="card-info">
-                Voir les disciplines de cette classe
-              </div>
-            </div>
-          `;
-        }
-
-        return `
-          <div
-            class="card"
-            onclick="selectClass('${cls.code}')"
-          >
-            <div class="card-icon">📚</div>
-
-            <div class="card-code">
-              ${escapeHtml(cls.code)}
-            </div>
-
-            <div class="card-title">
-              ${escapeHtml(cls.name)}
-            </div>
-
-            <div class="card-info">
-              ${cls.disciplines.length} discipline(s)
-            </div>
-          </div>
-        `;
-
-      }).join("")}
-
-    </div>
-  `;
-}
-
-
-/* =========================================================
-   7. ÉCRAN 3 — DISCIPLINES
-========================================================= */
-
-function selectClass(classCode){
-
-  state.classItem=classCode;
-  state.discipline=null;
-  state.topic=null;
-
-  const level=getLevel();
-
-  let cls = level.classes.find(
-    x=>typeof x==="object" && x.code===classCode
-  );
-
-  /*
-    Pour les classes secondaires générées simplement,
-    elles sont déjà des objets.
-  */
-
-  if(!cls){
-    return showMessage("Cette classe ne contient pas encore de structure.");
-  }
-
-  setBreadcrumb([
-    {label:"Mondo Quiz",action:"renderLevels()"},
-    {label:level.name,action:`selectLevel('${level.id}')`},
-    {label:cls.name}
-  ]);
-
-  app.innerHTML=`
-
-    <button
-      class="back"
-      onclick="selectLevel('${level.id}')"
-    >
-      ← Retour aux classes
-    </button>
-
-    <h1 class="screen-title">
-      ${escapeHtml(cls.name)}
-    </h1>
-
-    <p class="screen-description">
-      Choisis maintenant la discipline dans laquelle tu veux travailler.
-    </p>
-
-    <div class="grid">
-
-      ${cls.disciplines.map(d=>`
-
-        <div
-          class="card"
-          onclick="selectDiscipline('${d.code}')"
-        >
-
-          <div class="card-icon">
-            ${d.icon || "📚"}
-          </div>
-
-          <div class="card-title">
-            ${escapeHtml(d.name)}
-          </div>
-
-          <div class="card-info">
-            ${d.topics?.length || 0} thème(s)
-            ${d.questions?.length ? 
-              ` • ${d.questions.length} question(s)` : ""}
-          </div>
-
-        </div>
-
-      `).join("")}
-
-    </div>
-  `;
-}
-
-
-/* =========================================================
-   8. ÉCRAN 4 — DISCIPLINE / THÈMES
-========================================================= */
-
-function selectDiscipline(code){
-
-  state.discipline=code;
-  state.topic=null;
-
-  const level=getLevel();
-  const cls=getClass();
-  const discipline=getDiscipline();
-
-  if(!discipline){
-    return showMessage("Discipline introuvable.");
-  }
-
-  setBreadcrumb([
-    {label:"Mondo Quiz",action:"renderLevels()"},
-    {label:level.name,action:`selectLevel('${level.id}')`},
-    {label:cls.name,action:`selectClass('${cls.code}')`},
-    {label:discipline.name}
-  ]);
-
-  const questions = discipline.questions || [];
-
-  app.innerHTML=`
-
-    <button
-      class="back"
-      onclick="selectClass('${cls.code}')"
-    >
-      ← Retour aux disciplines
-    </button>
-
-    <h1 class="screen-title">
-      ${discipline.icon || "📚"} ${escapeHtml(discipline.name)}
-    </h1>
-
-    <p class="screen-description">
-      Choisis un thème ou lance directement les questions disponibles.
-    </p>
-
-    ${
-      questions.length
-      ?
-      `
-        <div class="section">
-
-          <div class="section-title">
-            Questions disponibles
-          </div>
-
-          <div
-            class="card"
-            onclick="startQuestions()"
-          >
-            <div class="card-icon">📝</div>
-            <div class="card-title">
-              Commencer les questions
-            </div>
-            <div class="card-info">
-              ${questions.length} question(s) disponible(s)
-            </div>
-          </div>
-
-        </div>
-      `
-      :
-      `
-        <div class="status">
-          Les questions de cette discipline seront chargées depuis
-          le catalogue pédagogique Mondo Quiz.
-        </div>
-      `
-    }
-
-    ${
-      discipline.topics?.length
-      ?
-      `
-        <div class="section">
-
-          <div class="section-title">
-            Thèmes de la discipline
-          </div>
-
-          <div class="grid">
-
-            ${discipline.topics.map((topic,index)=>`
-
-              <div
-                class="card"
-                onclick="selectTopic(${index})"
-              >
-                <div class="card-icon">📘</div>
-
-                <div class="card-title">
-                  ${escapeHtml(topic)}
-                </div>
-
-                <div class="card-info">
-                  Voir les exercices de ce thème
-                </div>
-
-              </div>
-
-            `).join("")}
-
-          </div>
-
-        </div>
-      `
-      :
-      ""
-    }
-
-  `;
-}
-
-
-/* =========================================================
-   9. ÉCRAN 5 — THÈME
-========================================================= */
-
-function selectTopic(index){
-
-  const discipline=getDiscipline();
-
-  state.topic =
-    discipline.topics &&
-    discipline.topics[index];
-
-  setBreadcrumb([
-    {label:"Mondo Quiz",action:"renderLevels()"},
-    {label:getLevel().name,action:`selectLevel('${getLevel().id}')`},
-    {label:getClass().name,action:`selectClass('${getClass().code}')`},
-    {label:discipline.name,action:`selectDiscipline('${discipline.code}')`},
-    {label:state.topic}
-  ]);
-
-  app.innerHTML=`
-
-    <button
-      class="back"
-      onclick="selectDiscipline('${discipline.code}')"
-    >
-      ← Retour à ${escapeHtml(discipline.name)}
-    </button>
-
-    <h1 class="screen-title">
-      📘 ${escapeHtml(state.topic)}
-    </h1>
-
-    <p class="screen-description">
-      Exercices et questions correspondant à ce thème.
-    </p>
-
-    ${
-      discipline.questions?.length
-      ?
-      `
-        <div class="card" onclick="startQuestions()">
-
-          <div class="card-icon">📝</div>
-
-          <div class="card-title">
-            Commencer l'exercice
-          </div>
-
-          <div class="card-info">
-            Répondre aux questions de ${escapeHtml(state.topic)}
-          </div>
-
-        </div>
-      `
-      :
-      `
-        <div class="empty">
-          <strong>Aucune question locale n'est encore associée à ce thème.</strong>
-          <br><br>
-          Le moteur Mondo Quiz peut charger ici les questions
-          correspondant à ce thème depuis Supabase.
-        </div>
-      `
-    }
-
-  `;
-}
-
-
-/* =========================================================
-   10. QUESTIONS
-========================================================= */
-
-function startQuestions(){
-
-  const discipline=getDiscipline();
-
-  state.questions =
-    discipline.questions || [];
-
-  state.questionIndex=0;
-  state.score=0;
-  state.answered=false;
-
-  if(!state.questions.length){
-    showMessage(
-      "Aucune question n'est encore disponible pour cette sélection."
-    );
-    return;
-  }
-
-  renderQuestion();
-}
-
-
-function renderQuestion(){
-
-  const q=state.questions[state.questionIndex];
-
-  if(!q){
-    renderResult();
-    return;
-  }
-
-  state.answered=false;
-
-  app.innerHTML=`
-
-    <button
-      class="back"
-      onclick="selectDiscipline('${getDiscipline().code}')"
-    >
-      ← Retour à la discipline
-    </button>
-
-    <div class="question-box">
-
-      <div class="question-number">
-        QUESTION ${state.questionIndex+1}
-        / ${state.questions.length}
-      </div>
-
-      <div class="question-text">
-        ${escapeHtml(q.question)}
-      </div>
-
-      <div class="answers">
-
-        ${q.options.map((option,index)=>`
-
-          <button
-            class="answer"
-            onclick="answerQuestion(this,'${escapeJs(option)}')"
-          >
-            <strong>${String.fromCharCode(65+index)}.</strong>
-            ${escapeHtml(option)}
-          </button>
-
-        `).join("")}
-
-      </div>
-
-      <div id="explanation" class="explanation"></div>
-
-      <button
-        id="nextButton"
-        class="next"
-        onclick="nextQuestion()"
-      >
-        Question suivante →
-      </button>
-
-    </div>
-  `;
-}
-
-
-function escapeJs(value){
-  return String(value)
-    .replace(/\\/g,"\\\\")
-    .replace(/'/g,"\\'");
-}
-
-
-function answerQuestion(button,answer){
-
-  if(state.answered) return;
-
-  state.answered=true;
-
-  const q=state.questions[state.questionIndex];
-
-  const buttons =
-    document.querySelectorAll(".answer");
-
-  buttons.forEach(btn=>{
-    btn.disabled=true;
-
-    if(btn.innerText.trim().endsWith(q.answer)){
-      btn.classList.add("correct");
-    }
-  });
-
-  if(answer===q.answer){
-    state.score++;
-    button.classList.add("correct");
-  }else{
-    button.classList.add("wrong");
-  }
-
-  const explanation =
-    document.getElementById("explanation");
-
-  explanation.style.display="block";
-
-  explanation.innerHTML =
-    `<strong>Explication :</strong> ${
-      escapeHtml(q.explanation || "Réponse enregistrée.")
-    }`;
-
-  document.getElementById("nextButton")
-    .style.display="inline-block";
-}
-
-
-function nextQuestion(){
-
-  state.questionIndex++;
-
-  if(state.questionIndex>=state.questions.length){
-    renderResult();
-  }else{
-    renderQuestion();
-  }
-}
-
-
-function renderResult(){
-
-  const total=state.questions.length;
-
-  app.innerHTML=`
-
-    <div class="question-box">
-
-      <div class="question-number">
-        RÉSULTAT
-      </div>
-
-      <div class="question-text">
-        ${state.score} / ${total}
-      </div>
-
-      <div class="status">
-        Tu as obtenu
-        <strong>${state.score}</strong>
-        bonne(s) réponse(s) sur
-        <strong>${total}</strong>.
-      </div>
-
-      <button
-        class="next"
-        style="display:inline-block"
-        onclick="startQuestions()"
-      >
-        Recommencer
-      </button>
-
-      <button
-        class="back"
-        style="margin-left:8px"
-        onclick="selectDiscipline('${getDiscipline().code}')"
-      >
-        Retour à la discipline
-      </button>
-
-    </div>
-  `;
-}
-
-
-/* =========================================================
-   11. SUPABASE : CHARGEMENT DU CATALOGUE
-========================================================= */
-
-async function loadSupabaseCatalog(){
-
-  if(!supabaseClient){
-    return;
-  }
+  grid.innerHTML=
+    "<div class='loading'>Chargement...</div>";
 
   try{
 
-    const {data,error} =
+    const {data,error}=
       await supabaseClient.rpc(
         "mondo_quiz_curriculum_tree",
         {
@@ -1552,83 +1014,1751 @@ async function loadSupabaseCatalog(){
         }
       );
 
-    if(error){
-      console.warn("Catalogue Supabase :",error);
-      return;
-    }
+    if(error) throw error;
 
-    if(!data || !Array.isArray(data.curricula)){
-      return;
-    }
+    academicData=
+      data && Array.isArray(data.curricula)
+        ?data
+        :{curricula:[]};
 
-    /*
-      Le catalogue local reste immédiatement disponible.
-      Les données Supabase pourront remplacer progressivement
-      les structures locales lorsqu'elles sont suffisamment
-      complètes.
-    */
-
-    console.log(
-      "Catalogue pédagogique Supabase chargé :",
-      data.curricula.length,
-      "programme(s)"
-    );
+    renderAcademicLevels();
 
   }catch(error){
 
-    console.warn(
-      "Impossible de charger le catalogue Supabase :",
-      error
+    console.error(error);
+
+    grid.innerHTML=
+      "<div class='error'>" +
+      "Impossible de charger le parcours académique." +
+      "</div>";
+  }
+}
+
+
+function renderAcademicLevels(){
+
+  const grid=
+    document.getElementById("academicLevelGrid");
+
+  grid.innerHTML="";
+
+  const curricula=
+    academicData.curricula||[];
+
+  const map=new Map();
+
+  curricula.forEach(c=>{
+
+    if(c.education_level)
+      map.set(c.education_level,c);
+
+  });
+
+  const labels={
+
+    preschool:[
+      "Maternelle",
+      "🧸",
+      "PS • MS • GS"
+    ],
+
+    primary:[
+      "Primaire",
+      "📚",
+      "CI • CP • CE1 • CE2 • CM1 • CM2"
+    ],
+
+    secondary_general:[
+      "Secondaire général",
+      "🎓",
+      "6e • 5e • 4e • 3e • 2nde • 1re • Terminale"
+    ],
+
+    secondary_technical:[
+      "Secondaire technique",
+      "⚙️",
+      "Parcours techniques"
+    ],
+
+    vocational:[
+      "Formation professionnelle",
+      "🛠️",
+      "Parcours professionnels"
+    ],
+
+    higher:[
+      "Enseignement supérieur",
+      "🏛️",
+      "Universités • écoles • instituts"
+    ]
+  };
+
+  map.forEach((curriculum,code)=>{
+
+    const info=
+      labels[code]||
+      [code,"🎓","Parcours académique"];
+
+    const card=
+      document.createElement("article");
+
+    card.className="card";
+
+    card.innerHTML=
+      `<div class="card-icon">${info[1]}</div>
+       <div class="card-title">${escapeHtml(info[0])}</div>
+       <div class="card-desc">${escapeHtml(info[2])}</div>`;
+
+    card.onclick=function(){
+
+      academicState.level={
+        code:code,
+        name:info[0]
+      };
+
+      academicState.curriculum=curriculum;
+
+      academicState.classNode=null;
+      academicState.trackNode=null;
+      academicState.disciplineNode=null;
+      academicState.topicNode=null;
+
+      if(code==="higher"){
+
+        openHigherEducation();
+        return;
+      }
+
+      renderAcademicClasses(curriculum);
+
+      showView("academicClassView");
+    };
+
+    grid.appendChild(card);
+  });
+}
+
+
+/* =========================================================
+   CLASSES
+========================================================= */
+
+function renderAcademicClasses(curriculum){
+
+  const grid=
+    document.getElementById("academicClassGrid");
+
+  grid.innerHTML="";
+
+  const grades=
+    (curriculum.nodes||[])
+      .filter(n=>
+        n.active!==false &&
+        n.node_type==="grade"
+      )
+      .sort(sortNodes);
+
+  if(!grades.length){
+
+    grid.innerHTML=
+      "<div class='empty'>" +
+      "Aucune classe n'est actuellement enregistrée." +
+      "</div>";
+
+    return;
+  }
+
+  renderNodeCards(
+    grid,
+    grades,
+    selectAcademicClass
+  );
+}
+
+
+function selectAcademicClass(node){
+
+  academicState.classNode=node;
+  academicState.trackNode=null;
+  academicState.disciplineNode=null;
+  academicState.topicNode=null;
+
+  const nodes=
+    academicState.curriculum.nodes||[];
+
+  const tracks=
+    getChildren(nodes,node.id)
+      .filter(n=>n.node_type==="track");
+
+  if(tracks.length){
+
+    renderNodeCards(
+      document.getElementById("academicTrackGrid"),
+      tracks,
+      function(track){
+
+        academicState.trackNode=track;
+
+        renderAcademicDisciplines(
+          academicState.classNode,
+          track
+        );
+
+        showView("academicDisciplineView");
+      }
     );
 
+    showView("academicTrackView");
+
+    return;
+  }
+
+  renderAcademicDisciplines(node);
+
+  showView("academicDisciplineView");
+}
+
+
+/* =========================================================
+   DISCIPLINES
+========================================================= */
+
+function renderAcademicDisciplines(
+  classNode,
+  trackNode=null
+){
+
+  const grid=
+    document.getElementById("academicDisciplineGrid");
+
+  grid.innerHTML="";
+
+  const nodes=
+    academicState.curriculum.nodes||[];
+
+  const parent=
+    trackNode||classNode;
+
+  let disciplines=
+    getChildren(nodes,parent.id)
+      .filter(n=>n.node_type==="discipline");
+
+  if(!disciplines.length){
+
+    const intermediate=
+      getChildren(nodes,parent.id);
+
+    intermediate.forEach(node=>{
+
+      disciplines.push(
+        ...getChildren(nodes,node.id)
+          .filter(n=>n.node_type==="discipline")
+      );
+
+    });
+  }
+
+  disciplines=
+    uniqueNodes(disciplines)
+      .sort(sortNodes);
+
+  if(!disciplines.length){
+
+    grid.innerHTML=
+      "<div class='empty'>" +
+      "Aucune discipline n'est encore rattachée à cette classe." +
+      "</div>";
+
+    return;
+  }
+
+  renderNodeCards(
+    grid,
+    disciplines,
+    function(discipline){
+
+      academicState.disciplineNode=discipline;
+      academicState.topicNode=null;
+
+      renderAcademicTopics(discipline);
+
+      showView("academicTopicView");
+    }
+  );
+}
+
+
+/* =========================================================
+   THEMES
+========================================================= */
+
+function renderAcademicTopics(discipline){
+
+  const grid=
+    document.getElementById("academicTopicGrid");
+
+  document.getElementById("topicTitle").textContent=
+    discipline.name;
+
+  grid.innerHTML="";
+
+  const nodes=
+    academicState.curriculum.nodes||[];
+
+  const topics=
+    getChildren(nodes,discipline.id)
+      .filter(n=>[
+        "domain",
+        "competency",
+        "capacity",
+        "knowledge",
+        "concept",
+        "topic",
+        "subtopic",
+        "learning_objective",
+        "assessment_target"
+      ].includes(n.node_type))
+      .sort(sortNodes);
+
+  if(!topics.length){
+
+    const card=
+      document.createElement("article");
+
+    card.className="card";
+
+    card.innerHTML=
+      `<div class="card-icon">❓</div>
+       <div class="card-title">
+         Questions de ${escapeHtml(discipline.name)}
+       </div>
+       <div class="card-desc">
+         Accéder directement aux questions rattachées à cette discipline.
+       </div>`;
+
+    card.onclick=function(){
+
+      academicState.topicNode=null;
+
+      document.getElementById("questionTitle").textContent=
+        discipline.name;
+
+      document.getElementById("questionSubtitle").textContent=
+        "Questions correspondant à la classe et à la discipline.";
+
+      showView("questionView");
+
+      loadAcademicQuestions();
+    };
+
+    grid.appendChild(card);
+
+    return;
+  }
+
+  renderNodeCards(
+    grid,
+    topics,
+    function(topic){
+
+      academicState.topicNode=topic;
+
+      document.getElementById("questionTitle").textContent=
+        topic.name;
+
+      document.getElementById("questionSubtitle").textContent=
+        discipline.name;
+
+      showView("questionView");
+
+      loadAcademicQuestions();
+    }
+  );
+}
+
+
+/* =========================================================
+   ENSEIGNEMENT SUPERIEUR
+========================================================= */
+
+function openHigherEducation(){
+
+  higherState={
+    category:null,
+    institution:null,
+    establishment:null,
+    program:null
+  };
+
+  showView("higherCategoryView");
+
+  loadHigherData();
+}
+
+
+/*
+  Le supérieur est volontairement séparé du parcours
+  maternelle/primaire/secondaire.
+
+  La structure attendue dans Supabase est :
+
+  catégorie
+      ↓
+  institution / université
+      ↓
+  établissement
+      ↓
+  filière
+      ↓
+  niveau
+      ↓
+  BAC admissible
+      ↓
+  questions / cours
+*/
+
+async function loadHigherData(){
+
+  const grid=
+    document.getElementById("higherCategoryGrid");
+
+  /*
+    On commence par exploiter les nœuds Supabase
+    déjà existants.
+
+    Le curriculum BJ-HIGHER est actuellement la
+    base académique du supérieur.
+  */
+
+  try{
+
+    const curriculum=
+      academicData.curricula.find(
+        c=>c.education_level==="higher"
+      );
+
+    if(!curriculum){
+
+      grid.innerHTML=
+        "<div class='empty'>" +
+        "Le curriculum supérieur n'est pas disponible." +
+        "</div>";
+
+      return;
+    }
+
+    higherData=
+      curriculum.nodes||[];
+
+    renderHigherCategories();
+
+  }catch(error){
+
+    console.error(error);
+
+    grid.innerHTML=
+      "<div class='error'>" +
+      "Impossible de charger l'enseignement supérieur." +
+      "</div>";
+  }
+}
+
+
+/*
+  Catégories correspondant à la structure du guide MESRS
+  2026-2027.
+*/
+
+const higherCategories=[
+
+  {
+    code:"public",
+    name:"Universités publiques",
+    icon:"🏛️",
+    description:
+      "UAC • UP • UNSTIM • UNA"
+  },
+
+  {
+    code:"inter_state",
+    name:"Écoles inter-États",
+    icon:"🌍",
+    description:
+      "Structures inter-États de formation supérieure"
+  },
+
+  {
+    code:"uadc",
+    name:"Université Africaine de Développement Coopératif",
+    icon:"🤝",
+    description:
+      "Formations en coopération, économie sociale, finance et développement"
+  },
+
+  {
+    code:"seme_city",
+    name:"Sèmè City",
+    icon:"🚀",
+    description:
+      "Établissements et formations de Sèmè City"
+  },
+
+  {
+    code:"private_approved",
+    name:"Privé — filières agréées",
+    icon:"🏫",
+    description:
+      "Établissements privés autorisés — régime d'agrément"
+  },
+
+  {
+    code:"private_opening",
+    name:"Privé — régime d'ouverture",
+    icon:"🎓",
+    description:
+      "Établissements privés autorisés — régime d'ouverture"
+  }
+
+];
+
+
+function renderHigherCategories(){
+
+  const grid=
+    document.getElementById("higherCategoryGrid");
+
+  grid.innerHTML="";
+
+  higherCategories.forEach(category=>{
+
+    const card=
+      document.createElement("article");
+
+    card.className="card";
+
+    card.innerHTML=
+      `<div class="card-icon">${category.icon}</div>
+       <div class="card-title">${category.name}</div>
+       <div class="card-desc">
+         ${category.description}
+       </div>`;
+
+    card.onclick=function(){
+
+      higherState.category=category;
+
+      loadHigherInstitutions(category);
+
+      showView("higherInstitutionView");
+    };
+
+    grid.appendChild(card);
+  });
+}
+
+
+/* =========================================================
+   INSTITUTIONS DU SUPERIEUR
+========================================================= */
+
+function loadHigherInstitutions(category){
+
+  const grid=
+    document.getElementById("higherInstitutionGrid");
+
+  document.getElementById(
+    "higherInstitutionTitle"
+  ).textContent=category.name;
+
+  /*
+    Les informations institutionnelles doivent être
+    récupérées depuis les données supérieures de Supabase.
+
+    Le code accepte plusieurs formes :
+      institution
+      university
+      establishment
+      structure
+  */
+
+  let institutions=
+    higherData.filter(node=>{
+
+      const type=
+        String(node.node_type||"").toLowerCase();
+
+      const meta=
+        node.metadata||{};
+
+      return (
+        type==="institution" ||
+        type==="university" ||
+        type==="school" ||
+        type==="structure" ||
+        meta.higher_category===category.code ||
+        meta.category===category.code
+      );
+    });
+
+  /*
+    Si les institutions sont déjà hiérarchisées,
+    on les récupère également depuis les nœuds racines.
+  */
+
+  institutions=
+    uniqueNodes(institutions)
+      .sort(sortNodes);
+
+  renderHigherInstitutionCards(
+    institutions
+  );
+}
+
+
+function renderHigherInstitutionCards(institutions){
+
+  const grid=
+    document.getElementById("higherInstitutionGrid");
+
+  grid.innerHTML="";
+
+  if(!institutions.length){
+
+    grid.innerHTML=
+      "<div class='empty'>" +
+
+      "Les établissements détaillés de cette catégorie " +
+      "doivent être enregistrés dans la base supérieure Mondo Quiz." +
+
+      "</div>";
+
+    return;
+  }
+
+  institutions.forEach(institution=>{
+
+    const card=
+      document.createElement("article");
+
+    card.className="card";
+
+    card.innerHTML=
+      `<div class="card-icon">🏛️</div>
+       <div class="card-title">
+         ${escapeHtml(institution.name)}
+       </div>
+       <div class="card-desc">
+         ${escapeHtml(
+           institution.description||
+           "Structure d'enseignement supérieur"
+         )}
+       </div>`;
+
+    card.onclick=function(){
+
+      higherState.institution=institution;
+
+      loadHigherEstablishments(
+        institution
+      );
+
+      showView("higherEstablishmentView");
+    };
+
+    grid.appendChild(card);
+  });
+}
+
+
+/* =========================================================
+   ETABLISSEMENTS
+========================================================= */
+
+function loadHigherEstablishments(institution){
+
+  const grid=
+    document.getElementById("higherEstablishmentGrid");
+
+  document.getElementById(
+    "higherEstablishmentTitle"
+  ).textContent=institution.name;
+
+  const establishments=
+    getChildren(
+      higherData,
+      institution.id
+    )
+    .filter(node=>[
+      "establishment",
+      "faculty",
+      "institute",
+      "school",
+      "domain"
+    ].includes(node.node_type))
+    .sort(sortNodes);
+
+  if(!establishments.length){
+
+    /*
+      Certaines données peuvent avoir les filières
+      directement sous l'institution.
+    */
+
+    const directPrograms=
+      getChildren(
+        higherData,
+        institution.id
+      )
+      .filter(node=>
+        [
+          "program",
+          "formation",
+          "discipline"
+        ].includes(node.node_type)
+      );
+
+    if(directPrograms.length){
+
+      higherState.establishment=institution;
+
+      renderHigherPrograms(
+        directPrograms
+      );
+
+      showView("higherProgramView");
+
+      return;
+    }
+
+    grid.innerHTML=
+      "<div class='empty'>" +
+      "Aucun établissement détaillé n'est encore rattaché à cette structure." +
+      "</div>";
+
+    return;
+  }
+
+  renderNodeCards(
+    grid,
+    establishments,
+    function(establishment){
+
+      higherState.establishment=
+        establishment;
+
+      loadHigherPrograms(
+        establishment
+      );
+
+      showView("higherProgramView");
+    }
+  );
+}
+
+
+/* =========================================================
+   FILIERES
+========================================================= */
+
+function loadHigherPrograms(establishment){
+
+  const programs=
+    getChildren(
+      higherData,
+      establishment.id
+    )
+    .filter(node=>[
+      "program",
+      "formation",
+      "discipline",
+      "domain"
+    ].includes(node.node_type))
+    .sort(sortNodes);
+
+  renderHigherPrograms(programs);
+}
+
+
+function renderHigherPrograms(programs){
+
+  const grid=
+    document.getElementById("higherProgramGrid");
+
+  grid.innerHTML="";
+
+  if(!programs.length){
+
+    grid.innerHTML=
+      "<div class='empty'>" +
+      "Aucune filière détaillée n'est actuellement enregistrée pour cet établissement." +
+      "</div>";
+
+    return;
+  }
+
+  programs.forEach(program=>{
+
+    const meta=
+      program.metadata||{};
+
+    const bac=
+      meta.bac_recommande||
+      meta.bac||
+      meta.baccalaureat||
+      "";
+
+    const level=
+      meta.level||
+      meta.niveau||
+      "";
+
+    const card=
+      document.createElement("article");
+
+    card.className="card";
+
+    card.innerHTML=
+      `<div class="card-icon">📘</div>
+
+       <div class="card-title">
+         ${escapeHtml(program.name)}
+       </div>
+
+       <div class="card-desc">
+         ${escapeHtml(
+           program.description||
+           "Formation d'enseignement supérieur"
+         )}
+       </div>
+
+       ${
+         level
+         ? `<span class="badge">${escapeHtml(level)}</span>`
+         :""
+       }
+
+       ${
+         bac
+         ? `<span class="badge">BAC : ${escapeHtml(bac)}</span>`
+         :""
+       }`;
+
+    card.onclick=function(){
+
+      higherState.program=program;
+
+      showHigherProgramDetail(
+        program
+      );
+
+      showView(
+        "higherProgramDetailView"
+      );
+    };
+
+    grid.appendChild(card);
+  });
+}
+
+
+/* =========================================================
+   DETAIL FILIERE
+========================================================= */
+
+function showHigherProgramDetail(program){
+
+  const container=
+    document.getElementById(
+      "higherProgramDetail"
+    );
+
+  const meta=
+    program.metadata||{};
+
+  const bac=
+    meta.bac_recommande||
+    meta.bac||
+    "Non renseigné";
+
+  const level=
+    meta.level||
+    meta.niveau||
+    "Non renseigné";
+
+  const entry=
+    meta.mode_entree||
+    meta.entry_mode||
+    "Non renseigné";
+
+  const jobs=
+    meta.debouches||
+    meta.jobs||
+    "Non renseignés";
+
+  container.innerHTML=
+    `<div class="hero">
+
+      <h1>
+        ${escapeHtml(program.name)}
+      </h1>
+
+      <p>
+        Fiche de formation
+      </p>
+
+     </div>
+
+     <div class="grid">
+
+       <article class="card">
+         <div class="card-icon">🎓</div>
+         <div class="card-title">Niveau</div>
+         <div class="card-desc">
+           ${escapeHtml(level)}
+         </div>
+       </article>
+
+       <article class="card">
+         <div class="card-icon">📜</div>
+         <div class="card-title">Baccalauréat recommandé</div>
+         <div class="card-desc">
+           ${escapeHtml(bac)}
+         </div>
+       </article>
+
+       <article class="card">
+         <div class="card-icon">📝</div>
+         <div class="card-title">Mode d'entrée</div>
+         <div class="card-desc">
+           ${escapeHtml(entry)}
+         </div>
+       </article>
+
+       <article class="card">
+         <div class="card-icon">💼</div>
+         <div class="card-title">Débouchés</div>
+         <div class="card-desc">
+           ${escapeHtml(jobs)}
+         </div>
+       </article>
+
+       <article
+         class="card"
+         onclick="loadHigherProgramQuestions()"
+       >
+         <div class="card-icon">❓</div>
+         <div class="card-title">
+           Questions et apprentissage
+         </div>
+         <div class="card-desc">
+           Accéder aux questions Mondo Quiz liées à cette formation.
+         </div>
+       </article>
+
+     </div>`;
+}
+
+
+async function loadHigherProgramQuestions(){
+
+  const program=
+    higherState.program;
+
+  if(!program)
+    return;
+
+  document.getElementById(
+    "questionTitle"
+  ).textContent=
+    program.name;
+
+  document.getElementById(
+    "questionSubtitle"
+  ).textContent=
+    "Questions académiques liées à la formation.";
+
+  showView("questionView");
+
+  const container=
+    document.getElementById(
+      "questionsContainer"
+    );
+
+  container.innerHTML=
+    "<div class='loading'>Chargement...</div>";
+
+  try{
+
+    const {data,error}=
+      await supabaseClient
+      .from("mondo_quiz_questions")
+      .select(
+        "id,question_text,options,correct_answer,explanation,difficulty,curriculum_node_id,education_level,grade_code"
+      )
+      .eq("active",true)
+      .eq("education_level","higher")
+      .eq(
+        "curriculum_node_id",
+        program.id
+      )
+      .limit(30);
+
+    if(error) throw error;
+
+    renderQuestions(data||[]);
+
+  }catch(error){
+
+    console.error(error);
+
+    container.innerHTML=
+      "<div class='error'>" +
+      "Impossible de charger les questions de cette formation." +
+      "</div>";
   }
 }
 
 
 /* =========================================================
-   12. MESSAGE
+   QUESTIONS SCOLAIRES
 ========================================================= */
 
-function showMessage(message){
+async function loadAcademicQuestions(){
 
-  app.innerHTML=`
+  const container=
+    document.getElementById(
+      "questionsContainer"
+    );
 
-    <button class="back" onclick="renderLevels()">
-      ← Retour aux niveaux
-    </button>
+  container.innerHTML=
+    "<div class='loading'>Chargement...</div>";
 
-    <div class="empty">
-      ${escapeHtml(message)}
-    </div>
+  try{
 
-  `;
+    let query=
+      supabaseClient
+      .from("mondo_quiz_questions")
+      .select(
+        "id,question_text,options,correct_answer,explanation,difficulty,topic,curriculum_node_id,education_level,grade_code,track_code"
+      )
+      .eq("active",true)
+      .limit(30);
+
+    if(academicState.level?.code){
+
+      query=
+        query.eq(
+          "education_level",
+          academicState.level.code
+        );
+    }
+
+    if(academicState.classNode){
+
+      const grade=
+        academicState.classNode.code||
+        academicState.classNode.metadata?.grade_code;
+
+      if(grade)
+        query=query.eq("grade_code",grade);
+    }
+
+    if(academicState.trackNode){
+
+      const track=
+        academicState.trackNode.code||
+        academicState.trackNode.metadata?.track_code;
+
+      if(track)
+        query=query.eq("track_code",track);
+    }
+
+    if(academicState.topicNode){
+
+      query=
+        query.eq(
+          "curriculum_node_id",
+          academicState.topicNode.id
+        );
+
+    }else if(academicState.disciplineNode){
+
+      const ids=
+        getDescendantIds(
+          academicState.curriculum.nodes||[],
+          academicState.disciplineNode.id
+        );
+
+      ids.push(
+        academicState.disciplineNode.id
+      );
+
+      query=
+        query.in(
+          "curriculum_node_id",
+          ids
+        );
+    }
+
+    const difficulty=
+      document.getElementById(
+        "difficultyFilter"
+      ).value;
+
+    if(difficulty)
+      query=query.eq("difficulty",difficulty);
+
+    const {data,error}=await query;
+
+    if(error) throw error;
+
+    renderQuestions(data||[]);
+
+  }catch(error){
+
+    console.error(error);
+
+    container.innerHTML=
+      "<div class='error'>" +
+      "Impossible de charger les questions." +
+      "</div>";
+  }
 }
 
 
 /* =========================================================
-   13. INITIALISATION
+   AFFICHAGE QUESTIONS
 ========================================================= */
 
-async function init(){
+function renderQuestions(questions){
 
-  /*
-    Important :
-    on affiche immédiatement le catalogue local.
-    Ainsi, Mondo Quiz ne peut pas rester bloqué sur
-    "0 programme" à cause d'une requête réseau.
-  */
+  const container=
+    document.getElementById(
+      "questionsContainer"
+    );
 
-  renderLevels();
+  container.innerHTML="";
 
-  /*
-    Supabase est chargé ensuite.
-  */
+  if(!questions.length){
 
-  await loadSupabaseCatalog();
+    container.innerHTML=
+      "<div class='empty'>" +
+      "Aucune question actuellement rattachée à cette sélection." +
+      "</div>";
 
+    return;
+  }
+
+  questions.forEach((q,index)=>{
+
+    const block=
+      document.createElement("article");
+
+    block.className="question";
+
+    const options=
+      normalizeOptions(q.options);
+
+    block.innerHTML=
+      `<div class="question-number">
+         QUESTION ${index+1}
+       </div>
+
+       <div class="question-text">
+         ${escapeHtml(q.question_text)}
+       </div>
+
+       <div class="options"></div>
+
+       <div class="explanation">
+         <strong>Explication :</strong><br>
+         ${escapeHtml(
+           q.explanation||
+           "Aucune explication disponible."
+         )}
+       </div>`;
+
+    const optionsBox=
+      block.querySelector(".options");
+
+    options.forEach(option=>{
+
+      const button=
+        document.createElement("button");
+
+      button.className="option";
+
+      const value=
+        typeof option==="object"
+          ?(
+            option.value||
+            option.text||
+            option.label||
+            ""
+          )
+          :option;
+
+      button.textContent=value;
+
+      button.onclick=function(){
+
+        const correct=
+          String(value)
+          .trim()
+          .toLowerCase()===
+          String(q.correct_answer||"")
+          .trim()
+          .toLowerCase();
+
+        [...optionsBox.children]
+          .forEach(b=>b.disabled=true);
+
+        if(correct){
+
+          button.classList.add("correct");
+
+        }else{
+
+          button.classList.add("wrong");
+
+          [...optionsBox.children]
+            .forEach(b=>{
+
+              if(
+                b.textContent
+                  .trim()
+                  .toLowerCase()===
+                String(q.correct_answer||"")
+                  .trim()
+                  .toLowerCase()
+              ){
+                b.classList.add("correct");
+              }
+
+            });
+        }
+
+        block.querySelector(
+          ".explanation"
+        ).style.display="block";
+      };
+
+      optionsBox.appendChild(button);
+    });
+
+    container.appendChild(block);
+  });
 }
 
-init();
+
+/* =========================================================
+   INTERNATIONAL
+   NE PAS MODIFIER LE CATALOGUE DES 119 DISCIPLINES
+========================================================= */
+
+function openInternational(){
+
+  showView("internationalView");
+
+  loadInternationalCatalogue();
+}
+
+
+async function loadInternationalCatalogue(){
+
+  const loading=
+    document.getElementById(
+      "internationalLoading"
+    );
+
+  const grid=
+    document.getElementById(
+      "internationalGrid"
+    );
+
+  loading.style.display="block";
+  grid.innerHTML="";
+
+  try{
+
+    const {data,error}=
+      await supabaseClient.rpc(
+        "mondo_quiz_catalog"
+      );
+
+    if(error) throw error;
+
+    internationalData=
+      Array.isArray(data)
+        ?data
+        :(data?.catalog||
+          data?.disciplines||
+          data?.data||
+          []);
+
+    renderInternational(
+      internationalData
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    loading.innerHTML=
+      "<div class='error'>" +
+      "Impossible de charger le catalogue international." +
+      "</div>";
+
+  }finally{
+
+    loading.style.display="none";
+  }
+}
+
+
+function renderInternational(items){
+
+  const grid=
+    document.getElementById(
+      "internationalGrid"
+    );
+
+  grid.innerHTML="";
+
+  items.forEach(item=>{
+
+    const name=
+      item.name||
+      item.discipline_name||
+      item.title||
+      item.label||
+      "Discipline";
+
+    const card=
+      document.createElement("article");
+
+    card.className="card";
+
+    card.innerHTML=
+      `<div class="card-icon">🌍</div>
+       <div class="card-title">
+         ${escapeHtml(name)}
+       </div>
+       <div class="card-desc">
+         ${escapeHtml(
+           item.description||
+           "Discipline du catalogue international."
+         )}
+       </div>`;
+
+    card.onclick=function(){
+
+      openInternationalQuestions(
+        item
+      );
+    };
+
+    grid.appendChild(card);
+  });
+}
+
+
+async function openInternationalQuestions(item){
+
+  document.getElementById(
+    "questionTitle"
+  ).textContent=
+    item.name||
+    item.discipline_name||
+    item.title||
+    "Questions";
+
+  document.getElementById(
+    "questionSubtitle"
+  ).textContent=
+    "Questions du catalogue international.";
+
+  showView("questionView");
+
+  const container=
+    document.getElementById(
+      "questionsContainer"
+    );
+
+  container.innerHTML=
+    "<div class='loading'>Chargement...</div>";
+
+  try{
+
+    let query=
+      supabaseClient
+      .from("mondo_quiz_questions")
+      .select(
+        "id,question_text,options,correct_answer,explanation,difficulty,topic"
+      )
+      .eq("active",true)
+      .limit(20);
+
+    const category=
+      item.slug||
+      item.discipline_slug||
+      item.code;
+
+    if(category)
+      query=query.eq("category",category);
+
+    const {data,error}=await query;
+
+    if(error) throw error;
+
+    renderQuestions(data||[]);
+
+  }catch(error){
+
+    console.error(error);
+
+    container.innerHTML=
+      "<div class='error'>" +
+      "Impossible de charger les questions." +
+      "</div>";
+  }
+}
+
+
+/* =========================================================
+   UTILITAIRES
+========================================================= */
+
+function getChildren(nodes,parentId){
+
+  return nodes.filter(
+    n=>
+      n.parent_id===parentId &&
+      n.active!==false
+  );
+}
+
+
+function getDescendantIds(nodes,parentId){
+
+  const result=[];
+
+  function walk(id){
+
+    getChildren(nodes,id)
+      .forEach(child=>{
+
+        result.push(child.id);
+
+        walk(child.id);
+
+      });
+  }
+
+  walk(parentId);
+
+  return result;
+}
+
+
+function uniqueNodes(nodes){
+
+  const map=new Map();
+
+  nodes.forEach(n=>{
+
+    if(n?.id)
+      map.set(n.id,n);
+
+  });
+
+  return [...map.values()];
+}
+
+
+function sortNodes(a,b){
+
+  const aa=
+    Number.isFinite(Number(a.sort_order))
+      ?Number(a.sort_order)
+      :999999;
+
+  const bb=
+    Number.isFinite(Number(b.sort_order))
+      ?Number(b.sort_order)
+      :999999;
+
+  if(aa!==bb)
+    return aa-bb;
+
+  return String(a.name||"")
+    .localeCompare(
+      String(b.name||""),
+      "fr",
+      {numeric:true}
+    );
+}
+
+
+function renderNodeCards(
+  container,
+  nodes,
+  callback
+){
+
+  container.innerHTML="";
+
+  nodes.forEach(node=>{
+
+    const card=
+      document.createElement("article");
+
+    card.className="card";
+
+    card.innerHTML=
+      `<div class="card-icon">
+         ${nodeIcon(node)}
+       </div>
+
+       <div class="card-title">
+         ${escapeHtml(
+           node.name||
+           "Sans nom"
+         )}
+       </div>
+
+       <div class="card-desc">
+         ${escapeHtml(
+           node.description||
+           nodeDescription(node)
+         )}
+       </div>`;
+
+    card.onclick=function(){
+      callback(node);
+    };
+
+    container.appendChild(card);
+  });
+}
+
+
+function nodeIcon(node){
+
+  switch(node.node_type){
+
+    case "grade":
+      return "📘";
+
+    case "track":
+      return "🎯";
+
+    case "discipline":
+      return "📚";
+
+    case "topic":
+    case "subtopic":
+      return "📝";
+
+    case "competency":
+    case "capacity":
+      return "🧠";
+
+    case "knowledge":
+    case "concept":
+      return "💡";
+
+    case "institution":
+    case "university":
+      return "🏛️";
+
+    case "establishment":
+    case "faculty":
+    case "institute":
+    case "school":
+      return "🏫";
+
+    case "program":
+    case "formation":
+      return "🎓";
+
+    default:
+      return "📖";
+  }
+}
+
+
+function nodeDescription(node){
+
+  const map={
+
+    grade:"Classe ou niveau académique",
+
+    track:"Série ou parcours",
+
+    discipline:"Discipline",
+
+    topic:"Thème",
+
+    subtopic:"Sous-thème",
+
+    competency:"Compétence",
+
+    capacity:"Capacité",
+
+    knowledge:"Connaissance",
+
+    concept:"Concept",
+
+    institution:"Institution",
+
+    university:"Université",
+
+    establishment:"Établissement",
+
+    faculty:"Faculté",
+
+    institute:"Institut",
+
+    school:"École",
+
+    program:"Filière de formation",
+
+    formation:"Formation"
+  };
+
+  return map[node.node_type]||
+    "Élément du parcours académique";
+}
+
+
+function normalizeOptions(options){
+
+  if(Array.isArray(options))
+    return options;
+
+  if(options&&typeof options==="object"){
+
+    return Object.entries(options)
+      .map(([key,value])=>({
+        key:key,
+        value:value
+      }));
+  }
+
+  return [];
+}
+
+
+function escapeHtml(value){
+
+  return String(value??"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   RECHERCHE SUPERIEUR
+========================================================= */
+
+document
+.getElementById("higherInstitutionSearch")
+.addEventListener(
+  "input",
+  function(){
+
+    const value=
+      this.value
+      .trim()
+      .toLowerCase();
+
+    const cards=
+      document
+      .getElementById(
+        "higherInstitutionGrid"
+      )
+      .querySelectorAll(".card");
+
+    cards.forEach(card=>{
+
+      card.style.display=
+        card.textContent
+          .toLowerCase()
+          .includes(value)
+          ?"block"
+          :"none";
+    });
+  }
+);
+
+
+document
+.getElementById("higherProgramSearch")
+.addEventListener(
+  "input",
+  function(){
+
+    const value=
+      this.value
+      .trim()
+      .toLowerCase();
+
+    const cards=
+      document
+      .getElementById(
+        "higherProgramGrid"
+      )
+      .querySelectorAll(".card");
+
+    cards.forEach(card=>{
+
+      card.style.display=
+        card.textContent
+          .toLowerCase()
+          .includes(value)
+          ?"block"
+          :"none";
+    });
+  }
+);
+
+
+document
+.getElementById("difficultyFilter")
+.addEventListener(
+  "change",
+  function(){
+
+    if(currentView==="questionView"){
+
+      if(
+        academicState.disciplineNode
+      )
+        loadAcademicQuestions();
+
+    }
+  }
+);
+
+
+/* =========================================================
+   DEMARRAGE
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    console.log(
+      "Mondo Quiz initialisé."
+    );
+
+  }
+);
 
 </script>
 
