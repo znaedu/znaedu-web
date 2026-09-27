@@ -1,527 +1,985 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mondo Quiz — ZNAEDU</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Mondo Quiz — ZNAEDU</title>
 
-  <style>
-    :root {
-      --primary: #174ea6;
-      --secondary: #0b8043;
-      --accent: #f9ab00;
-      --danger: #d93025;
-      --dark: #17202a;
-      --light: #f5f7fa;
-      --white: #ffffff;
-      --border: #dfe3e8;
-      --muted: #687078;
-    }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    * {
-      box-sizing: border-box;
-    }
+<style>
+:root{
+  --primary:#2563eb;
+  --primary-dark:#1d4ed8;
+  --secondary:#0f172a;
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --text:#172033;
+  --muted:#64748b;
+  --border:#dbe3ef;
+  --success:#15803d;
+  --danger:#dc2626;
+  --warning:#b45309;
+  --info:#0369a1;
+  --radius:18px;
+  --shadow:0 12px 32px rgba(15,23,42,.08);
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--light);
-      color: var(--dark);
-    }
+*{
+  box-sizing:border-box;
+}
 
-    header {
-      background: linear-gradient(135deg, #174ea6, #0b8043);
-      color: white;
-      padding: 22px 16px;
-      text-align: center;
-    }
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 30px;
-    }
+header{
+  background:linear-gradient(135deg,#1d4ed8,#2563eb);
+  color:#fff;
+  padding:28px 18px;
+  text-align:center;
+}
 
-    header p {
-      margin: 8px 0 0;
-      opacity: .92;
-    }
+header h1{
+  margin:0;
+  font-size:32px;
+}
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 18px;
-    }
+header p{
+  margin:8px 0 0;
+}
 
-    .card {
-      background: var(--white);
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 3px 15px rgba(0,0,0,.07);
-    }
+.container{
+  width:min(1150px,94%);
+  margin:24px auto 60px;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
-    }
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  margin-bottom:20px;
+  box-shadow:var(--shadow);
+}
 
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
+h2,h3{
+  margin-top:0;
+}
 
-    input,
-    select,
-    button {
-      width: 100%;
-      min-height: 44px;
-      border-radius: 9px;
-      border: 1px solid var(--border);
-      padding: 10px 12px;
-      font-size: 15px;
-    }
+.small{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
 
-    button {
-      cursor: pointer;
-      border: none;
-      font-weight: bold;
-    }
+label{
+  display:block;
+  font-weight:700;
+  margin:15px 0 7px;
+}
 
-    .primary {
-      background: var(--primary);
-      color: white;
-    }
+input,
+select,
+button{
+  width:100%;
+  min-height:46px;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  font-size:15px;
+}
 
-    .secondary {
-      background: var(--secondary);
-      color: white;
-    }
+button{
+  border:none;
+  background:var(--primary);
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
 
-    .warning {
-      background: var(--accent);
-      color: #222;
-    }
+button:hover{
+  background:var(--primary-dark);
+}
 
-    .danger {
-      background: var(--danger);
-      color: white;
-    }
+button.secondary{
+  background:#eef2ff;
+  color:#1e3a8a;
+}
 
-    .muted {
-      color: var(--muted);
-      font-size: 14px;
-    }
+button.danger{
+  background:#fee2e2;
+  color:#991b1b;
+}
 
-    .hidden {
-      display: none !important;
-    }
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
 
-    .status {
-      padding: 12px;
-      border-radius: 9px;
-      margin-bottom: 14px;
-      background: #eef3f8;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+}
 
-    .status.success {
-      background: #e8f5e9;
-      color: #146c2e;
-    }
+@media(max-width:750px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
 
-    .status.error {
-      background: #fdecea;
-      color: #a50e0e;
-    }
+.hidden{
+  display:none!important;
+}
 
-    .question {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px;
-      margin-bottom: 16px;
-      background: #fff;
-    }
+.status{
+  display:none;
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:10px;
+  line-height:1.45;
+}
 
-    .question h3 {
-      margin-top: 0;
-    }
+.status.success{
+  display:block;
+  background:#dcfce7;
+  color:#166534;
+}
 
-    .option {
-      display: block;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin: 8px 0;
-      cursor: pointer;
-    }
+.status.error{
+  display:block;
+  background:#fee2e2;
+  color:#991b1b;
+}
 
-    .option:hover {
-      background: #f5f8fc;
-    }
+.status.info{
+  display:block;
+  background:#dbeafe;
+  color:#1e40af;
+}
 
-    .badge {
-      display: inline-block;
-      padding: 5px 9px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      margin: 3px;
-      background: #e8eef8;
-    }
+.status.warning{
+  display:block;
+  background:#fef3c7;
+  color:#92400e;
+}
 
-    .premium {
-      border: 2px solid var(--accent);
-      background: #fffaf0;
-    }
+.mode-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+  margin-top:15px;
+}
 
-    .price {
-      font-size: 30px;
-      font-weight: bold;
-      color: var(--primary);
-    }
+@media(max-width:750px){
+  .mode-grid{
+    grid-template-columns:1fr;
+  }
+}
 
-    .plan {
-      text-align: center;
-    }
+.mode-button{
+  min-height:110px;
+  text-align:left;
+  padding:18px;
+  background:#fff;
+  color:var(--text);
+  border:1px solid var(--border);
+}
 
-    .referral-box {
-      background: #f0f7ff;
-      border: 1px dashed var(--primary);
-      padding: 15px;
-      border-radius: 10px;
-    }
+.mode-button strong{
+  display:block;
+  font-size:18px;
+  margin-bottom:7px;
+}
 
-    footer {
-      text-align: center;
-      color: var(--muted);
-      padding: 25px;
-      font-size: 13px;
-    }
-  </style>
+.mode-button span{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  font-weight:400;
+  line-height:1.4;
+}
+
+.mode-button.active{
+  border:2px solid var(--primary);
+  background:#eff6ff;
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:10px;
+}
+
+.chip{
+  padding:6px 10px;
+  border-radius:999px;
+  background:#eff6ff;
+  color:#1d4ed8;
+  font-size:12px;
+  font-weight:700;
+}
+
+.question-box{
+  background:#f8fafc;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  margin:20px 0;
+}
+
+.question{
+  font-size:21px;
+  font-weight:700;
+  line-height:1.5;
+}
+
+.option{
+  margin-top:10px;
+  text-align:left;
+  background:#fff;
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.option:hover{
+  background:#eff6ff;
+  color:#1d4ed8;
+}
+
+.progress{
+  width:100%;
+  height:10px;
+  background:#e5e7eb;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  width:0%;
+  height:100%;
+  background:var(--primary);
+  transition:.3s;
+}
+
+.result-score{
+  text-align:center;
+  font-size:54px;
+  font-weight:800;
+  color:var(--primary);
+}
+
+.center{
+  text-align:center;
+}
+
+.catalog-count{
+  font-weight:700;
+  color:var(--primary);
+}
+
+.loading{
+  text-align:center;
+  padding:20px;
+  color:var(--muted);
+}
+
+.search-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+}
+
+@media(max-width:600px){
+  .search-row{
+    grid-template-columns:1fr;
+  }
+}
+
+.search-row button{
+  width:auto;
+  min-width:130px;
+}
+
+.mini-info{
+  padding:12px;
+  border-radius:12px;
+  background:#f8fafc;
+  border:1px solid var(--border);
+  margin-top:12px;
+}
+
+.quiz-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+
+.quiz-meta span{
+  padding:5px 9px;
+  border-radius:999px;
+  background:#eef2ff;
+  color:#1e3a8a;
+  font-size:12px;
+  font-weight:700;
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <h1>MONDO QUIZ</h1>
-  <p>Apprendre • S'exercer • Progresser • Réussir</p>
+  <p>Apprendre • S'exercer • Découvrir • Progresser</p>
+  <p style="opacity:.9;font-size:13px">
+    ZNAEDU — Plateforme mondiale de connaissances et d'apprentissage
+  </p>
 </header>
 
 <div class="container">
 
-  <!-- AUTHENTIFICATION -->
-  <section class="card" id="authCard">
-    <h2>Connexion</h2>
+<!-- =====================================================
+     AUTHENTIFICATION
+===================================================== -->
 
-    <div id="authStatus" class="status">
-      Connecte-toi pour accéder à ton espace Mondo Quiz.
-    </div>
+<section class="card">
 
-    <div id="loginForm">
-      <label for="email">Adresse e-mail</label>
-      <input
-        id="email"
-        type="email"
-        placeholder="exemple@email.com"
-        autocomplete="email"
-      >
+<h2>Connexion</h2>
 
-      <br>
+<p class="small">
+Connecte-toi pour conserver tes sessions et ta progression.
+</p>
 
-      <button class="primary" id="sendMagicLink">
-        Recevoir mon lien de connexion
-      </button>
-    </div>
+<label for="email">Adresse e-mail</label>
 
-    <button
-      class="danger hidden"
-      id="logoutBtn"
-      style="margin-top:10px;"
-    >
-      Se déconnecter
-    </button>
-  </section>
+<input
+  id="email"
+  type="email"
+  placeholder="exemple@email.com"
+/>
 
-  <!-- PROFIL -->
-  <section class="card hidden" id="profileCard">
-    <h2>Mon profil</h2>
+<button id="loginBtn" onclick="sendMagicLink()">
+  Recevoir mon lien de connexion
+</button>
 
-    <div id="profileInfo"></div>
+<div id="authStatus" class="status"></div>
 
-    <div class="grid">
-      <div>
-        <label for="userType">Profil</label>
-        <select id="userType">
-          <option value="student">Élève</option>
-          <option value="teacher">Enseignant</option>
-        </select>
-      </div>
+<button
+  id="logoutBtn"
+  class="secondary hidden"
+  onclick="logout()"
+  style="margin-top:10px"
+>
+  Se déconnecter
+</button>
 
-      <div>
-        <label for="schoolLevel">Niveau</label>
-        <select id="schoolLevel">
-          <option value="">Sélectionner</option>
-          <option value="maternelle">Maternelle</option>
-          <option value="primaire">Primaire</option>
-          <option value="secondaire_general">Secondaire général</option>
-          <option value="secondaire_technique">Secondaire technique</option>
-          <option value="professionnel">Technique et professionnel</option>
-          <option value="superieur">Supérieur</option>
-          <option value="international">International</option>
-        </select>
-      </div>
-    </div>
-  </section>
+</section>
 
-  <!-- ABONNEMENTS -->
-  <section class="card hidden" id="subscriptionCard">
-    <h2>Abonnement Mondo Quiz</h2>
 
-    <p class="muted">
-      L'abonnement donne accès aux fonctionnalités premium selon le profil choisi.
-    </p>
+<!-- =====================================================
+     CHOIX DU MODE
+===================================================== -->
 
-    <div class="grid">
+<section class="card">
 
-      <div class="card plan">
-        <h3>Élève</h3>
-        <div class="price">500 FCFA</div>
-        <p>par mois</p>
-        <button
-          class="primary subscribeBtn"
-          data-plan="student"
-        >
-          S'abonner
-        </button>
-      </div>
+<h2>Que veux-tu faire ?</h2>
 
-      <div class="card plan">
-        <h3>Enseignant</h3>
-        <div class="price">1 000 FCFA</div>
-        <p>par mois</p>
-        <button
-          class="secondary subscribeBtn"
-          data-plan="teacher"
-        >
-          S'abonner
-        </button>
-      </div>
+<div class="mode-grid">
 
-    </div>
+<button
+  id="generalMode"
+  class="mode-button active"
+  onclick="setMode('general')"
+>
 
-    <div id="subscriptionStatus" class="status"></div>
+<strong>🌍 Culture générale & connaissances</strong>
 
-    <div class="referral-box">
-      <h3>Parrainage</h3>
+<span>
+Explore librement les disciplines, sciences, arts,
+sports, métiers, technologies, médecine, histoire,
+géographie et bien d'autres domaines.
+</span>
 
-      <p>
-        Invite un ami à s'abonner. Lorsqu'une nouvelle souscription admissible
-        est confirmée, le système peut appliquer une réduction de 20 % au
-        parrain selon les règles du programme de parrainage.
-      </p>
+</button>
 
-      <label for="referralCode">Ton code de parrainage</label>
-      <input id="referralCode" readonly>
 
-      <button
-        class="warning"
-        id="copyReferral"
-        style="margin-top:8px;"
-      >
-        Copier mon code
-      </button>
+<button
+  id="schoolMode"
+  class="mode-button"
+  onclick="setMode('school')"
+>
 
-      <br><br>
+<strong>📚 Apprentissage scolaire / académique</strong>
 
-      <label for="referrerCode">
-        Code de la personne qui t'a invité
-      </label>
+<span>
+Choisis un pays, un niveau, une classe, une filière,
+une discipline et, lorsque disponibles, les éléments
+du programme correspondant.
+</span>
 
-      <input
-        id="referrerCode"
-        placeholder="Code du parrain"
-      >
-
-      <button
-        class="primary"
-        id="saveReferral"
-        style="margin-top:8px;"
-      >
-        Enregistrer le parrain
-      </button>
-    </div>
-  </section>
-
-  <!-- PARAMÈTRES DU QUIZ -->
-  <section class="card hidden" id="quizSetupCard">
-    <h2>Préparer mon quiz</h2>
-
-    <div class="grid">
-
-      <div>
-        <label for="scope">Portée</label>
-        <select id="scope">
-          <option value="international">International</option>
-          <option value="national">Programme national</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="country">Pays</label>
-        <select id="country">
-          <option value="">Chargement...</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="discipline">Discipline</label>
-        <select id="discipline">
-          <option value="">Chargement...</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="subdiscipline">Sous-discipline</label>
-        <input
-          id="subdiscipline"
-          placeholder="Ex. Algèbre"
-        >
-      </div>
-
-      <div>
-        <label for="level">Classe / niveau</label>
-        <input
-          id="level"
-          placeholder="Ex. CM2, 3e, Terminale..."
-        >
-      </div>
-
-      <div>
-        <label for="programYear">Année / version du programme</label>
-        <input
-          id="programYear"
-          placeholder="Ex. 2026-2027"
-        >
-      </div>
-
-      <div>
-        <label for="competency">Compétence</label>
-        <input
-          id="competency"
-          placeholder="Compétence ciblée"
-        >
-      </div>
-
-      <div>
-        <label for="bloom">Niveau de Bloom</label>
-        <select id="bloom">
-          <option value="">Tous les niveaux</option>
-          <option value="remember">Mémoriser</option>
-          <option value="understand">Comprendre</option>
-          <option value="apply">Appliquer</option>
-          <option value="analyze">Analyser</option>
-          <option value="evaluate">Évaluer</option>
-          <option value="create">Créer</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="difficulty">Difficulté</label>
-        <select id="difficulty">
-          <option value="">Toutes</option>
-          <option value="beginner">Débutant</option>
-          <option value="intermediate">Intermédiaire</option>
-          <option value="advanced">Avancé</option>
-          <option value="expert">Expert</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="questionType">Type de question</label>
-        <select id="questionType">
-          <option value="">Tous</option>
-          <option value="single_choice">Choix unique</option>
-          <option value="multiple_choice">Choix multiples</option>
-          <option value="true_false">Vrai / Faux</option>
-          <option value="short_answer">Réponse courte</option>
-          <option value="numeric">Numérique</option>
-          <option value="ordering">Classement</option>
-          <option value="matching">Association</option>
-          <option value="case_study">Étude de cas</option>
-          <option value="adaptive">Adaptatif</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="questionCount">
-          Nombre de questions
-        </label>
-
-        <input
-          id="questionCount"
-          type="number"
-          min="1"
-          value="10"
-        >
-      </div>
-
-    </div>
-
-    <br>
-
-    <button
-      class="primary"
-      id="startQuiz"
-    >
-      Commencer le quiz
-    </button>
-  </section>
-
-  <!-- QUIZ -->
-  <section class="card hidden" id="quizCard">
-    <h2>Quiz en cours</h2>
-
-    <div id="quizMeta"></div>
-
-    <div id="questionsContainer"></div>
-
-    <button
-      class="secondary"
-      id="submitQuiz"
-    >
-      Valider mes réponses
-    </button>
-  </section>
-
-  <!-- RESULTATS -->
-  <section class="card hidden" id="resultCard">
-    <h2>Résultats</h2>
-
-    <div id="resultContent"></div>
-
-    <button
-      class="primary"
-      id="newQuiz"
-    >
-      Nouveau quiz
-    </button>
-  </section>
+</button>
 
 </div>
 
-<footer>
-  Mondo Quiz — ZNAEDU
-</footer>
+</section>
+
+
+<!-- =====================================================
+     CONFIGURATION
+===================================================== -->
+
+<section class="card">
+
+<h2>Construire ton quiz</h2>
+
+<div class="grid">
+
+<div>
+
+<label for="scope">
+Périmètre
+</label>
+
+<select id="scope" onchange="handleScopeChange()">
+
+<option value="international">
+International
+</option>
+
+<option value="national">
+National / programme d'un pays
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label for="country">
+Pays
+</label>
+
+<select id="country" disabled onchange="loadCurricula()">
+
+<option value="">
+— Choisir un pays —
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div id="schoolFilters" class="hidden">
+
+<div class="grid">
+
+<div>
+
+<label for="educationLevel">
+Niveau d'enseignement
+</label>
+
+<select id="educationLevel">
+<option value="">— Tous les niveaux —</option>
+</select>
+
+</div>
+
+
+<div>
+
+<label for="gradeCode">
+Classe / année
+</label>
+
+<select id="gradeCode">
+<option value="">— Toutes les classes —</option>
+</select>
+
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<div>
+
+<label for="trackCode">
+Filière / parcours
+</label>
+
+<select id="trackCode">
+<option value="">— Toutes les filières —</option>
+</select>
+
+</div>
+
+
+<div>
+
+<label for="curriculum">
+Programme / curriculum
+</label>
+
+<select id="curriculum">
+<option value="">— Tous les programmes —</option>
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+
+<label for="discipline">
+Discipline / domaine
+</label>
+
+<select id="discipline">
+
+<option value="">
+Chargement du catalogue...
+</option>
+
+</select>
+
+
+<div class="grid">
+
+<div>
+
+<label for="subdiscipline">
+Sous-discipline / spécialité
+</label>
+
+<select id="subdiscipline">
+
+<option value="">
+— Toutes —
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label for="topic">
+Thème
+</label>
+
+<select id="topic">
+
+<option value="">
+— Tous —
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<div>
+
+<label for="subtopic">
+Sous-thème
+</label>
+
+<input
+  id="subtopic"
+  type="text"
+  placeholder="Facultatif"
+/>
+
+</div>
+
+
+<div>
+
+<label for="bloom">
+Niveau cognitif
+</label>
+
+<select id="bloom">
+
+<option value="">Tous</option>
+<option value="remember">Mémoriser</option>
+<option value="understand">Comprendre</option>
+<option value="apply">Appliquer</option>
+<option value="analyze">Analyser</option>
+<option value="evaluate">Évaluer</option>
+<option value="create">Créer</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<div>
+
+<label for="difficulty">
+Difficulté
+</label>
+
+<select id="difficulty">
+
+<option value="">
+Toutes
+</option>
+
+<option value="beginner">
+Débutant
+</option>
+
+<option value="intermediate">
+Intermédiaire
+</option>
+
+<option value="advanced">
+Avancé
+</option>
+
+<option value="expert">
+Expert
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label for="questionType">
+Type de question
+</label>
+
+<select id="questionType">
+
+<option value="">
+Tous
+</option>
+
+<option value="single_choice">
+Choix unique
+</option>
+
+<option value="multiple_choice">
+Choix multiple
+</option>
+
+<option value="true_false">
+Vrai / Faux
+</option>
+
+<option value="short_answer">
+Réponse courte
+</option>
+
+<option value="numeric">
+Numérique
+</option>
+
+<option value="ordering">
+Classement
+</option>
+
+<option value="matching">
+Association
+</option>
+
+<option value="image">
+Image
+</option>
+
+<option value="audio">
+Audio
+</option>
+
+<option value="video">
+Vidéo
+</option>
+
+<option value="case_study">
+Étude de cas
+</option>
+
+<option value="adaptive">
+Adaptatif
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<div>
+
+<label for="language">
+Langue
+</label>
+
+<select id="language">
+
+<option value="fr">
+Français
+</option>
+
+<option value="en">
+English
+</option>
+
+<option value="es">
+Español
+</option>
+
+<option value="pt">
+Português
+</option>
+
+<option value="de">
+Deutsch
+</option>
+
+<option value="ar">
+العربية
+</option>
+
+<option value="zh">
+中文
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label for="count">
+Nombre de questions
+</label>
+
+<select id="count">
+
+<option value="5">5</option>
+<option value="10" selected>10</option>
+<option value="20">20</option>
+<option value="30">30</option>
+<option value="50">50</option>
+<option value="100">100</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<button
+  onclick="startQuiz()"
+  style="margin-top:18px"
+>
+  COMMENCER LE QUIZ
+</button>
+
+<div id="setupStatus" class="status"></div>
+
+<div class="mini-info">
+  <strong>Catalogue disponible :</strong>
+  <span id="catalogCount" class="catalog-count">chargement...</span>
+  <br>
+  <span class="small">
+    Le catalogue est chargé depuis Supabase. Il peut donc être enrichi
+    sans modifier ce fichier HTML.
+  </span>
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     RECHERCHE DU CATALOGUE
+===================================================== -->
+
+<section class="card">
+
+<h2>Rechercher une discipline</h2>
+
+<div class="search-row">
+
+<input
+  id="catalogSearch"
+  type="search"
+  placeholder="Ex. médecine, menuiserie, athlétisme..."
+/>
+
+<button onclick="searchCatalog()">
+  Rechercher
+</button>
+
+</div>
+
+<div id="searchResults" style="margin-top:15px"></div>
+
+</section>
+
+
+<!-- =====================================================
+     QUIZ
+===================================================== -->
+
+<section
+  id="quizCard"
+  class="card hidden"
+>
+
+<div class="grid">
+
+<div>
+<strong id="quizDiscipline">
+Quiz
+</strong>
+</div>
+
+<div style="text-align:right">
+Question
+<strong id="questionNumber">0</strong>
+/
+<strong id="questionTotal">0</strong>
+</div>
+
+</div>
+
+
+<div class="quiz-meta">
+
+<span id="quizScopeMeta"></span>
+<span id="quizCountryMeta"></span>
+<span id="quizLevelMeta"></span>
+<span id="quizGradeMeta"></span>
+
+</div>
+
+
+<div class="progress" style="margin-top:15px">
+<div id="progressBar" class="progress-bar"></div>
+</div>
+
+
+<div
+  id="questionBox"
+  class="question-box"
+>
+
+<div
+  id="questionText"
+  class="question"
+>
+Chargement...
+</div>
+
+<div id="options"></div>
+
+</div>
+
+
+<div id="feedback" class="status"></div>
+
+
+<div class="grid">
+
+<div>
+Score :
+<strong id="score">0</strong>
+</div>
+
+<div style="text-align:right">
+Répondu :
+<strong id="answered">0</strong>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     RESULTAT
+===================================================== -->
+
+<section
+  id="resultCard"
+  class="card hidden"
+>
+
+<h2 class="center">
+Résultat
+</h2>
+
+<div
+  id="resultScore"
+  class="result-score"
+>
+0%
+</div>
+
+<p class="center">
+<strong id="resultCorrect">0</strong>
+bonne(s) réponse(s) sur
+<strong id="resultTotal">0</strong>.
+</p>
+
+<div
+  id="resultExplanation"
+  class="mini-info"
+>
+</div>
+
+<button
+  onclick="resetQuiz()"
+  style="margin-top:15px"
+>
+  Revenir au choix du quiz
+</button>
+
+</section>
+
+</div>
+
 
 <script>
-"use strict";
 
-/* =========================================================
-   CONFIGURATION SUPABASE
-========================================================= */
+/* =====================================================
+   SUPABASE
+===================================================== */
 
 const SUPABASE_URL =
   "https://dpxghtjhjylofxhmnfxf.supabase.co";
@@ -534,119 +992,126 @@ const supabaseClient =
     SUPABASE_URL,
     SUPABASE_KEY,
     {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
       }
     }
   );
 
 
-/* =========================================================
-   ÉTAT
-========================================================= */
+/* =====================================================
+   ETAT GLOBAL
+===================================================== */
 
-let currentUser = null;
-let currentSession = null;
-let currentQuiz = null;
 let catalog = null;
 
+let disciplines = [];
 
-/* =========================================================
-   OUTILS
-========================================================= */
+let countries = [];
 
-function $(id) {
+let curricula = [];
+
+let currentMode = "general";
+
+let currentSessionId = null;
+
+let questions = [];
+
+let currentIndex = 0;
+
+let currentScore = 0;
+
+let currentAnswered = 0;
+
+
+/* =====================================================
+   UTILITAIRES
+===================================================== */
+
+function $(id){
   return document.getElementById(id);
 }
 
-function show(id) {
-  $(id).classList.remove("hidden");
-}
 
-function hide(id) {
-  $(id).classList.add("hidden");
-}
+function setStatus(
+  id,
+  message,
+  type="info"
+){
 
-function setStatus(id, message, type = "") {
-  const el = $(id);
-  el.textContent = message;
-  el.className = "status";
+  const element = $(id);
 
-  if (type) {
-    el.classList.add(type);
+  if(!element){
+    return;
   }
-}
 
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  element.className =
+    "status " + type;
+
+  element.textContent =
+    message;
 }
 
 
-/* =========================================================
+function clearStatus(id){
+
+  const element = $(id);
+
+  if(!element){
+    return;
+  }
+
+  element.className =
+    "status";
+
+  element.textContent =
+    "";
+
+}
+
+
+/* =====================================================
    AUTHENTIFICATION
-========================================================= */
+===================================================== */
 
-async function initializeAuth() {
+async function sendMagicLink(){
 
-  const {
-    data: {
-      session
-    }
-  } = await supabaseClient.auth.getSession();
+  const email =
+    $("email").value.trim();
 
-  currentSession = session;
-  currentUser = session?.user ?? null;
+  if(!email){
 
-  await refreshInterface();
-
-  supabaseClient.auth.onAuthStateChange(
-    async (_event, session) => {
-
-      currentSession = session;
-      currentUser = session?.user ?? null;
-
-      await refreshInterface();
-    }
-  );
-}
-
-
-async function sendMagicLink() {
-
-  const email = $("email").value.trim();
-
-  if (!email) {
     setStatus(
       "authStatus",
       "Veuillez saisir une adresse e-mail.",
       "error"
     );
+
     return;
   }
 
-  try {
+  $("loginBtn").disabled = true;
+
+  try{
 
     const redirectTo =
       window.location.origin +
       window.location.pathname;
 
-    const {
-      error
-    } = await supabaseClient.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: redirectTo
-      }
-    });
+    const {error} =
+      await supabaseClient.auth.signInWithOtp({
 
-    if (error) {
+        email,
+
+        options:{
+          emailRedirectTo:redirectTo
+        }
+
+      });
+
+    if(error){
       throw error;
     }
 
@@ -656,1045 +1121,1093 @@ async function sendMagicLink() {
       "success"
     );
 
-  } catch (error) {
+  }catch(error){
 
     console.error(error);
 
     setStatus(
       "authStatus",
-      "Impossible d'envoyer le lien : " + error.message,
+      error.message ||
+      "Erreur lors de la connexion.",
       "error"
     );
+
+  }finally{
+
+    $("loginBtn").disabled = false;
+
   }
+
 }
 
 
-async function logout() {
+async function checkSession(){
+
+  const {
+    data:{
+      session
+    }
+  } =
+    await supabaseClient.auth.getSession();
+
+  if(session){
+
+    $("logoutBtn")
+      .classList.remove("hidden");
+
+    setStatus(
+      "authStatus",
+      "Connexion active.",
+      "success"
+    );
+
+  }
+
+}
+
+
+async function logout(){
 
   await supabaseClient.auth.signOut();
 
-  currentUser = null;
-  currentSession = null;
-
-  await refreshInterface();
-}
-
-
-/* =========================================================
-   INTERFACE APRÈS CONNEXION
-========================================================= */
-
-async function refreshInterface() {
-
-  if (!currentUser) {
-
-    show("authCard");
-    hide("profileCard");
-    hide("subscriptionCard");
-    hide("quizSetupCard");
-    hide("quizCard");
-    hide("resultCard");
-
-    show("loginForm");
-    hide("logoutBtn");
-
-    return;
-  }
-
-  hide("loginForm");
-  show("logoutBtn");
+  $("logoutBtn")
+    .classList.add("hidden");
 
   setStatus(
     "authStatus",
-    "Connexion réussie : " + currentUser.email,
-    "success"
+    "Tu es maintenant déconnecté.",
+    "info"
   );
 
-  show("profileCard");
-  show("subscriptionCard");
-  show("quizSetupCard");
-
-  await loadProfile();
-  await loadSubscription();
-  await loadCatalog();
 }
 
 
-/* =========================================================
-   PROFIL
-========================================================= */
+/* =====================================================
+   MODE
+===================================================== */
 
-async function loadProfile() {
+function setMode(mode){
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from("profiles")
-    .select("*")
-    .eq("id", currentUser.id)
-    .maybeSingle();
+  currentMode = mode;
 
-  if (error) {
-    console.error(error);
-    return;
+  $("generalMode")
+    .classList.toggle(
+      "active",
+      mode === "general"
+    );
+
+  $("schoolMode")
+    .classList.toggle(
+      "active",
+      mode === "school"
+    );
+
+  if(mode === "school"){
+
+    $("schoolFilters")
+      .classList.remove("hidden");
+
+    $("scope").value =
+      "national";
+
+    $("country").disabled = false;
+
+    if(!$("country").value){
+      $("country").value = "BJ";
+    }
+
+    loadCurricula();
+
+  }else{
+
+    $("schoolFilters")
+      .classList.add("hidden");
+
+    $("scope").value =
+      "international";
+
+    $("country").disabled = true;
+
   }
 
-  $("profileInfo").innerHTML = `
-    <p>
-      <strong>Compte :</strong>
-      ${escapeHtml(currentUser.email)}
-    </p>
-
-    <p>
-      <strong>Nom :</strong>
-      ${escapeHtml(data?.display_name || "Non renseigné")}
-    </p>
-  `;
-
-  if (data?.language) {
-    // Langue utilisateur récupérée depuis le profil.
-  }
 }
 
 
-/* =========================================================
-   CATALOGUE MONDO QUIZ
-========================================================= */
+/* =====================================================
+   CHARGEMENT DU CATALOGUE
+===================================================== */
 
-async function loadCatalog() {
+async function loadCatalog(){
 
-  try {
+  try{
 
     const {
       data,
       error
-    } = await supabaseClient.rpc(
-      "mondo_quiz_catalog"
-    );
+    } =
+      await supabaseClient.rpc(
+        "mondo_quiz_catalog"
+      );
 
-    if (error) {
+    if(error){
       throw error;
     }
 
     catalog = data;
 
-    populateCatalog();
+    countries =
+      data.countries ||
+      [];
 
-  } catch (error) {
+    disciplines =
+      data.disciplines ||
+      [];
 
-    console.error(error);
+    populateCountries();
 
-    setStatus(
-      "authStatus",
-      "Impossible de charger le catalogue Mondo Quiz : " +
-      error.message,
-      "error"
-    );
-  }
-}
+    populateDisciplines();
 
+    $("catalogCount").textContent =
+      disciplines.length +
+      " disciplines/domaine(s) actuellement catalogués";
 
-function populateCatalog() {
-
-  if (!catalog) return;
-
-  const countrySelect = $("country");
-  const disciplineSelect = $("discipline");
-
-  countrySelect.innerHTML =
-    `<option value="">Sélectionner un pays</option>`;
-
-  disciplineSelect.innerHTML =
-    `<option value="">Sélectionner une discipline</option>`;
-
-  if (Array.isArray(catalog.countries)) {
-
-    catalog.countries.forEach(country => {
-
-      const option =
-        document.createElement("option");
-
-      option.value =
-        country.country_code ||
-        country.code ||
-        "";
-
-      option.textContent =
-        country.name ||
-        country.label ||
-        country.country_name ||
-        option.value;
-
-      countrySelect.appendChild(option);
-    });
-  }
-
-  if (Array.isArray(catalog.disciplines)) {
-
-    catalog.disciplines.forEach(discipline => {
-
-      const option =
-        document.createElement("option");
-
-      option.value =
-        discipline.slug ||
-        discipline.code ||
-        "";
-
-      option.textContent =
-        discipline.name ||
-        discipline.label ||
-        discipline.slug;
-
-      disciplineSelect.appendChild(option);
-    });
-  }
-}
-
-
-/* =========================================================
-   ABONNEMENT
-========================================================= */
-
-async function loadSubscription() {
-
-  /*
-    La vérification définitive doit être effectuée
-    côté serveur.
-
-    Cette interface ne considère jamais qu'un simple
-    clic sur un bouton constitue un paiement.
-  */
-
-  $("subscriptionStatus").textContent =
-    "Vérification de l'état de l'abonnement...";
-
-  try {
-
-    const {
-      data,
-      error
-    } = await supabaseClient
-      .from("profiles")
-      .select("status")
-      .eq("id", currentUser.id)
-      .maybeSingle();
-
-    if (error) {
-      throw error;
-    }
-
-    $("subscriptionStatus").textContent =
-      "Compte actif. L'état premium est vérifié côté serveur lors des opérations nécessitant un abonnement.";
-
-  } catch (error) {
-
-    console.error(error);
-
-    $("subscriptionStatus").textContent =
-      "État de l'abonnement indisponible.";
-  }
-
-}
-
-
-/*
-  Début du flux de paiement.
-
-  Le frontend NE valide PAS lui-même le paiement.
-
-  Le backend devra créer une transaction auprès
-  du prestataire choisi puis retourner l'URL
-  de paiement.
-*/
-
-async function startSubscription(plan) {
-
-  if (!currentUser) {
-    alert("Connecte-toi d'abord.");
-    return;
-  }
-
-  const amount =
-    plan === "teacher"
-      ? 1000
-      : 500;
-
-  const label =
-    plan === "teacher"
-      ? "Enseignant"
-      : "Élève";
-
-  setStatus(
-    "subscriptionStatus",
-    `Préparation de l'abonnement ${label} à ${amount} FCFA...`
-  );
-
-  /*
-    Point d'intégration sécurisé :
-
-    POST /functions/v1/create-subscription-payment
-
-    Le serveur devra :
-      1. vérifier l'utilisateur ;
-      2. déterminer son rôle ;
-      3. déterminer le montant ;
-      4. créer la transaction ;
-      5. enregistrer la référence ;
-      6. retourner l'URL de paiement.
-
-    Aucun secret de paiement ne doit être placé
-    dans ce fichier HTML.
-  */
-
-  try {
-
-    const {
-      data,
-      error
-    } = await supabaseClient.functions.invoke(
-      "create-subscription-payment",
-      {
-        body: {
-          plan,
-          amount,
-          currency: "XOF"
-        }
-      }
-    );
-
-    if (error) {
-      throw error;
-    }
-
-    if (!data?.payment_url) {
-      throw new Error(
-        "Le serveur n'a pas fourni d'URL de paiement."
-      );
-    }
-
-    window.location.href =
-      data.payment_url;
-
-  } catch (error) {
+  }catch(error){
 
     console.error(error);
 
     setStatus(
-      "subscriptionStatus",
-      "Le paiement n'est pas encore disponible sur le serveur : " +
-      error.message,
+      "setupStatus",
+      "Impossible de charger le catalogue Mondo Quiz.",
       "error"
     );
+
   }
+
 }
 
 
-/* =========================================================
-   PARRAINAGE
-========================================================= */
+/* =====================================================
+   PAYS
+===================================================== */
 
-async function loadReferralCode() {
+function populateCountries(){
 
-  /*
-    Le code réel doit idéalement être généré
-    côté serveur afin d'éviter les collisions
-    et les manipulations.
-  */
+  const select =
+    $("country");
 
-  const code =
-    "ZNA-" +
-    currentUser.id
-      .replace(/-/g, "")
-      .substring(0, 8)
-      .toUpperCase();
+  select.innerHTML =
+    '<option value="">— Choisir un pays —</option>';
 
-  $("referralCode").value = code;
+  countries.forEach(country=>{
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      country.code;
+
+    option.textContent =
+      country.name_fr ||
+      country.name_en ||
+      country.code;
+
+    select.appendChild(option);
+
+  });
+
 }
 
 
-async function saveReferral() {
+/* =====================================================
+   DISCIPLINES
+===================================================== */
 
-  const code =
-    $("referrerCode").value.trim();
+function populateDisciplines(){
 
-  if (!code) {
-    alert("Saisis le code de ton parrain.");
+  const select =
+    $("discipline");
+
+  select.innerHTML =
+    '<option value="">Toutes les disciplines</option>';
+
+  disciplines.forEach(item=>{
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      item.slug;
+
+    option.textContent =
+      item.name;
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+/* =====================================================
+   PROGRAMMES / CURRICULA
+===================================================== */
+
+async function loadCurricula(){
+
+  const country =
+    $("country").value;
+
+  if(
+    $("scope").value !== "national" ||
+    !country
+  ){
+
+    curricula = [];
+
+    $("curriculum").innerHTML =
+      '<option value="">— Tous les programmes —</option>';
+
     return;
+
   }
 
-  try {
+  try{
 
     /*
-      La validation définitive du parrainage doit
-      être réalisée côté serveur.
-
-      Cela évite qu'un utilisateur :
-      - s'auto-parraine ;
-      - crée de faux comptes ;
-      - obtienne plusieurs réductions ;
-      - modifie directement sa réduction.
+      La fonction de catalogue des curricula
+      est déjà présente dans Supabase.
     */
 
     const {
       data,
       error
-    } = await supabaseClient.functions.invoke(
-      "register-referral",
-      {
-        body: {
-          referrer_code: code
+    } =
+      await supabaseClient.rpc(
+        "mondo_quiz_curriculum_catalog",
+        {
+          p_country_code:country,
+          p_education_level:
+            $("educationLevel").value || null,
+          p_search:null
         }
-      }
-    );
+      );
 
-    if (error) {
+    if(error){
       throw error;
     }
 
-    alert(
-      data?.message ||
-      "Parrainage enregistré."
-    );
+    curricula =
+      data || [];
 
-  } catch (error) {
+    const select =
+      $("curriculum");
+
+    select.innerHTML =
+      '<option value="">— Tous les programmes —</option>';
+
+    curricula.forEach(item=>{
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        item.curriculum_id;
+
+      option.textContent =
+        item.curriculum_name +
+        (
+          item.version_label
+            ? " — " + item.version_label
+            : ""
+        );
+
+      select.appendChild(option);
+
+    });
+
+  }catch(error){
 
     console.error(error);
 
-    alert(
-      "Impossible d'enregistrer le parrainage : " +
-      error.message
+    setStatus(
+      "setupStatus",
+      "Le catalogue des programmes n'a pas pu être chargé.",
+      "warning"
     );
+
   }
+
 }
 
 
-/* =========================================================
-   DÉMARRAGE DU QUIZ
-========================================================= */
+/* =====================================================
+   CHANGEMENT DE PERIMETRE
+===================================================== */
 
-async function startQuiz() {
+function handleScopeChange(){
 
-  if (!currentUser) {
-    alert("Connecte-toi d'abord.");
-    return;
+  const scope =
+    $("scope").value;
+
+  if(scope === "national"){
+
+    $("country").disabled = false;
+
+    if(!$("country").value){
+      $("country").value = "BJ";
+    }
+
+    loadCurricula();
+
+  }else{
+
+    $("country").disabled = true;
+
+    $("country").value = "";
+
+    $("curriculum").innerHTML =
+      '<option value="">— Tous les programmes —</option>';
+
   }
 
-  const questionCount =
-    parseInt(
-      $("questionCount").value,
-      10
-    );
+}
 
-  if (
-    !Number.isInteger(questionCount) ||
-    questionCount < 1
-  ) {
-    alert(
-      "Le nombre de questions doit être supérieur ou égal à 1."
-    );
+
+/* =====================================================
+   RECHERCHE DU CATALOGUE
+===================================================== */
+
+async function searchCatalog(){
+
+  const search =
+    $("catalogSearch")
+      .value
+      .trim();
+
+  if(!search){
+
+    $("searchResults").innerHTML =
+      '<p class="small">Saisis un domaine à rechercher.</p>';
+
     return;
+
   }
 
-  const payload = {
-
-    p_category:
-      $("discipline").value || null,
-
-    p_scope:
-      $("scope").value || "international",
-
-    p_country_code:
-      $("country").value || null,
-
-    p_difficulty:
-      $("difficulty").value || null,
-
-    p_question_count:
-      questionCount,
-
-    p_language_code:
-      "fr",
-
-    p_subdiscipline:
-      $("subdiscipline").value || null,
-
-    p_topic:
-      null,
-
-    p_subtopic:
-      null,
-
-    p_region_code:
-      null,
-
-    p_city_code:
-      null,
-
-    p_age:
-      null,
-
-    p_question_type:
-      $("questionType").value || null,
-
-    p_tags:
-      null
-  };
-
-
-  try {
-
-    setStatus(
-      "authStatus",
-      "Recherche des questions correspondant à tes critères..."
-    );
+  try{
 
     const {
       data,
       error
-    } = await supabaseClient.rpc(
-      "mondo_quiz_start",
-      payload
-    );
+    } =
+      await supabaseClient.rpc(
+        "mondo_quiz_search_catalog",
+        {
+          p_search:search,
+          p_country_code:
+            $("scope").value === "national"
+              ? $("country").value || null
+              : null,
+          p_scope:$("scope").value,
+          p_limit:50
+        }
+      );
 
-    if (error) {
+    if(error){
       throw error;
     }
 
-    if (!data) {
+    if(!data || !data.length){
+
+      $("searchResults").innerHTML =
+        '<p class="small">Aucun résultat trouvé.</p>';
+
+      return;
+
+    }
+
+    $("searchResults").innerHTML =
+      data.map(item=>`
+
+        <button
+          class="secondary"
+          style="margin-top:7px;text-align:left"
+          onclick="selectSearchResult('${escapeHtml(item.slug)}')"
+        >
+
+          <strong>
+            ${escapeHtml(item.label)}
+          </strong>
+
+          <br>
+
+          <span class="small">
+            ${escapeHtml(item.family || "")}
+            ·
+            ${Number(item.available_question_count || 0)}
+            question(s) disponible(s)
+          </span>
+
+        </button>
+
+      `).join("");
+
+  }catch(error){
+
+    console.error(error);
+
+    $("searchResults").innerHTML =
+      '<p class="small">Erreur pendant la recherche.</p>';
+
+  }
+
+}
+
+
+function selectSearchResult(slug){
+
+  const select =
+    $("discipline");
+
+  const exists =
+    [...select.options]
+      .some(
+        option =>
+          option.value === slug
+      );
+
+  if(exists){
+
+    select.value = slug;
+
+  }
+
+  window.scrollTo({
+    top:select.getBoundingClientRect().top +
+        window.scrollY -
+        100,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =====================================================
+   SECURITE AFFICHAGE
+===================================================== */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   DEMARRAGE DU QUIZ
+===================================================== */
+
+async function startQuiz(){
+
+  clearStatus("setupStatus");
+
+  const scope =
+    $("scope").value;
+
+  const country =
+    $("country").value || null;
+
+  const category =
+    $("discipline").value || null;
+
+  const difficulty =
+    $("difficulty").value || null;
+
+  const questionCount =
+    Number($("count").value);
+
+  const language =
+    $("language").value;
+
+  const subdiscipline =
+    $("subdiscipline").value || null;
+
+  const topic =
+    $("topic").value || null;
+
+  const subtopic =
+    $("subtopic").value.trim() || null;
+
+  const questionType =
+    $("questionType").value || null;
+
+  const educationLevel =
+    currentMode === "school"
+      ? $("educationLevel").value || null
+      : null;
+
+  const gradeCode =
+    currentMode === "school"
+      ? $("gradeCode").value || null
+      : null;
+
+  const trackCode =
+    currentMode === "school"
+      ? $("trackCode").value || null
+      : null;
+
+  const curriculumNodeId =
+    currentMode === "school"
+      ? $("curriculum").value || null
+      : null;
+
+  const bloomLevel =
+    $("bloom").value || null;
+
+
+  if(
+    scope === "national" &&
+    !country
+  ){
+
+    setStatus(
+      "setupStatus",
+      "Choisis le pays pour un quiz national.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  setStatus(
+    "setupStatus",
+    "Préparation de ton quiz...",
+    "info"
+  );
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.rpc(
+        "mondo_quiz_start_v2",
+        {
+          p_category:category,
+          p_scope:scope,
+          p_country_code:country,
+          p_difficulty:difficulty,
+          p_question_count:questionCount,
+          p_language_code:language,
+          p_subdiscipline:subdiscipline,
+          p_topic:topic,
+          p_subtopic:subtopic,
+          p_region_code:null,
+          p_city_code:null,
+          p_age:null,
+          p_question_type:questionType,
+          p_tags:null,
+          p_education_level:educationLevel,
+          p_grade_code:gradeCode,
+          p_track_code:trackCode,
+          p_curriculum_node_id:curriculumNodeId,
+          p_bloom_level:bloomLevel
+        }
+      );
+
+    if(error){
+      throw error;
+    }
+
+    if(!data){
       throw new Error(
-        "Aucun résultat retourné."
+        "Aucune session retournée."
       );
     }
 
-    currentQuiz = data;
+    currentSessionId =
+      data.session_id;
 
-    renderQuiz(data);
+    questions =
+      data.questions || [];
 
-    hide("quizSetupCard");
-    show("quizCard");
-    hide("resultCard");
+    if(!questions.length){
 
-  } catch (error) {
+      throw new Error(
+        "Aucune question disponible pour cette combinaison de critères."
+      );
+
+    }
+
+    currentIndex = 0;
+    currentScore = 0;
+    currentAnswered = 0;
+
+    $("setupStatus").className =
+      "status";
+
+    $("setupStatus").textContent =
+      "";
+
+    $("quizCard")
+      .classList.remove("hidden");
+
+    $("resultCard")
+      .classList.add("hidden");
+
+    updateQuizMeta(data);
+
+    displayQuestion();
+
+    window.scrollTo({
+      top:$("quizCard").offsetTop - 15,
+      behavior:"smooth"
+    });
+
+  }catch(error){
+
+    console.error(error);
+
+    let message =
+      error.message ||
+      "Impossible de démarrer le quiz.";
+
+    if(
+      message.includes(
+        "authentication_required"
+      )
+    ){
+
+      message =
+        "Connecte-toi avant de commencer un quiz.";
+
+    }
+
+    if(
+      message.includes(
+        "no_unanswered_questions_available"
+      )
+    ){
+
+      message =
+        "Aucune question disponible avec ces critères pour le moment.";
+
+    }
+
+    setStatus(
+      "setupStatus",
+      message,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   META DU QUIZ
+===================================================== */
+
+function updateQuizMeta(data){
+
+  $("quizDiscipline").textContent =
+    data.category ||
+    "Toutes les disciplines";
+
+  $("quizScopeMeta").textContent =
+    data.scope === "national"
+      ? "National"
+      : "International";
+
+  $("quizCountryMeta").textContent =
+    data.country_code
+      ? data.country_code
+      : "";
+
+  const filters =
+    data.filters || {};
+
+  $("quizLevelMeta").textContent =
+    filters.education_level ||
+    "";
+
+  $("quizGradeMeta").textContent =
+    filters.grade_code ||
+    "";
+
+}
+
+
+/* =====================================================
+   AFFICHAGE QUESTION
+===================================================== */
+
+function displayQuestion(){
+
+  if(
+    currentIndex >=
+    questions.length
+  ){
+
+    finishQuiz();
+
+    return;
+
+  }
+
+  const q =
+    questions[currentIndex];
+
+  $("questionNumber").textContent =
+    currentIndex + 1;
+
+  $("questionTotal").textContent =
+    questions.length;
+
+  $("questionText").textContent =
+    q.question ||
+    "Question indisponible.";
+
+  $("options").innerHTML = "";
+
+  const options =
+    Array.isArray(q.options)
+      ? q.options
+      : [];
+
+
+  if(
+    q.type === "true_false" &&
+    !options.length
+  ){
+
+    ["Vrai","Faux"].forEach(
+      answer=>{
+        createOptionButton(answer);
+      }
+    );
+
+  }else{
+
+    options.forEach(
+      option=>{
+
+        let label = option;
+
+        if(
+          typeof option === "object"
+        ){
+
+          label =
+            option.label ||
+            option.text ||
+            option.value ||
+            "";
+
+        }
+
+        createOptionButton(label);
+
+      }
+    );
+
+  }
+
+
+  const progress =
+    (currentIndex /
+      questions.length) * 100;
+
+  $("progressBar")
+    .style.width =
+    progress + "%";
+
+  $("score").textContent =
+    currentScore;
+
+  $("answered").textContent =
+    currentAnswered;
+
+  clearStatus("feedback");
+
+}
+
+
+function createOptionButton(answer){
+
+  const button =
+    document.createElement("button");
+
+  button.className =
+    "option";
+
+  button.textContent =
+    answer;
+
+  button.onclick =
+    ()=>{
+      submitAnswer(answer);
+    };
+
+  $("options")
+    .appendChild(button);
+
+}
+
+
+/* =====================================================
+   REPONSE
+===================================================== */
+
+async function submitAnswer(answer){
+
+  const buttons =
+    document.querySelectorAll(
+      ".option"
+    );
+
+  buttons.forEach(
+    button=>{
+      button.disabled = true;
+    }
+  );
+
+  try{
+
+    const question =
+      questions[currentIndex];
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.rpc(
+        "mondo_quiz_submit_answer",
+        {
+          p_session_id:
+            currentSessionId,
+
+          p_question_id:
+            question.id,
+
+          p_answer:
+            typeof answer === "string"
+              ? answer
+              : JSON.stringify(answer)
+        }
+      );
+
+    if(error){
+      throw error;
+    }
+
+    currentAnswered++;
+
+    if(data && data.correct){
+
+      currentScore++;
+
+      setStatus(
+        "feedback",
+        "Bonne réponse !",
+        "success"
+      );
+
+    }else{
+
+      let message =
+        "Réponse enregistrée.";
+
+      if(
+        data &&
+        data.explanation
+      ){
+
+        message =
+          data.explanation;
+
+      }
+
+      setStatus(
+        "feedback",
+        message,
+        "info"
+      );
+
+    }
+
+    $("score").textContent =
+      currentScore;
+
+    $("answered").textContent =
+      currentAnswered;
+
+
+    setTimeout(
+      ()=>{
+        currentIndex++;
+        displayQuestion();
+      },
+      900
+    );
+
+
+  }catch(error){
 
     console.error(error);
 
     setStatus(
-      "authStatus",
-      "Impossible de démarrer le quiz : " +
-      error.message,
+      "feedback",
+      error.message ||
+      "Erreur lors de l'enregistrement de la réponse.",
       "error"
     );
-  }
-}
 
-
-/* =========================================================
-   AFFICHAGE DES QUESTIONS
-========================================================= */
-
-function renderQuiz(data) {
-
-  const questions =
-    data.questions ||
-    data.items ||
-    [];
-
-  $("quizMeta").innerHTML = `
-    <div>
-      <span class="badge">
-        ${escapeHtml($("scope").value)}
-      </span>
-
-      <span class="badge">
-        ${escapeHtml(
-          $("discipline").selectedOptions[0]?.textContent || ""
-        )}
-      </span>
-
-      <span class="badge">
-        ${escapeHtml($("level").value || "Tous niveaux")}
-      </span>
-
-      <span class="badge">
-        ${escapeHtml(
-          $("bloom").selectedOptions[0]?.textContent || "Tous niveaux Bloom"
-        )}
-      </span>
-    </div>
-  `;
-
-  const container =
-    $("questionsContainer");
-
-  container.innerHTML = "";
-
-  if (!questions.length) {
-
-    container.innerHTML = `
-      <div class="status">
-        Aucune question disponible pour ces critères.
-      </div>
-    `;
-
-    return;
-  }
-
-  questions.forEach(
-    (question, index) => {
-
-      container.appendChild(
-        buildQuestionElement(
-          question,
-          index
-        )
-      );
-    }
-  );
-}
-
-
-function buildQuestionElement(
-  question,
-  index
-) {
-
-  const div =
-    document.createElement("div");
-
-  div.className =
-    "question";
-
-  const type =
-    question.question_type ||
-    question.type ||
-    "single_choice";
-
-  let html = `
-    <h3>
-      Question ${index + 1}
-    </h3>
-
-    <p>
-      ${escapeHtml(
-        question.question_text ||
-        question.question ||
-        ""
-      )}
-    </p>
-  `;
-
-  if (
-    question.bloom_level ||
-    question.competency ||
-    question.program_year
-  ) {
-
-    html += `
-      <div>
-        ${
-          question.bloom_level
-            ? `<span class="badge">
-                Bloom : ${escapeHtml(question.bloom_level)}
-               </span>`
-            : ""
-        }
-
-        ${
-          question.competency
-            ? `<span class="badge">
-                Compétence
-               </span>`
-            : ""
-        }
-
-        ${
-          question.program_year
-            ? `<span class="badge">
-                ${escapeHtml(question.program_year)}
-               </span>`
-            : ""
-        }
-      </div>
-    `;
-  }
-
-
-  if (
-    type === "single_choice" ||
-    type === "multiple_choice"
-  ) {
-
-    const options =
-      question.options ||
-      [];
-
-    options.forEach(
-      (option, optionIndex) => {
-
-        const optionValue =
-          typeof option === "string"
-            ? option
-            : option.value ||
-              option.label ||
-              "";
-
-        const inputType =
-          type === "multiple_choice"
-            ? "checkbox"
-            : "radio";
-
-        html += `
-          <label class="option">
-            <input
-              type="${inputType}"
-              name="question-${question.id}"
-              value="${escapeHtml(optionValue)}"
-            >
-            ${escapeHtml(optionValue)}
-          </label>
-        `;
+    buttons.forEach(
+      button=>{
+        button.disabled = false;
       }
     );
 
-  } else if (
-    type === "true_false"
-  ) {
-
-    html += `
-      <label class="option">
-        <input
-          type="radio"
-          name="question-${question.id}"
-          value="true"
-        >
-        Vrai
-      </label>
-
-      <label class="option">
-        <input
-          type="radio"
-          name="question-${question.id}"
-          value="false"
-        >
-        Faux
-      </label>
-    `;
-
-  } else {
-
-    html += `
-      <input
-        type="text"
-        data-short-answer="${question.id}"
-        placeholder="Ta réponse"
-      >
-    `;
   }
 
-  div.innerHTML = html;
-
-  div.dataset.questionId =
-    question.id;
-
-  return div;
 }
 
 
-/* =========================================================
-   SOUMISSION
-========================================================= */
+/* =====================================================
+   FIN DU QUIZ
+===================================================== */
 
-async function submitQuiz() {
+function finishQuiz(){
 
-  if (!currentQuiz) {
-    return;
-  }
+  $("quizCard")
+    .classList.add("hidden");
 
-  const questions =
-    currentQuiz.questions ||
-    currentQuiz.items ||
-    [];
+  $("resultCard")
+    .classList.remove("hidden");
 
-  let answered =
-    0;
-
-  let score =
-    0;
-
-  for (
-    const question
-    of questions
-  ) {
-
-    const questionId =
-      question.id;
-
-    const type =
-      question.question_type ||
-      question.type ||
-      "single_choice";
-
-    let answer = null;
-
-    if (
-      type === "single_choice" ||
-      type === "true_false"
-    ) {
-
-      const selected =
-        document.querySelector(
-          `input[name="question-${questionId}"]:checked`
-        );
-
-      if (selected) {
-        answer = selected.value;
-      }
-
-    } else if (
-      type === "multiple_choice"
-    ) {
-
-      const selected =
-        document.querySelectorAll(
-          `input[name="question-${questionId}"]:checked`
-        );
-
-      answer =
-        Array.from(selected)
-          .map(
-            element => element.value
-          );
-
-    } else {
-
-      const field =
-        document.querySelector(
-          `[data-short-answer="${questionId}"]`
-        );
-
-      if (field) {
-        answer =
-          field.value.trim();
-      }
-    }
-
-
-    if (
-      answer === null ||
-      answer === "" ||
-      (
-        Array.isArray(answer) &&
-        answer.length === 0
-      )
-    ) {
-      continue;
-    }
-
-    answered++;
-
-    try {
-
-      const {
-        data,
-        error
-      } = await supabaseClient.rpc(
-        "mondo_quiz_submit_answer",
-        {
-          p_session_id:
-            currentQuiz.session_id,
-
-          p_question_id:
-            questionId,
-
-          p_answer:
-            answer
-        }
-      );
-
-      if (error) {
-        throw error;
-      }
-
-      if (data?.is_correct) {
-        score++;
-      }
-
-    } catch (error) {
-
-      console.error(
-        "Erreur question",
-        questionId,
-        error
-      );
-    }
-  }
-
-  renderResults(
-    score,
-    answered,
-    questions.length
-  );
-}
-
-
-function renderResults(
-  score,
-  answered,
-  total
-) {
-
-  hide("quizCard");
-  show("resultCard");
+  const total =
+    questions.length;
 
   const percentage =
-    total > 0
+    total
       ? Math.round(
-          (score / total) * 100
+          (currentScore /
+            total) * 100
         )
       : 0;
 
-  $("resultContent").innerHTML = `
-    <div class="card">
-      <h3>Résultat</h3>
+  $("resultScore").textContent =
+    percentage + "%";
 
-      <p>
-        <strong>Score :</strong>
-        ${score} / ${total}
-      </p>
+  $("resultCorrect").textContent =
+    currentScore;
 
-      <p>
-        <strong>Réponses données :</strong>
-        ${answered} / ${total}
-      </p>
+  $("resultTotal").textContent =
+    total;
 
-      <p>
-        <strong>Pourcentage :</strong>
-        ${percentage} %
-      </p>
-    </div>
+  $("resultExplanation").innerHTML = `
+
+    <strong>Session terminée.</strong><br>
+
+    Tu as obtenu
+    <strong>${currentScore}</strong>
+    bonne(s) réponse(s) sur
+    <strong>${total}</strong>.
+
   `;
+
+  $("progressBar")
+    .style.width =
+    "100%";
+
+  window.scrollTo({
+    top:$("resultCard").offsetTop - 15,
+    behavior:"smooth"
+  });
+
 }
 
 
-/* =========================================================
-   ÉVÉNEMENTS
-========================================================= */
+/* =====================================================
+   RESET
+===================================================== */
 
-$("sendMagicLink")
-  .addEventListener(
-    "click",
-    sendMagicLink
-  );
+function resetQuiz(){
 
-$("logoutBtn")
-  .addEventListener(
-    "click",
-    logout
-  );
+  currentSessionId = null;
+  questions = [];
+  currentIndex = 0;
+  currentScore = 0;
+  currentAnswered = 0;
 
-$("startQuiz")
-  .addEventListener(
-    "click",
-    startQuiz
-  );
+  $("quizCard")
+    .classList.add("hidden");
 
-$("submitQuiz")
-  .addEventListener(
-    "click",
-    submitQuiz
-  );
+  $("resultCard")
+    .classList.add("hidden");
 
-$("newQuiz")
-  .addEventListener(
-    "click",
-    () => {
-      hide("resultCard");
-      show("quizSetupCard");
-    }
-  );
+  $("progressBar")
+    .style.width =
+    "0%";
+
+  $("score").textContent =
+    "0";
+
+  $("answered").textContent =
+    "0";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
 
 
-document
-  .querySelectorAll(".subscribeBtn")
-  .forEach(
-    button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          startSubscription(
-            button.dataset.plan
-          );
-        }
-      );
-    }
-  );
-
-
-$("copyReferral")
-  .addEventListener(
-    "click",
-    async () => {
-
-      try {
-
-        await navigator.clipboard.writeText(
-          $("referralCode").value
-        );
-
-        alert(
-          "Code de parrainage copié."
-        );
-
-      } catch {
-
-        alert(
-          "Impossible de copier automatiquement le code."
-        );
-      }
-    }
-  );
-
-
-$("saveReferral")
-  .addEventListener(
-    "click",
-    saveReferral
-  );
-
-
-/* =========================================================
+/* =====================================================
    INITIALISATION
-========================================================= */
+===================================================== */
 
-(async function () {
+document.addEventListener(
+  "DOMContentLoaded",
+  async ()=>{
 
-  try {
+    await checkSession();
 
-    await initializeAuth();
+    await loadCatalog();
 
-    if (currentUser) {
-      await loadReferralCode();
+  }
+);
+
+
+supabaseClient.auth.onAuthStateChange(
+  (_event,session)=>{
+
+    if(session){
+
+      $("logoutBtn")
+        .classList.remove("hidden");
+
+    }else{
+
+      $("logoutBtn")
+        .classList.add("hidden");
+
     }
 
-  } catch (error) {
-
-    console.error(
-      "Erreur d'initialisation",
-      error
-    );
-
-    setStatus(
-      "authStatus",
-      "Erreur d'initialisation de Mondo Quiz.",
-      "error"
-    );
   }
+);
 
-})();
 </script>
 
 </body>
