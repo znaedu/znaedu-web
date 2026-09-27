@@ -6,17 +6,19 @@
 
 <title>Mondo Quiz — ZNAEDU</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root{
-  --blue:#1261c9;
-  --blue-dark:#0b438f;
-  --blue-light:#eaf5ff;
-  --sky:#f4faff;
-  --text:#20354d;
-  --muted:#68809a;
-  --border:#d8e7f5;
+  --blue:#0b5ed7;
+  --blue2:#1677ff;
+  --sky:#eaf5ff;
+  --light:#f6faff;
+  --dark:#12304f;
+  --muted:#60758b;
+  --border:#dbe8f5;
   --white:#fff;
-  --shadow:0 8px 25px rgba(18,97,201,.09);
+  --success:#16844a;
 }
 
 *{
@@ -26,411 +28,280 @@
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
-  color:var(--text);
-  background:var(--sky);
+  background:var(--light);
+  color:var(--dark);
 }
 
-header{
-  position:sticky;
-  top:0;
-  z-index:50;
-  background:linear-gradient(135deg,#0b55ae,#2d8ff0);
-  color:#fff;
-  box-shadow:0 3px 15px rgba(0,0,0,.12);
+button{
+  font:inherit;
+}
+
+.header{
+  background:linear-gradient(135deg,#0758c9,#1b82ff);
+  color:white;
+  padding:22px 18px 26px;
 }
 
 .header-inner{
-  max-width:1300px;
+  max-width:1100px;
   margin:auto;
-  padding:15px 20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
 }
 
 .brand{
-  font-size:24px;
+  font-size:28px;
   font-weight:800;
 }
 
-.brand small{
-  display:block;
-  font-size:11px;
-  margin-top:3px;
-  opacity:.9;
-  font-weight:400;
-}
-
-#status{
-  font-size:12px;
-  opacity:.9;
-}
-
-main{
-  max-width:1300px;
-  margin:auto;
-  padding:22px 18px 70px;
-}
-
-.hero{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:25px;
-  box-shadow:var(--shadow);
-  margin-bottom:18px;
-}
-
-.hero h1{
-  margin:0 0 8px;
-  color:var(--blue-dark);
-}
-
-.hero p{
-  margin:0;
-  line-height:1.6;
-  color:var(--muted);
-}
-
-.modes{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  margin-bottom:18px;
-}
-
-.mode{
-  background:#fff;
-  border:2px solid var(--border);
-  border-radius:17px;
-  padding:18px;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.mode.active{
-  border-color:var(--blue);
-  background:var(--blue-light);
-}
-
-.mode h2{
-  margin:0 0 6px;
-  color:var(--blue-dark);
-  font-size:18px;
-}
-
-.mode p{
-  margin:0;
-  font-size:13px;
-  line-height:1.5;
-  color:var(--muted);
-}
-
-.filters{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:17px;
-  padding:17px;
-  box-shadow:var(--shadow);
-  margin-bottom:20px;
-}
-
-.filter-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:11px;
-}
-
-label{
-  display:block;
-  font-size:12px;
-  font-weight:700;
-  color:var(--blue-dark);
-  margin-bottom:5px;
-}
-
-input,
-select{
-  width:100%;
-  padding:10px 11px;
-  border:1px solid #cbddec;
-  border-radius:9px;
-  background:#fff;
-  color:var(--text);
+.subtitle{
+  margin-top:6px;
+  opacity:.92;
   font-size:14px;
 }
 
-.section-head{
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px 16px 60px;
+}
+
+.breadcrumb{
   display:flex;
-  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:7px;
   align-items:center;
-  gap:10px;
-  margin:20px 0 12px;
+  margin-bottom:18px;
+  font-size:13px;
+  color:var(--muted);
 }
 
-.section-head h2{
-  margin:0;
-  color:var(--blue-dark);
-  font-size:20px;
+.crumb{
+  cursor:pointer;
 }
 
-.counter{
-  background:var(--blue-light);
+.crumb.active{
   color:var(--blue);
-  padding:6px 10px;
-  border-radius:20px;
-  font-size:12px;
   font-weight:700;
 }
 
-.loading,
-.empty,
-.error{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:20px;
-  text-align:center;
-  box-shadow:var(--shadow);
+.crumb-separator{
+  color:#9eb2c7;
 }
 
-.catalog{
+.screen-title{
+  margin:5px 0 7px;
+  font-size:25px;
+}
+
+.screen-description{
+  margin:0 0 22px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.back{
+  border:1px solid var(--border);
+  background:white;
+  color:var(--blue);
+  border-radius:10px;
+  padding:9px 14px;
+  cursor:pointer;
+  margin-bottom:18px;
+  font-weight:700;
+}
+
+.grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:13px;
 }
 
-.curriculum{
-  background:#fff;
+.card{
+  background:white;
   border:1px solid var(--border);
-  border-radius:17px;
+  border-radius:14px;
   padding:16px;
-  box-shadow:var(--shadow);
+  cursor:pointer;
+  transition:.15s;
+  min-height:115px;
+  box-shadow:0 2px 8px rgba(20,70,120,.04);
 }
 
-.curriculum-title{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
+.card:hover{
+  border-color:#8bbcf0;
+  transform:translateY(-1px);
+  box-shadow:0 5px 16px rgba(20,70,120,.09);
+}
+
+.card-icon{
+  font-size:24px;
+  margin-bottom:9px;
+}
+
+.card-title{
+  font-weight:800;
+  font-size:16px;
+  margin-bottom:5px;
+}
+
+.card-code{
+  display:inline-block;
+  background:var(--sky);
+  color:var(--blue);
+  border-radius:6px;
+  padding:3px 7px;
+  font-size:11px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.card-info{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+}
+
+.section{
+  margin-top:25px;
+}
+
+.section-title{
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:11px;
+}
+
+.question-box{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 4px 15px rgba(20,70,120,.05);
+}
+
+.question-number{
+  color:var(--blue);
+  font-weight:800;
+  font-size:13px;
+  margin-bottom:12px;
+}
+
+.question-text{
+  font-size:20px;
+  line-height:1.45;
+  font-weight:700;
+  margin-bottom:18px;
+}
+
+.answers{
+  display:grid;
   gap:10px;
 }
 
-.curriculum h3{
-  margin:0;
-  color:var(--blue);
-  font-size:17px;
+.answer{
+  width:100%;
+  text-align:left;
+  border:1px solid var(--border);
+  background:#fff;
+  border-radius:10px;
+  padding:13px 15px;
+  cursor:pointer;
+  color:var(--dark);
 }
 
-.curriculum-description{
-  margin:8px 0;
+.answer:hover{
+  border-color:#80b6ec;
+  background:#f5faff;
+}
+
+.answer.correct{
+  border-color:#4caf78;
+  background:#effbf4;
+}
+
+.answer.wrong{
+  border-color:#e09b9b;
+  background:#fff4f4;
+}
+
+.explanation{
+  margin-top:16px;
+  padding:13px;
+  background:#f2f8ff;
+  border-radius:10px;
+  color:#35546f;
+  line-height:1.5;
+  display:none;
+}
+
+.next{
+  margin-top:16px;
+  border:0;
+  background:var(--blue);
+  color:white;
+  border-radius:10px;
+  padding:12px 18px;
+  font-weight:800;
+  cursor:pointer;
+  display:none;
+}
+
+.status{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
   color:var(--muted);
-  font-size:13px;
-  line-height:1.45;
+  margin-bottom:18px;
 }
 
-.badges{
-  margin:8px 0;
+.empty{
+  background:white;
+  border:1px dashed #aac7df;
+  border-radius:14px;
+  padding:25px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.loading{
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
 }
 
 .badge{
   display:inline-block;
-  padding:5px 8px;
-  border-radius:20px;
-  background:var(--blue-light);
-  color:var(--blue);
-  font-size:10px;
-  font-weight:700;
-  margin:2px;
-}
-
-.tree{
-  margin-top:12px;
-}
-
-.tree-item{
-  border-top:1px solid #edf3f8;
-  padding:9px 0;
-}
-
-.tree-name{
-  font-weight:700;
-  color:var(--blue-dark);
-}
-
-.tree-type{
-  font-size:10px;
-  color:var(--muted);
-  margin-left:5px;
-}
-
-.children{
-  margin-left:13px;
-  padding-left:10px;
-  border-left:2px solid #e5f1fc;
-}
-
-.question-count{
+  padding:4px 8px;
+  border-radius:7px;
+  background:#eef6ff;
   color:var(--blue);
   font-size:11px;
-  font-weight:700;
+  font-weight:800;
 }
 
-.topic-content{
-  background:#f8fbff;
-  border-radius:9px;
-  padding:9px;
-  margin-top:7px;
-  font-size:12px;
-}
-
-.question{
-  margin-top:8px;
-  padding:10px;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:9px;
-}
-
-.question-text{
-  font-weight:700;
-  font-size:13px;
-  line-height:1.45;
-}
-
-.options{
-  margin-top:7px;
-}
-
-.option{
-  display:block;
-  padding:5px 0;
-  font-size:12px;
-}
-
-.answer{
-  margin-top:7px;
-  color:var(--blue);
-  font-weight:700;
-  font-size:12px;
-}
-
-.explanation{
-  margin-top:5px;
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.4;
-}
-
-button{
-  border:0;
-  border-radius:9px;
-  background:var(--blue);
-  color:#fff;
-  padding:9px 13px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-button:hover{
-  background:var(--blue-dark);
-}
-
-.quiz{
-  position:fixed;
-  inset:0;
-  background:rgba(8,40,75,.55);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:100;
-}
-
-.quiz.hidden{
-  display:none;
-}
-
-.quiz-box{
-  width:min(650px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border-radius:18px;
-  padding:22px;
-}
-
-.quiz-box h2{
-  margin-top:0;
-  color:var(--blue-dark);
-}
-
-.quiz-question{
-  font-size:17px;
-  font-weight:700;
-  line-height:1.5;
-  margin:15px 0;
-}
-
-.quiz-option{
-  border:1px solid var(--border);
-  padding:11px;
-  border-radius:9px;
-  margin:7px 0;
-  cursor:pointer;
-}
-
-.quiz-option:hover{
-  background:var(--blue-light);
-}
-
-.quiz-option.selected{
-  background:var(--blue-light);
-  border-color:var(--blue);
-}
-
-.quiz-actions{
-  display:flex;
-  gap:8px;
-  margin-top:15px;
-}
-
-.secondary{
-  background:#eef5fb;
-  color:var(--blue-dark);
-}
-
-.hidden{
-  display:none!important;
-}
-
-@media(max-width:950px){
-  .catalog{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .filter-grid{
-    grid-template-columns:repeat(2,1fr);
+@media(max-width:800px){
+  .grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
 
-@media(max-width:650px){
-  .modes,
-  .catalog,
-  .filter-grid{
-    grid-template-columns:1fr;
+@media(max-width:520px){
+  .grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
   }
 
-  .header-inner{
-    padding:13px 15px;
+  .card{
+    padding:12px;
+    min-height:105px;
   }
 
-  .brand{
-    font-size:20px;
+  .card-title{
+    font-size:14px;
   }
 
-  main{
-    padding:15px 12px 50px;
+  .screen-title{
+    font-size:22px;
   }
 }
 </style>
@@ -438,194 +309,29 @@ button:hover{
 
 <body>
 
-<header>
+<header class="header">
   <div class="header-inner">
-
-    <div class="brand">
-      🌍 MONDO QUIZ
-      <small>ZNAEDU — connaissances, apprentissage et évaluation</small>
+    <div class="brand">🌍 Mondo Quiz</div>
+    <div class="subtitle">
+      Connaissances • Apprentissage • Exercices • Évaluation
     </div>
-
-    <div id="status">
-      Catalogue en préparation...
-    </div>
-
   </div>
 </header>
 
-<main>
+<main class="container">
 
-<section class="hero">
+  <div id="breadcrumb" class="breadcrumb"></div>
 
-  <h1>Mondo Quiz</h1>
-
-  <p>
-    Une plateforme organisée par niveaux, cycles, classes,
-    filières, disciplines, contenus, thèmes et exercices.
-  </p>
-
-</section>
-
-
-<section class="modes">
-
-  <div class="mode active" id="academicMode">
-
-    <h2>🎓 Apprentissage scolaire & académique</h2>
-
-    <p>
-      Maternelle, primaire, secondaire général,
-      secondaire technique, formation professionnelle
-      et enseignement supérieur.
-    </p>
-
+  <div id="app">
+    <div class="loading">Chargement du catalogue…</div>
   </div>
-
-
-  <div class="mode" id="generalMode">
-
-    <h2>🌍 Culture générale, connaissances & loisirs</h2>
-
-    <p>
-      Sciences, histoire, géographie, santé, technologie,
-      économie, arts, sport, métiers et autres domaines.
-    </p>
-
-  </div>
-
-</section>
-
-
-<section class="filters" id="filters">
-
-  <div class="filter-grid">
-
-    <div>
-      <label>Niveau</label>
-
-      <select id="level">
-        <option value="">Tous les niveaux</option>
-        <option value="preschool">Maternelle</option>
-        <option value="primary">Primaire</option>
-        <option value="secondary_general">Secondaire général</option>
-        <option value="secondary_technical">Secondaire technique</option>
-        <option value="vocational">Formation professionnelle</option>
-        <option value="higher">Supérieur</option>
-      </select>
-
-    </div>
-
-
-    <div>
-      <label>Classe / année</label>
-
-      <select id="grade">
-        <option value="">Toutes</option>
-      </select>
-
-    </div>
-
-
-    <div>
-      <label>Recherche</label>
-
-      <input
-        id="search"
-        type="search"
-        placeholder="Discipline, thème, contenu..."
-      >
-
-    </div>
-
-
-    <div>
-      <label>Affichage</label>
-
-      <select id="displayMode">
-
-        <option value="compact">
-          Catalogue compact
-        </option>
-
-        <option value="detailed">
-          Catalogue détaillé
-        </option>
-
-      </select>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<div class="section-head">
-
-  <h2 id="catalogTitle">
-    Catalogue scolaire
-  </h2>
-
-  <span class="counter" id="counter">
-    Chargement...
-  </span>
-
-</div>
-
-
-<div id="catalog" class="catalog">
-
-  <div class="loading">
-    Chargement du catalogue Mondo Quiz...
-  </div>
-
-</div>
 
 </main>
 
-
-<div id="quiz" class="quiz hidden">
-
-  <div class="quiz-box">
-
-    <h2 id="quizTitle">
-      Exercice
-    </h2>
-
-    <div id="quizProgress"></div>
-
-    <div id="quizQuestion" class="quiz-question"></div>
-
-    <div id="quizOptions"></div>
-
-    <div id="quizResult"></div>
-
-    <div class="quiz-actions">
-
-      <button id="quizValidate">
-        Valider
-      </button>
-
-      <button
-        id="quizClose"
-        class="secondary"
-      >
-        Fermer
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
 <script>
-
-/* ============================================================
-   MONDO QUIZ
-   Connexion Supabase
-   ============================================================ */
+/* =========================================================
+   1. SUPABASE
+========================================================= */
 
 const SUPABASE_URL =
   "https://dpxghtjhjylofxhmnfxf.supabase.co";
@@ -633,108 +339,1206 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_QklC1lULFCU5wsl52CgNQg_V1iKQKEs";
 
-const supabaseClient =
-  window.supabase
-    ? window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY,
-        {
-          auth:{
-            persistSession:true,
-            autoRefreshToken:true,
-            detectSessionInUrl:true
-          }
+let supabaseClient = null;
+
+try{
+  supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY,
+      {
+        auth:{
+          persistSession:true,
+          autoRefreshToken:true,
+          detectSessionInUrl:true
         }
-      )
-    : null;
-
-
-/* ============================================================
-   DONNÉES
-   ============================================================ */
-
-let curriculumData = [];
-let generalData = [];
-let currentMode = "academic";
-
-let quizQuestions = [];
-let quizIndex = 0;
-let quizScore = 0;
-let selectedAnswer = null;
-
-
-/* ============================================================
-   DOM
-   ============================================================ */
-
-const catalog =
-  document.getElementById("catalog");
-
-const counter =
-  document.getElementById("counter");
-
-const level =
-  document.getElementById("level");
-
-const grade =
-  document.getElementById("grade");
-
-const search =
-  document.getElementById("search");
-
-const displayMode =
-  document.getElementById("displayMode");
-
-const academicMode =
-  document.getElementById("academicMode");
-
-const generalMode =
-  document.getElementById("generalMode");
-
-const filters =
-  document.getElementById("filters");
-
-const status =
-  document.getElementById("status");
-
-
-/* ============================================================
-   INITIALISATION
-   ============================================================ */
-
-async function init(){
-
-  if(!supabaseClient){
-
-    showError(
-      "La bibliothèque Supabase n'a pas été chargée."
+      }
     );
-
-    return;
-  }
-
-  status.textContent =
-    "Connexion au catalogue...";
-
-  await loadAcademicCatalog();
-
-  await loadGeneralCatalog();
-
-  populateGrades();
-
-  renderAcademic();
-
-  status.textContent =
-    "Catalogue connecté";
-
+}catch(error){
+  console.warn("Supabase indisponible :",error);
 }
 
 
-/* ============================================================
-   CATALOGUE ACADEMIQUE
-   ============================================================ */
+/* =========================================================
+   2. CATALOGUE DE SECOURS
+   Ce catalogue garantit que Mondo Quiz ne reste jamais vide.
+========================================================= */
 
-async function loadAcademicCatalog(){
+const LOCAL_CATALOG = [
+
+  {
+    id:"preschool",
+    code:"MAT",
+    name:"Maternelle",
+    icon:"🧸",
+    description:"Éveil, langage, motricité, découverte et premières notions.",
+    classes:[
+      {
+        code:"PS",
+        name:"Petite Section",
+        disciplines:[
+          {
+            code:"LANG",
+            name:"Langage",
+            icon:"🗣️",
+            topics:["Communication orale","Vocabulaire","Écoute et compréhension"],
+            questions:[]
+          },
+          {
+            code:"EVEIL",
+            name:"Éveil et découverte",
+            icon:"🌱",
+            topics:["Le corps","La nature","L'environnement"],
+            questions:[]
+          },
+          {
+            code:"MOT",
+            name:"Motricité",
+            icon:"🤸",
+            topics:["Motricité globale","Motricité fine"],
+            questions:[]
+          }
+        ]
+      },
+      {
+        code:"MS",
+        name:"Moyenne Section",
+        disciplines:[
+          {
+            code:"LANG",
+            name:"Langage",
+            icon:"🗣️",
+            topics:["Expression orale","Vocabulaire","Préparation à l'écrit"],
+            questions:[]
+          },
+          {
+            code:"EVEIL",
+            name:"Éveil",
+            icon:"🌱",
+            topics:["Corps humain","Animaux","Plantes"],
+            questions:[]
+          },
+          {
+            code:"PREMATH",
+            name:"Premières notions mathématiques",
+            icon:"🔢",
+            topics:["Quantités","Formes","Classement"],
+            questions:[]
+          }
+        ]
+      },
+      {
+        code:"GS",
+        name:"Grande Section",
+        disciplines:[
+          {
+            code:"LANG",
+            name:"Langage et communication",
+            icon:"🗣️",
+            topics:["Compréhension","Expression","Prélecture"],
+            questions:[]
+          },
+          {
+            code:"MATH",
+            name:"Premières mathématiques",
+            icon:"🔢",
+            topics:["Nombres","Quantités","Formes et grandeurs"],
+            questions:[]
+          },
+          {
+            code:"EVEIL",
+            name:"Découverte du monde",
+            icon:"🌍",
+            topics:["Corps humain","Nature","Vie quotidienne"],
+            questions:[]
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    id:"primary",
+    code:"PRIM",
+    name:"Primaire",
+    icon:"📘",
+    description:"Enseignement primaire : du CI au CM2.",
+    classes:[
+      {
+        code:"CI",
+        name:"CI — Cours d'Initiation",
+        disciplines:[
+          {
+            code:"MATH",
+            name:"Mathématiques",
+            icon:"🔢",
+            topics:["Nombres","Petites quantités","Addition","Soustraction"],
+            questions:[
+              {
+                question:"Combien font 2 + 3 ?",
+                options:["4","5","6","7"],
+                answer:"5",
+                explanation:"2 + 3 = 5."
+              }
+            ]
+          },
+          {
+            code:"FR",
+            name:"Français",
+            icon:"📖",
+            topics:["Alphabet","Sons","Lecture","Vocabulaire"],
+            questions:[]
+          },
+          {
+            code:"EM",
+            name:"Éducation au milieu",
+            icon:"🌱",
+            topics:["Le corps","La famille","L'environnement"],
+            questions:[]
+          }
+        ]
+      },
+
+      {
+        code:"CP",
+        name:"CP — Cours Préparatoire",
+        disciplines:[
+          {
+            code:"MATH",
+            name:"Mathématiques",
+            icon:"🔢",
+            topics:["Nombres","Addition","Soustraction","Comparaison"],
+            questions:[]
+          },
+          {
+            code:"FR",
+            name:"Français",
+            icon:"📖",
+            topics:["Lecture","Écriture","Grammaire","Vocabulaire"],
+            questions:[]
+          },
+          {
+            code:"EM",
+            name:"Éducation au milieu",
+            icon:"🌱",
+            topics:["Corps humain","Animaux","Plantes","Milieu de vie"],
+            questions:[]
+          }
+        ]
+      },
+
+      {
+        code:"CE1",
+        name:"CE1",
+        disciplines:[
+          {
+            code:"MATH",
+            name:"Mathématiques",
+            icon:"🔢",
+            topics:["Nombres","Addition","Soustraction","Multiplication","Problèmes"],
+            questions:[]
+          },
+          {
+            code:"FR",
+            name:"Français",
+            icon:"📖",
+            topics:["Lecture","Grammaire","Conjugaison","Orthographe","Vocabulaire"],
+            questions:[]
+          },
+          {
+            code:"EST",
+            name:"Éveil scientifique et technologique",
+            icon:"🔬",
+            topics:["Corps humain","Animaux","Plantes","Matière"],
+            questions:[]
+          },
+          {
+            code:"ECM",
+            name:"Éducation civique et morale",
+            icon:"🤝",
+            topics:["Règles de vie","Citoyenneté","Respect"],
+            questions:[]
+          }
+        ]
+      },
+
+      {
+        code:"CE2",
+        name:"CE2",
+        disciplines:[
+          {
+            code:"MATH",
+            name:"Mathématiques",
+            icon:"🔢",
+            topics:[
+              "Nombres et calcul",
+              "Addition et soustraction",
+              "Multiplication",
+              "Division et partage",
+              "Fractions simples",
+              "Problèmes"
+            ],
+            questions:[
+              {
+                question:"Quelle est la moitié de 10 ?",
+                options:["2","5","10","20"],
+                answer:"5",
+                explanation:"La moitié de 10 est 5."
+              },
+              {
+                question:"Combien font 6 × 4 ?",
+                options:["10","20","24","28"],
+                answer:"24",
+                explanation:"6 × 4 = 24."
+              }
+            ]
+          },
+          {
+            code:"FR",
+            name:"Français",
+            icon:"📖",
+            topics:[
+              "Compréhension",
+              "Grammaire",
+              "Conjugaison",
+              "Orthographe",
+              "Vocabulaire",
+              "Production écrite"
+            ],
+            questions:[]
+          },
+          {
+            code:"EST",
+            name:"Éveil scientifique et technologique",
+            icon:"🔬",
+            topics:[
+              "Corps humain",
+              "Respiration",
+              "Circulation sanguine",
+              "États de la matière",
+              "Énergie",
+              "Environnement"
+            ],
+            questions:[]
+          },
+          {
+            code:"ECM",
+            name:"Éducation civique et morale",
+            icon:"🤝",
+            topics:[
+              "Citoyenneté",
+              "Règles de vie collective",
+              "Respect",
+              "Sécurité",
+              "Responsabilités"
+            ],
+            questions:[]
+          }
+        ]
+      },
+
+      {
+        code:"CM1",
+        name:"CM1",
+        disciplines:[
+          {
+            code:"MATH",
+            name:"Mathématiques",
+            icon:"🔢",
+            topics:[
+              "Nombres entiers",
+              "Opérations",
+              "Fractions",
+              "Géométrie",
+              "Mesures",
+              "Problèmes"
+            ],
+            questions:[]
+          },
+          {
+            code:"FR",
+            name:"Français",
+            icon:"📖",
+            topics:[
+              "Lecture",
+              "Grammaire",
+              "Conjugaison",
+              "Orthographe",
+              "Vocabulaire",
+              "Expression écrite"
+            ],
+            questions:[]
+          },
+          {
+            code:"EST",
+            name:"Éveil scientifique et technologique",
+            icon:"🔬",
+            topics:[
+              "Biologie",
+              "Matière",
+              "Énergie",
+              "Technologie",
+              "Environnement"
+            ],
+            questions:[]
+          },
+          {
+            code:"ECM",
+            name:"Éducation civique et morale",
+            icon:"🤝",
+            topics:[
+              "Citoyenneté",
+              "Institutions",
+              "Droits et devoirs",
+              "Vie collective"
+            ],
+            questions:[]
+          }
+        ]
+      },
+
+      {
+        code:"CM2",
+        name:"CM2",
+        disciplines:[
+          {
+            code:"MATH",
+            name:"Mathématiques",
+            icon:"🔢",
+            topics:[
+              "Nombres",
+              "Opérations",
+              "Fractions",
+              "Géométrie",
+              "Mesures",
+              "Problèmes"
+            ],
+            questions:[]
+          },
+          {
+            code:"FR",
+            name:"Français",
+            icon:"📖",
+            topics:[
+              "Compréhension",
+              "Grammaire",
+              "Conjugaison",
+              "Orthographe",
+              "Vocabulaire",
+              "Production écrite"
+            ],
+            questions:[]
+          },
+          {
+            code:"EST",
+            name:"Éveil scientifique et technologique",
+            icon:"🔬",
+            topics:[
+              "Corps humain",
+              "Sciences physiques",
+              "Technologie",
+              "Environnement",
+              "Énergie"
+            ],
+            questions:[]
+          },
+          {
+            code:"ECM",
+            name:"Éducation civique et morale",
+            icon:"🤝",
+            topics:[
+              "Citoyenneté",
+              "Institutions",
+              "Droits et devoirs",
+              "Élections",
+              "Vie collective"
+            ],
+            questions:[]
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    id:"secondary_general",
+    code:"SEG",
+    name:"Secondaire général",
+    icon:"🏫",
+    description:"Enseignement secondaire général.",
+    classes:[
+      "6e","5e","4e","3e","2nde","1ère","Terminale"
+    ].map(code=>({
+      code,
+      name:code,
+      disciplines:[
+        {code:"FR",name:"Français",icon:"📖",topics:["Langue","Littérature","Expression"],questions:[]},
+        {code:"MATH",name:"Mathématiques",icon:"🔢",topics:["Calcul","Algèbre","Géométrie","Problèmes"],questions:[]},
+        {code:"SVT",name:"Sciences de la Vie et de la Terre",icon:"🧬",topics:["Biologie","Terre","Environnement"],questions:[]},
+        {code:"HIST",name:"Histoire",icon:"🏛️",topics:["Histoire du Bénin","Afrique","Monde"],questions:[]},
+        {code:"GEO",name:"Géographie",icon:"🌍",topics:["Espaces","Population","Environnement"],questions:[]},
+        {code:"ANG",name:"Anglais",icon:"🇬🇧",topics:["Grammar","Vocabulary","Reading"],questions:[]},
+        {code:"ECM",name:"Éducation civique et morale",icon:"⚖️",topics:["Citoyenneté","Institutions","Droits"],questions:[]}
+      ]
+    }))
+  },
+
+  {
+    id:"secondary_technical",
+    code:"SET",
+    name:"Secondaire technique",
+    icon:"🔧",
+    description:"Enseignement secondaire technique.",
+    classes:[
+      {
+        code:"TECH",
+        name:"Parcours technique",
+        disciplines:[
+          {code:"TECH",name:"Technologie",icon:"⚙️",topics:["Technologie générale","Systèmes","Procédés"],questions:[]},
+          {code:"MATH",name:"Mathématiques",icon:"🔢",topics:["Calcul","Géométrie","Applications"],questions:[]},
+          {code:"SCI",name:"Sciences appliquées",icon:"🔬",topics:["Sciences","Mesures","Applications"],questions:[]}
+        ]
+      }
+    ]
+  },
+
+  {
+    id:"vocational",
+    code:"PRO",
+    name:"Formation professionnelle",
+    icon:"🛠️",
+    description:"Métiers, compétences et formation professionnelle.",
+    classes:[
+      {
+        code:"PRO",
+        name:"Formation professionnelle",
+        disciplines:[
+          {code:"METIER",name:"Compétences professionnelles",icon:"🛠️",topics:["Compétences","Pratiques professionnelles"],questions:[]},
+          {code:"TECH",name:"Technologie professionnelle",icon:"⚙️",topics:["Techniques","Matériels","Sécurité"],questions:[]},
+          {code:"ENT",name:"Entrepreneuriat",icon:"💼",topics:["Projet","Entreprise","Gestion"],questions:[]}
+        ]
+      }
+    ]
+  },
+
+  {
+    id:"higher",
+    code:"SUP",
+    name:"Enseignement supérieur",
+    icon:"🎓",
+    description:"Filières, disciplines et apprentissages universitaires.",
+    classes:[
+      {
+        code:"L1",
+        name:"Licence — 1ère année",
+        disciplines:[
+          {code:"MED",name:"Médecine",icon:"🩺",topics:["Sciences fondamentales","Anatomie","Biologie"],questions:[]},
+          {code:"GEO",name:"Géographie",icon:"🌍",topics:["Géographie physique","Géographie humaine"],questions:[]},
+          {code:"ECO",name:"Économie",icon:"📈",topics:["Microéconomie","Macroéconomie"],questions:[]},
+          {code:"INFO",name:"Informatique",icon:"💻",topics:["Algorithmique","Programmation","Systèmes"],questions:[]}
+        ]
+      }
+    ]
+  }
+
+];
+
+
+/* =========================================================
+   3. ÉTAT DE NAVIGATION
+========================================================= */
+
+let catalog = LOCAL_CATALOG;
+
+let state = {
+  level:null,
+  classItem:null,
+  discipline:null,
+  topic:null,
+  questions:[],
+  questionIndex:0,
+  score:0,
+  answered:false
+};
+
+
+/* =========================================================
+   4. OUTILS
+========================================================= */
+
+const app = document.getElementById("app");
+const breadcrumb = document.getElementById("breadcrumb");
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function normalizeProgram(program){
+
+  if(!program.classes){
+    return program;
+  }
+
+  if(!Array.isArray(program.classes)){
+    return program;
+  }
+
+  return program;
+}
+
+function getLevel(){
+  return catalog.find(x=>x.id===state.level);
+}
+
+function getClass(){
+  const level=getLevel();
+  if(!level) return null;
+
+  return level.classes.find(
+    x=>typeof x==="object" && x.code===state.classItem
+  );
+}
+
+function getDiscipline(){
+  const cls=getClass();
+  if(!cls) return null;
+
+  return cls.disciplines.find(
+    x=>x.code===state.discipline
+  );
+}
+
+function setBreadcrumb(items){
+
+  breadcrumb.innerHTML = items.map((item,index)=>{
+
+    if(index===items.length-1){
+      return `<span class="crumb active">${escapeHtml(item.label)}</span>`;
+    }
+
+    return `
+      <span
+        class="crumb"
+        onclick="${item.action}"
+      >
+        ${escapeHtml(item.label)}
+      </span>
+      <span class="crumb-separator">›</span>
+    `;
+
+  }).join("");
+}
+
+
+/* =========================================================
+   5. ÉCRAN 1 — NIVEAUX
+========================================================= */
+
+function renderLevels(){
+
+  state.level=null;
+  state.classItem=null;
+  state.discipline=null;
+  state.topic=null;
+
+  setBreadcrumb([
+    {label:"Mondo Quiz",action:"renderLevels()"},
+    {label:"Choisir un niveau"}
+  ]);
+
+  app.innerHTML=`
+
+    <h1 class="screen-title">Choisis ton niveau</h1>
+
+    <p class="screen-description">
+      Sélectionne d'abord le niveau d'enseignement. 
+      Les classes correspondant à ce niveau apparaîtront ensuite.
+    </p>
+
+    <div class="grid">
+
+      ${catalog.map(level=>`
+
+        <div
+          class="card"
+          onclick="selectLevel('${level.id}')"
+        >
+
+          <div class="card-icon">${level.icon}</div>
+
+          <div class="card-title">
+            ${escapeHtml(level.name)}
+          </div>
+
+          <div class="card-info">
+            ${escapeHtml(level.description)}
+          </div>
+
+        </div>
+
+      `).join("")}
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   6. ÉCRAN 2 — CLASSES
+========================================================= */
+
+function selectLevel(levelId){
+
+  state.level=levelId;
+  state.classItem=null;
+  state.discipline=null;
+  state.topic=null;
+
+  const level=getLevel();
+
+  setBreadcrumb([
+    {label:"Mondo Quiz",action:"renderLevels()"},
+    {label:level.name}
+  ]);
+
+  app.innerHTML=`
+
+    <button class="back" onclick="renderLevels()">
+      ← Retour aux niveaux
+    </button>
+
+    <h1 class="screen-title">
+      ${level.icon} ${escapeHtml(level.name)}
+    </h1>
+
+    <p class="screen-description">
+      Choisis maintenant la classe ou le parcours correspondant.
+    </p>
+
+    <div class="grid">
+
+      ${level.classes.map(cls=>{
+
+        if(typeof cls==="string"){
+          return `
+            <div
+              class="card"
+              onclick="selectClass('${cls}')"
+            >
+              <div class="card-icon">📚</div>
+              <div class="card-title">${escapeHtml(cls)}</div>
+              <div class="card-info">
+                Voir les disciplines de cette classe
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div
+            class="card"
+            onclick="selectClass('${cls.code}')"
+          >
+            <div class="card-icon">📚</div>
+
+            <div class="card-code">
+              ${escapeHtml(cls.code)}
+            </div>
+
+            <div class="card-title">
+              ${escapeHtml(cls.name)}
+            </div>
+
+            <div class="card-info">
+              ${cls.disciplines.length} discipline(s)
+            </div>
+          </div>
+        `;
+
+      }).join("")}
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   7. ÉCRAN 3 — DISCIPLINES
+========================================================= */
+
+function selectClass(classCode){
+
+  state.classItem=classCode;
+  state.discipline=null;
+  state.topic=null;
+
+  const level=getLevel();
+
+  let cls = level.classes.find(
+    x=>typeof x==="object" && x.code===classCode
+  );
+
+  /*
+    Pour les classes secondaires générées simplement,
+    elles sont déjà des objets.
+  */
+
+  if(!cls){
+    return showMessage("Cette classe ne contient pas encore de structure.");
+  }
+
+  setBreadcrumb([
+    {label:"Mondo Quiz",action:"renderLevels()"},
+    {label:level.name,action:`selectLevel('${level.id}')`},
+    {label:cls.name}
+  ]);
+
+  app.innerHTML=`
+
+    <button
+      class="back"
+      onclick="selectLevel('${level.id}')"
+    >
+      ← Retour aux classes
+    </button>
+
+    <h1 class="screen-title">
+      ${escapeHtml(cls.name)}
+    </h1>
+
+    <p class="screen-description">
+      Choisis maintenant la discipline dans laquelle tu veux travailler.
+    </p>
+
+    <div class="grid">
+
+      ${cls.disciplines.map(d=>`
+
+        <div
+          class="card"
+          onclick="selectDiscipline('${d.code}')"
+        >
+
+          <div class="card-icon">
+            ${d.icon || "📚"}
+          </div>
+
+          <div class="card-title">
+            ${escapeHtml(d.name)}
+          </div>
+
+          <div class="card-info">
+            ${d.topics?.length || 0} thème(s)
+            ${d.questions?.length ? 
+              ` • ${d.questions.length} question(s)` : ""}
+          </div>
+
+        </div>
+
+      `).join("")}
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   8. ÉCRAN 4 — DISCIPLINE / THÈMES
+========================================================= */
+
+function selectDiscipline(code){
+
+  state.discipline=code;
+  state.topic=null;
+
+  const level=getLevel();
+  const cls=getClass();
+  const discipline=getDiscipline();
+
+  if(!discipline){
+    return showMessage("Discipline introuvable.");
+  }
+
+  setBreadcrumb([
+    {label:"Mondo Quiz",action:"renderLevels()"},
+    {label:level.name,action:`selectLevel('${level.id}')`},
+    {label:cls.name,action:`selectClass('${cls.code}')`},
+    {label:discipline.name}
+  ]);
+
+  const questions = discipline.questions || [];
+
+  app.innerHTML=`
+
+    <button
+      class="back"
+      onclick="selectClass('${cls.code}')"
+    >
+      ← Retour aux disciplines
+    </button>
+
+    <h1 class="screen-title">
+      ${discipline.icon || "📚"} ${escapeHtml(discipline.name)}
+    </h1>
+
+    <p class="screen-description">
+      Choisis un thème ou lance directement les questions disponibles.
+    </p>
+
+    ${
+      questions.length
+      ?
+      `
+        <div class="section">
+
+          <div class="section-title">
+            Questions disponibles
+          </div>
+
+          <div
+            class="card"
+            onclick="startQuestions()"
+          >
+            <div class="card-icon">📝</div>
+            <div class="card-title">
+              Commencer les questions
+            </div>
+            <div class="card-info">
+              ${questions.length} question(s) disponible(s)
+            </div>
+          </div>
+
+        </div>
+      `
+      :
+      `
+        <div class="status">
+          Les questions de cette discipline seront chargées depuis
+          le catalogue pédagogique Mondo Quiz.
+        </div>
+      `
+    }
+
+    ${
+      discipline.topics?.length
+      ?
+      `
+        <div class="section">
+
+          <div class="section-title">
+            Thèmes de la discipline
+          </div>
+
+          <div class="grid">
+
+            ${discipline.topics.map((topic,index)=>`
+
+              <div
+                class="card"
+                onclick="selectTopic(${index})"
+              >
+                <div class="card-icon">📘</div>
+
+                <div class="card-title">
+                  ${escapeHtml(topic)}
+                </div>
+
+                <div class="card-info">
+                  Voir les exercices de ce thème
+                </div>
+
+              </div>
+
+            `).join("")}
+
+          </div>
+
+        </div>
+      `
+      :
+      ""
+    }
+
+  `;
+}
+
+
+/* =========================================================
+   9. ÉCRAN 5 — THÈME
+========================================================= */
+
+function selectTopic(index){
+
+  const discipline=getDiscipline();
+
+  state.topic =
+    discipline.topics &&
+    discipline.topics[index];
+
+  setBreadcrumb([
+    {label:"Mondo Quiz",action:"renderLevels()"},
+    {label:getLevel().name,action:`selectLevel('${getLevel().id}')`},
+    {label:getClass().name,action:`selectClass('${getClass().code}')`},
+    {label:discipline.name,action:`selectDiscipline('${discipline.code}')`},
+    {label:state.topic}
+  ]);
+
+  app.innerHTML=`
+
+    <button
+      class="back"
+      onclick="selectDiscipline('${discipline.code}')"
+    >
+      ← Retour à ${escapeHtml(discipline.name)}
+    </button>
+
+    <h1 class="screen-title">
+      📘 ${escapeHtml(state.topic)}
+    </h1>
+
+    <p class="screen-description">
+      Exercices et questions correspondant à ce thème.
+    </p>
+
+    ${
+      discipline.questions?.length
+      ?
+      `
+        <div class="card" onclick="startQuestions()">
+
+          <div class="card-icon">📝</div>
+
+          <div class="card-title">
+            Commencer l'exercice
+          </div>
+
+          <div class="card-info">
+            Répondre aux questions de ${escapeHtml(state.topic)}
+          </div>
+
+        </div>
+      `
+      :
+      `
+        <div class="empty">
+          <strong>Aucune question locale n'est encore associée à ce thème.</strong>
+          <br><br>
+          Le moteur Mondo Quiz peut charger ici les questions
+          correspondant à ce thème depuis Supabase.
+        </div>
+      `
+    }
+
+  `;
+}
+
+
+/* =========================================================
+   10. QUESTIONS
+========================================================= */
+
+function startQuestions(){
+
+  const discipline=getDiscipline();
+
+  state.questions =
+    discipline.questions || [];
+
+  state.questionIndex=0;
+  state.score=0;
+  state.answered=false;
+
+  if(!state.questions.length){
+    showMessage(
+      "Aucune question n'est encore disponible pour cette sélection."
+    );
+    return;
+  }
+
+  renderQuestion();
+}
+
+
+function renderQuestion(){
+
+  const q=state.questions[state.questionIndex];
+
+  if(!q){
+    renderResult();
+    return;
+  }
+
+  state.answered=false;
+
+  app.innerHTML=`
+
+    <button
+      class="back"
+      onclick="selectDiscipline('${getDiscipline().code}')"
+    >
+      ← Retour à la discipline
+    </button>
+
+    <div class="question-box">
+
+      <div class="question-number">
+        QUESTION ${state.questionIndex+1}
+        / ${state.questions.length}
+      </div>
+
+      <div class="question-text">
+        ${escapeHtml(q.question)}
+      </div>
+
+      <div class="answers">
+
+        ${q.options.map((option,index)=>`
+
+          <button
+            class="answer"
+            onclick="answerQuestion(this,'${escapeJs(option)}')"
+          >
+            <strong>${String.fromCharCode(65+index)}.</strong>
+            ${escapeHtml(option)}
+          </button>
+
+        `).join("")}
+
+      </div>
+
+      <div id="explanation" class="explanation"></div>
+
+      <button
+        id="nextButton"
+        class="next"
+        onclick="nextQuestion()"
+      >
+        Question suivante →
+      </button>
+
+    </div>
+  `;
+}
+
+
+function escapeJs(value){
+  return String(value)
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+}
+
+
+function answerQuestion(button,answer){
+
+  if(state.answered) return;
+
+  state.answered=true;
+
+  const q=state.questions[state.questionIndex];
+
+  const buttons =
+    document.querySelectorAll(".answer");
+
+  buttons.forEach(btn=>{
+    btn.disabled=true;
+
+    if(btn.innerText.trim().endsWith(q.answer)){
+      btn.classList.add("correct");
+    }
+  });
+
+  if(answer===q.answer){
+    state.score++;
+    button.classList.add("correct");
+  }else{
+    button.classList.add("wrong");
+  }
+
+  const explanation =
+    document.getElementById("explanation");
+
+  explanation.style.display="block";
+
+  explanation.innerHTML =
+    `<strong>Explication :</strong> ${
+      escapeHtml(q.explanation || "Réponse enregistrée.")
+    }`;
+
+  document.getElementById("nextButton")
+    .style.display="inline-block";
+}
+
+
+function nextQuestion(){
+
+  state.questionIndex++;
+
+  if(state.questionIndex>=state.questions.length){
+    renderResult();
+  }else{
+    renderQuestion();
+  }
+}
+
+
+function renderResult(){
+
+  const total=state.questions.length;
+
+  app.innerHTML=`
+
+    <div class="question-box">
+
+      <div class="question-number">
+        RÉSULTAT
+      </div>
+
+      <div class="question-text">
+        ${state.score} / ${total}
+      </div>
+
+      <div class="status">
+        Tu as obtenu
+        <strong>${state.score}</strong>
+        bonne(s) réponse(s) sur
+        <strong>${total}</strong>.
+      </div>
+
+      <button
+        class="next"
+        style="display:inline-block"
+        onclick="startQuestions()"
+      >
+        Recommencer
+      </button>
+
+      <button
+        class="back"
+        style="margin-left:8px"
+        onclick="selectDiscipline('${getDiscipline().code}')"
+      >
+        Retour à la discipline
+      </button>
+
+    </div>
+  `;
+}
+
+
+/* =========================================================
+   11. SUPABASE : CHARGEMENT DU CATALOGUE
+========================================================= */
+
+async function loadSupabaseCatalog(){
+
+  if(!supabaseClient){
+    return;
+  }
 
   try{
 
@@ -748,1190 +1552,84 @@ async function loadAcademicCatalog(){
         }
       );
 
-    if(error) throw error;
-
-    curriculumData =
-      data &&
-      Array.isArray(data.curricula)
-        ? data.curricula
-        : [];
-
-    const totalNodes =
-      curriculumData.reduce(
-        (sum,c)=>sum+(c.nodes?.length||0),
-        0
-      );
-
-    counter.textContent =
-      `${curriculumData.length} programmes · ${totalNodes} éléments`;
-
-  }catch(error){
-
-    console.error(error);
-
-    showError(
-      "Impossible de charger le catalogue scolaire depuis Supabase."
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   CATALOGUE GENERAL
-   ============================================================ */
-
-async function loadGeneralCatalog(){
-
-  try{
-
-    const {data,error} =
-      await supabaseClient.rpc(
-        "mondo_quiz_catalog"
-      );
-
-    if(error) throw error;
-
-    const taxonomy =
-      Array.isArray(data?.taxonomy)
-        ? data.taxonomy
-        : [];
-
-    generalData =
-      taxonomy
-        .filter(x =>
-          x.type === "discipline" &&
-          !x.parent_id
-        )
-        .map(x=>({
-
-          name:x.name,
-
-          description:
-            x.description || "",
-
-          id:x.id
-
-        }));
-
-  }catch(error){
-
-    console.error(error);
-
-    generalData=[];
-
-  }
-
-}
-
-
-/* ============================================================
-   FILTRES
-   ============================================================ */
-
-function populateGrades(){
-
-  const selectedLevel =
-    level.value;
-
-  grade.innerHTML =
-    `<option value="">Toutes</option>`;
-
-  const values = new Map();
-
-  curriculumData
-    .filter(c =>
-      !selectedLevel ||
-      c.education_level === selectedLevel
-    )
-    .forEach(c=>{
-
-      (c.nodes||[])
-        .filter(n =>
-          n.node_type === "grade"
-        )
-        .forEach(n=>{
-
-          values.set(
-            n.code,
-            n.name
-          );
-
-        });
-
-    });
-
-  [...values.entries()]
-    .sort((a,b)=>
-      a[1].localeCompare(
-        b[1],
-        "fr"
-      )
-    )
-    .forEach(([code,name])=>{
-
-      grade.innerHTML +=
-        `<option value="${escapeHtml(code)}">
-          ${escapeHtml(name)}
-        </option>`;
-
-    });
-
-}
-
-
-/* ============================================================
-   ACADEMIQUE
-   ============================================================ */
-
-function renderAcademic(){
-
-  const selectedLevel =
-    level.value;
-
-  const selectedGrade =
-    grade.value;
-
-  const query =
-    search.value
-      .trim()
-      .toLowerCase();
-
-  let programmes =
-    curriculumData.filter(c => {
-
-      if(
-        selectedLevel &&
-        c.education_level !== selectedLevel
-      ){
-        return false;
-      }
-
-      if(query){
-
-        const curriculumMatch =
-          `${c.curriculum_name} ${c.description}`
-            .toLowerCase()
-            .includes(query);
-
-        const nodeMatch =
-          (c.nodes||[]).some(n =>
-            `${n.name} ${n.description}`
-              .toLowerCase()
-              .includes(query)
-          );
-
-        if(!curriculumMatch && !nodeMatch){
-          return false;
-        }
-
-      }
-
-      return true;
-
-    });
-
-
-  catalog.innerHTML="";
-
-
-  if(!programmes.length){
-
-    catalog.innerHTML =
-      `<div class="empty">
-        Aucun programme ne correspond aux filtres.
-      </div>`;
-
-    counter.textContent =
-      "0 programme";
-
-    return;
-  }
-
-
-  let totalVisibleNodes=0;
-  let totalQuestions=0;
-
-
-  programmes.forEach(programme=>{
-
-    const nodes =
-      (programme.nodes||[])
-        .filter(n=>{
-
-          if(
-            selectedGrade &&
-            !nodeBelongsToGrade(
-              n,
-              programme.nodes,
-              selectedGrade
-            )
-          ){
-            return false;
-          }
-
-          if(query){
-
-            const text =
-              `${n.name} ${n.description}`
-                .toLowerCase();
-
-            const questionText =
-              (n.questions||[])
-                .map(q=>q.question_text)
-                .join(" ")
-                .toLowerCase();
-
-            if(
-              !text.includes(query) &&
-              !questionText.includes(query)
-            ){
-              return false;
-            }
-
-          }
-
-          return true;
-
-        });
-
-
-    if(!nodes.length){
+    if(error){
+      console.warn("Catalogue Supabase :",error);
       return;
     }
 
-
-    totalVisibleNodes +=
-      nodes.length;
-
-    totalQuestions +=
-      nodes.reduce(
-        (s,n)=>
-          s+(n.questions?.length||0),
-        0
-      );
-
-
-    const card =
-      document.createElement("article");
-
-    card.className =
-      "curriculum";
-
-
-    card.innerHTML = `
-
-      <div class="curriculum-title">
-
-        <div>
-
-          <h3>
-            ${escapeHtml(
-              programme.curriculum_name
-            )}
-          </h3>
-
-          <div class="badges">
-
-            <span class="badge">
-              ${escapeHtml(
-                educationLabel(
-                  programme.education_level
-                )
-              )}
-            </span>
-
-            <span class="badge">
-              ${escapeHtml(
-                programme.curriculum_code
-              )}
-            </span>
-
-            <span class="badge">
-              ${escapeHtml(
-                programme.academic_year || ""
-              )}
-            </span>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="curriculum-description">
-
-        ${escapeHtml(
-          programme.description || ""
-        )}
-
-      </div>
-
-
-      <div class="tree"></div>
-    `;
-
-
-    const tree =
-      card.querySelector(".tree");
-
-
-    buildTree(
-      tree,
-      nodes,
-      programme.nodes
-    );
-
-
-    catalog.appendChild(card);
-
-  });
-
-
-  counter.textContent =
-    `${programmes.length} programmes · ` +
-    `${totalVisibleNodes} éléments · ` +
-    `${totalQuestions} exercices`;
-
-}
-
-
-/* ============================================================
-   CONSTRUCTION DE L'ARBRE
-   ============================================================ */
-
-function buildTree(container,nodes,allNodes){
-
-  const roots =
-    nodes.filter(n => {
-
-      return !nodes.some(
-        child =>
-          child.id === n.parent_id
-      );
-
-    });
-
-
-  roots.forEach(root=>{
-
-    renderTreeNode(
-      container,
-      root,
-      nodes,
-      allNodes,
-      0
-    );
-
-  });
-
-}
-
-
-function renderTreeNode(
-  container,
-  node,
-  nodes,
-  allNodes,
-  depth
-){
-
-  const wrapper =
-    document.createElement("div");
-
-  wrapper.className =
-    "tree-item";
-
-
-  const questions =
-    Array.isArray(node.questions)
-      ? node.questions
-      : [];
-
-
-  wrapper.innerHTML = `
-
-    <div class="tree-name">
-
-      ${escapeHtml(node.name)}
-
-      <span class="tree-type">
-        ${escapeHtml(
-          nodeTypeLabel(node.node_type)
-        )}
-      </span>
-
-      ${
-        questions.length
-          ? `<span class="question-count">
-              · ${questions.length} exercice(s)
-            </span>`
-          : ""
-      }
-
-    </div>
-
-    ${
-      node.description
-        ? `<div class="topic-content">
-            ${escapeHtml(node.description)}
-          </div>`
-        : ""
+    if(!data || !Array.isArray(data.curricula)){
+      return;
     }
 
-  `;
+    /*
+      Le catalogue local reste immédiatement disponible.
+      Les données Supabase pourront remplacer progressivement
+      les structures locales lorsqu'elles sont suffisamment
+      complètes.
+    */
 
-
-  if(
-    questions.length &&
-    displayMode.value === "detailed"
-  ){
-
-    questions.forEach(question=>{
-
-      wrapper.appendChild(
-        createQuestion(question)
-      );
-
-    });
-
-  }
-
-
-  const children =
-    nodes.filter(
-      child =>
-        child.parent_id === node.id
+    console.log(
+      "Catalogue pédagogique Supabase chargé :",
+      data.curricula.length,
+      "programme(s)"
     );
 
+  }catch(error){
 
-  if(children.length){
-
-    const childContainer =
-      document.createElement("div");
-
-    childContainer.className =
-      "children";
-
-
-    children.forEach(child=>{
-
-      renderTreeNode(
-        childContainer,
-        child,
-        nodes,
-        allNodes,
-        depth+1
-      );
-
-    });
-
-
-    wrapper.appendChild(
-      childContainer
+    console.warn(
+      "Impossible de charger le catalogue Supabase :",
+      error
     );
 
   }
-
-
-  if(questions.length){
-
-    const button =
-      document.createElement("button");
-
-    button.textContent =
-      "▶ Exercices";
-
-
-    button.style.marginTop =
-      "8px";
-
-
-    button.onclick =
-      () => startQuiz(
-        questions,
-        node.name
-      );
-
-
-    wrapper.appendChild(button);
-
-  }
-
-
-  container.appendChild(wrapper);
-
 }
 
 
-/* ============================================================
-   ASSOCIATION CLASSE → NODE
-   ============================================================ */
+/* =========================================================
+   12. MESSAGE
+========================================================= */
 
-function nodeBelongsToGrade(
-  node,
-  nodes,
-  gradeCode
-){
+function showMessage(message){
 
-  if(node.code === gradeCode){
-    return true;
-  }
+  app.innerHTML=`
 
+    <button class="back" onclick="renderLevels()">
+      ← Retour aux niveaux
+    </button>
 
-  let parent =
-    nodes.find(
-      n => n.id === node.parent_id
-    );
-
-
-  while(parent){
-
-    if(parent.code === gradeCode){
-      return true;
-    }
-
-    parent =
-      nodes.find(
-        n => n.id === parent.parent_id
-      );
-
-  }
-
-
-  return false;
-
-}
-
-
-/* ============================================================
-   QUESTION
-   ============================================================ */
-
-function createQuestion(question){
-
-  const box =
-    document.createElement("div");
-
-  box.className =
-    "question";
-
-
-  let options="";
-
-
-  if(Array.isArray(question.options)){
-
-    options =
-      question.options
-        .map(option =>
-          `<div class="option">
-            ${escapeHtml(option)}
-          </div>`
-        )
-        .join("");
-
-  }
-
-
-  box.innerHTML = `
-
-    <div class="question-text">
-
-      ${escapeHtml(
-        question.question_text || ""
-      )}
-
-    </div>
-
-    <div class="options">
-
-      ${options}
-
-    </div>
-
-    <div class="answer">
-
-      Réponse :
-      ${escapeHtml(
-        String(
-          question.correct_answer || ""
-        )
-      )}
-
-    </div>
-
-    ${
-      question.explanation
-        ? `<div class="explanation">
-            ${escapeHtml(
-              question.explanation
-            )}
-          </div>`
-        : ""
-    }
-
-  `;
-
-
-  return box;
-
-}
-
-
-/* ============================================================
-   MODE GENERAL
-   ============================================================ */
-
-generalMode.onclick = ()=>{
-
-  currentMode="general";
-
-  generalMode.classList.add("active");
-  academicMode.classList.remove("active");
-
-  filters.classList.add("hidden");
-
-  document.getElementById(
-    "catalogTitle"
-  ).textContent =
-    "Culture générale, connaissances & loisirs";
-
-
-  renderGeneral();
-
-};
-
-
-academicMode.onclick = ()=>{
-
-  currentMode="academic";
-
-  academicMode.classList.add("active");
-  generalMode.classList.remove("active");
-
-  filters.classList.remove("hidden");
-
-  document.getElementById(
-    "catalogTitle"
-  ).textContent =
-    "Catalogue scolaire";
-
-
-  renderAcademic();
-
-};
-
-
-function renderGeneral(){
-
-  catalog.innerHTML="";
-
-
-  if(!generalData.length){
-
-    catalog.innerHTML =
-      `<div class="empty">
-        Aucun domaine général n'est actuellement disponible.
-      </div>`;
-
-    counter.textContent =
-      "0 domaine";
-
-    return;
-
-  }
-
-
-  generalData.forEach(item=>{
-
-    const card =
-      document.createElement("article");
-
-    card.className =
-      "curriculum";
-
-
-    card.innerHTML = `
-
-      <h3>
-        ${escapeHtml(item.name)}
-      </h3>
-
-      <p class="curriculum-description">
-
-        ${escapeHtml(
-          item.description
-        )}
-
-      </p>
-
-      <span class="badge">
-        Domaine Mondo Quiz
-      </span>
-
-    `;
-
-
-    catalog.appendChild(card);
-
-  });
-
-
-  counter.textContent =
-    `${generalData.length} domaines`;
-
-}
-
-
-/* ============================================================
-   QUIZ
-   ============================================================ */
-
-const quiz =
-  document.getElementById("quiz");
-
-const quizTitle =
-  document.getElementById("quizTitle");
-
-const quizProgress =
-  document.getElementById("quizProgress");
-
-const quizQuestion =
-  document.getElementById("quizQuestion");
-
-const quizOptions =
-  document.getElementById("quizOptions");
-
-const quizResult =
-  document.getElementById("quizResult");
-
-const quizValidate =
-  document.getElementById("quizValidate");
-
-const quizClose =
-  document.getElementById("quizClose");
-
-
-function startQuiz(
-  questions,
-  title
-){
-
-  quizQuestions =
-    questions.filter(Boolean);
-
-  if(!quizQuestions.length){
-
-    return;
-
-  }
-
-
-  quizIndex=0;
-  quizScore=0;
-  selectedAnswer=null;
-
-
-  quizTitle.textContent =
-    title;
-
-
-  quizResult.innerHTML="";
-
-  quiz.classList.remove("hidden");
-
-  renderQuizQuestion();
-
-}
-
-
-function renderQuizQuestion(){
-
-  if(
-    quizIndex >=
-    quizQuestions.length
-  ){
-
-    quizQuestion.innerHTML =
-      `Quiz terminé.`;
-
-    quizOptions.innerHTML="";
-
-    quizProgress.textContent =
-      `Score : ${quizScore} / ${quizQuestions.length}`;
-
-    quizResult.innerHTML = `
-      <div class="topic-content">
-
-        Résultat :
-        <strong>
-          ${quizScore} / ${quizQuestions.length}
-        </strong>
-
-      </div>
-    `;
-
-    quizValidate.classList.add(
-      "hidden"
-    );
-
-    return;
-
-  }
-
-
-  const q =
-    quizQuestions[quizIndex];
-
-
-  selectedAnswer=null;
-
-
-  quizProgress.textContent =
-    `Question ${quizIndex+1} / ${quizQuestions.length}`;
-
-
-  quizQuestion.textContent =
-    q.question_text || "";
-
-
-  quizResult.innerHTML="";
-
-
-  quizOptions.innerHTML="";
-
-
-  if(
-    Array.isArray(q.options) &&
-    q.options.length
-  ){
-
-    q.options.forEach(option=>{
-
-      const item =
-        document.createElement("div");
-
-      item.className =
-        "quiz-option";
-
-      item.textContent =
-        option;
-
-
-      item.onclick=()=>{
-
-        document
-          .querySelectorAll(
-            ".quiz-option"
-          )
-          .forEach(x =>
-            x.classList.remove(
-              "selected"
-            )
-          );
-
-
-        item.classList.add(
-          "selected"
-        );
-
-
-        selectedAnswer =
-          option;
-
-      };
-
-
-      quizOptions.appendChild(item);
-
-    });
-
-  }else{
-
-    const input =
-      document.createElement("input");
-
-    input.placeholder =
-      "Écris ta réponse...";
-
-    input.id =
-      "shortAnswer";
-
-    quizOptions.appendChild(
-      input
-    );
-
-  }
-
-
-  quizValidate.classList.remove(
-    "hidden"
-  );
-
-}
-
-
-quizValidate.onclick=()=>{
-
-  const q =
-    quizQuestions[quizIndex];
-
-
-  let answer =
-    selectedAnswer;
-
-
-  const shortInput =
-    document.getElementById(
-      "shortAnswer"
-    );
-
-
-  if(
-    !answer &&
-    shortInput
-  ){
-
-    answer =
-      shortInput.value.trim();
-
-  }
-
-
-  if(!answer){
-
-    quizResult.innerHTML =
-      `<div class="topic-content">
-        Sélectionne ou écris une réponse.
-      </div>`;
-
-    return;
-
-  }
-
-
-  const expected =
-    String(
-      q.correct_answer || ""
-    ).trim().toLowerCase();
-
-
-  const received =
-    String(answer)
-      .trim()
-      .toLowerCase();
-
-
-  if(received === expected){
-
-    quizScore++;
-
-
-    quizResult.innerHTML =
-      `<div class="topic-content">
-        ✅ Bonne réponse.
-      </div>`;
-
-  }else{
-
-    quizResult.innerHTML =
-      `<div class="topic-content">
-        Réponse attendue :
-        <strong>
-          ${escapeHtml(
-            String(
-              q.correct_answer || ""
-            )
-          )}
-        </strong>
-
-        ${
-          q.explanation
-            ? `<br><br>
-               ${escapeHtml(
-                 q.explanation
-               )}`
-            : ""
-        }
-
-      </div>`;
-
-  }
-
-
-  quizIndex++;
-
-
-  setTimeout(
-    renderQuizQuestion,
-    900
-  );
-
-};
-
-
-quizClose.onclick=()=>{
-
-  quiz.classList.add(
-    "hidden"
-  );
-
-};
-
-
-level.onchange=()=>{
-
-  populateGrades();
-
-  renderAcademic();
-
-};
-
-
-grade.onchange =
-  renderAcademic;
-
-search.oninput =
-  renderAcademic;
-
-displayMode.onchange =
-  renderAcademic;
-
-
-/* ============================================================
-   OUTILS
-   ============================================================ */
-
-function educationLabel(level){
-
-  const labels={
-
-    preschool:"Maternelle",
-
-    primary:"Primaire",
-
-    secondary_general:
-      "Secondaire général",
-
-    secondary_technical:
-      "Secondaire technique",
-
-    vocational:
-      "Formation professionnelle",
-
-    higher:
-      "Enseignement supérieur"
-
-  };
-
-
-  return labels[level] ||
-    level ||
-    "Programme";
-
-}
-
-
-function nodeTypeLabel(type){
-
-  const labels={
-
-    cycle:"cycle",
-
-    grade:"classe / année",
-
-    track:"filière",
-
-    discipline:"discipline",
-
-    domain:"domaine",
-
-    competency:"compétence",
-
-    capacity:"capacité",
-
-    knowledge:"connaissance",
-
-    concept:"concept",
-
-    topic:"thème",
-
-    subtopic:"sous-thème",
-
-    learning_objective:
-      "objectif d'apprentissage",
-
-    assessment_target:
-      "objectif d'évaluation"
-
-  };
-
-
-  return labels[type] ||
-    type ||
-    "";
-
-}
-
-
-function showError(message){
-
-  catalog.innerHTML =
-    `<div class="error">
+    <div class="empty">
       ${escapeHtml(message)}
-    </div>`;
+    </div>
 
-  counter.textContent =
-    "Erreur";
-
-  status.textContent =
-    "Erreur de connexion";
-
+  `;
 }
 
 
-function escapeHtml(value){
+/* =========================================================
+   13. INITIALISATION
+========================================================= */
 
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+async function init(){
+
+  /*
+    Important :
+    on affiche immédiatement le catalogue local.
+    Ainsi, Mondo Quiz ne peut pas rester bloqué sur
+    "0 programme" à cause d'une requête réseau.
+  */
+
+  renderLevels();
+
+  /*
+    Supabase est chargé ensuite.
+  */
+
+  await loadSupabaseCatalog();
 
 }
-
-
-/* ============================================================
-   DEMARRAGE
-   ============================================================ */
 
 init();
 
-</script>
-
-
-<!--
-  IMPORTANT :
-  Supabase JS est chargé ici afin que le fichier
-  fonctionne directement sur GitHub Pages.
--->
-<script
-  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-</script>
-
-<script>
-/*
-  Le script principal est placé avant le chargement de Supabase
-  dans ce fichier. On relance donc l'initialisation une fois
-  la bibliothèque disponible.
-*/
-if(window.supabase && typeof init === "function"){
-  init();
-}
 </script>
 
 </body>
