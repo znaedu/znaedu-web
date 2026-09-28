@@ -1,118 +1,833 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BON PLAN 229 — ZNAEDU</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Plan 229 — ZNAEDU</title>
+
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f8fc;
-      color: #17243a;
+      background: #f5f7fb;
+      color: #172033;
     }
 
-    header {
-      background: #0b4ea2;
-      color: white;
-      padding: 22px 18px;
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
-    header h1 {
-      margin: 0 0 6px;
-      font-size: 25px;
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
     }
 
-    header p {
-      margin: 0;
-      opacity: .92;
+    button {
+      cursor: pointer;
     }
 
-    main {
-      max-width: 1000px;
+    .topbar {
+      background: #ffffff;
+      border-bottom: 1px solid #e3e7ef;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .brand strong {
+      font-size: 22px;
+    }
+
+    .brand span {
+      color: #687386;
+      font-size: 13px;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    .btn-secondary {
+      background: #e8edf5;
+      color: #172033;
+    }
+
+    .hero {
+      background: #111827;
+      color: #ffffff;
+      padding: 55px 22px;
+    }
+
+    .hero-content {
+      max-width: 1100px;
       margin: auto;
-      padding: 24px 18px;
     }
 
-    .welcome {
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 8px 25px rgba(16,35,63,.08);
+    .hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(32px, 6vw, 58px);
     }
 
-    .cards {
+    .hero p {
+      max-width: 700px;
+      margin: 0 0 25px;
+      color: #d1d5db;
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 22px 60px;
+    }
+
+    .section-title {
+      margin-bottom: 20px;
+    }
+
+    .section-title h2 {
+      margin: 0 0 7px;
+      font-size: 27px;
+    }
+
+    .section-title p {
+      margin: 0;
+      color: #687386;
+    }
+
+    .categories {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 16px;
-      margin-top: 22px;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(180px, 1fr)
+      );
+      gap: 15px;
+      margin-bottom: 35px;
     }
 
-    .card {
-      background: white;
-      border: 1px solid #dce7f5;
-      border-radius: 14px;
+    .category {
+      background: #ffffff;
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
       padding: 20px;
     }
 
-    .card h2 {
-      margin-top: 0;
-      font-size: 19px;
+    .category h3 {
+      margin: 0 0 8px;
     }
 
-    .back {
+    .category p {
+      margin: 0;
+      color: #687386;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .search-panel {
+      background: #ffffff;
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+
+    .search-panel form {
+      display: grid;
+      grid-template-columns: 1fr 180px auto;
+      gap: 10px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #cfd6e2;
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: #ffffff;
+      color: #172033;
+    }
+
+    .listings {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(260px, 1fr)
+      );
+      gap: 18px;
+    }
+
+    .listing {
+      background: #ffffff;
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .listing-tag {
       display: inline-block;
-      margin-top: 24px;
-      padding: 11px 16px;
-      border-radius: 10px;
-      background: #0b4ea2;
-      color: white;
-      text-decoration: none;
+      background: #e8edf5;
+      border-radius: 20px;
+      padding: 5px 9px;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .listing h3 {
+      margin: 0 0 9px;
+    }
+
+    .listing p {
+      color: #687386;
+      line-height: 1.5;
+    }
+
+    .listing-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .price {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .features {
+      margin-top: 45px;
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(220px, 1fr)
+      );
+      gap: 15px;
+    }
+
+    .feature {
+      background: #ffffff;
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .feature h3 {
+      margin-top: 0;
+    }
+
+    .feature p {
+      color: #687386;
+      line-height: 1.6;
+    }
+
+    .footer {
+      border-top: 1px solid #e3e7ef;
+      background: #ffffff;
+      padding: 25px 22px;
+      text-align: center;
+      color: #687386;
+      font-size: 14px;
+    }
+
+    .empty {
+      background: #ffffff;
+      border: 1px solid #e3e7ef;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      color: #687386;
+    }
+
+    @media (max-width: 750px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .search-panel form {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 40px 18px;
+      }
+
+      .main {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <h1>BON PLAN 229</h1>
-    <p>Acheter • Vendre • Développer</p>
-  </header>
 
-  <main>
-    <section class="welcome">
-      <h2>Bienvenue sur BON PLAN 229</h2>
+<header class="topbar">
+
+  <div class="brand">
+    <strong>Plan 229</strong>
+    <span>ZNAEDU</span>
+  </div>
+
+  <div class="top-actions">
+    <a
+      href="../index.html"
+      class="btn btn-secondary"
+    >
+      Retour à ZNAEDU
+    </a>
+
+    <button
+      class="btn btn-primary"
+      id="publishBtn"
+    >
+      Publier
+    </button>
+  </div>
+
+</header>
+
+
+<section class="hero">
+
+  <div class="hero-content">
+
+    <h1>Plan 229</h1>
+
+    <p>
+      Une plateforme pour publier, rechercher, acheter,
+      vendre et proposer des biens et des services,
+      avec suivi des transactions et des opérations.
+    </p>
+
+    <div class="hero-actions">
+
+      <button
+        class="btn btn-primary"
+        id="searchHeroBtn"
+      >
+        Rechercher
+      </button>
+
+      <button
+        class="btn btn-secondary"
+        id="publishHeroBtn"
+      >
+        Publier une annonce
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<main class="main">
+
+  <section>
+
+    <div class="section-title">
+
+      <h2>Explorer</h2>
 
       <p>
-        Une place de marché intégrée à ZNAEDU pour acheter,
-        vendre et développer son activité.
+        Recherchez les biens et services disponibles
+        sur Plan 229.
       </p>
 
-      <div class="cards">
-        <div class="card">
-          <h2>🛍️ Acheter</h2>
-          <p>Découvrir les produits et services proposés sur la marketplace.</p>
-        </div>
+    </div>
 
-        <div class="card">
-          <h2>💼 Vendre</h2>
-          <p>Présenter ses produits ou services et gérer ses ventes.</p>
-        </div>
 
-        <div class="card">
-          <h2>🏪 Boutiques</h2>
-          <p>Découvrir et gérer les espaces commerciaux.</p>
-        </div>
+    <div class="categories">
 
-        <div class="card">
-          <h2>📦 Commandes</h2>
-          <p>Suivre les achats et les commandes.</p>
-        </div>
+      <div class="category">
+        <h3>Produits</h3>
+        <p>
+          Rechercher des produits proposés par les vendeurs.
+        </p>
       </div>
 
-      <a class="back" href="../index.html">← Retour à ZNAEDU</a>
-    </section>
-  </main>
+      <div class="category">
+        <h3>Services</h3>
+        <p>
+          Trouver des personnes ou structures proposant
+          différents services.
+        </p>
+      </div>
+
+      <div class="category">
+        <h3>Offres</h3>
+        <p>
+          Consulter les offres publiées sur la plateforme.
+        </p>
+      </div>
+
+      <div class="category">
+        <h3>Opportunités</h3>
+        <p>
+          Découvrir les annonces et propositions disponibles.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section id="searchSection">
+
+    <div class="search-panel">
+
+      <form id="searchForm">
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Que recherchez-vous ?"
+        >
+
+        <select id="categoryFilter">
+
+          <option value="">
+            Toutes les catégories
+          </option>
+
+          <option value="Produit">
+            Produits
+          </option>
+
+          <option value="Service">
+            Services
+          </option>
+
+          <option value="Offre">
+            Offres
+          </option>
+
+          <option value="Opportunité">
+            Opportunités
+          </option>
+
+        </select>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >
+          Rechercher
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
+
+
+  <section>
+
+    <div class="section-title">
+
+      <h2>Annonces</h2>
+
+      <p>
+        Aperçu des annonces disponibles.
+      </p>
+
+    </div>
+
+
+    <div
+      id="listingContainer"
+      class="listings"
+    >
+
+      <article class="listing">
+
+        <span class="listing-tag">
+          Produit
+        </span>
+
+        <h3>
+          Exemple de produit
+        </h3>
+
+        <p>
+          Cette annonce est un exemple de présentation
+          pour le prototype de Plan 229.
+        </p>
+
+        <div class="listing-footer">
+
+          <span class="price">
+            Prix à définir
+          </span>
+
+          <button
+            class="btn btn-secondary"
+            type="button"
+          >
+            Voir
+          </button>
+
+        </div>
+
+      </article>
+
+
+      <article class="listing">
+
+        <span class="listing-tag">
+          Service
+        </span>
+
+        <h3>
+          Exemple de service
+        </h3>
+
+        <p>
+          Les services publiés pourront être consultés
+          par les utilisateurs.
+        </p>
+
+        <div class="listing-footer">
+
+          <span class="price">
+            Tarif à définir
+          </span>
+
+          <button
+            class="btn btn-secondary"
+            type="button"
+          >
+            Voir
+          </button>
+
+        </div>
+
+      </article>
+
+
+      <article class="listing">
+
+        <span class="listing-tag">
+          Offre
+        </span>
+
+        <h3>
+          Exemple d'offre
+        </h3>
+
+        <p>
+          Les offres pourront être publiées et consultées
+          directement sur Plan 229.
+        </p>
+
+        <div class="listing-footer">
+
+          <span class="price">
+            À définir
+          </span>
+
+          <button
+            class="btn btn-secondary"
+            type="button"
+          >
+            Voir
+          </button>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <section class="features">
+
+    <div class="feature">
+
+      <h3>Vendre</h3>
+
+      <p>
+        Publier des biens ou services et gérer ses annonces.
+      </p>
+
+    </div>
+
+
+    <div class="feature">
+
+      <h3>Acheter</h3>
+
+      <p>
+        Rechercher une offre, passer une commande et suivre
+        son évolution.
+      </p>
+
+    </div>
+
+
+    <div class="feature">
+
+      <h3>Entreprendre</h3>
+
+      <p>
+        Proposer ses compétences, ses services ou ses produits.
+      </p>
+
+    </div>
+
+
+    <div class="feature">
+
+      <h3>Suivre</h3>
+
+      <p>
+        Conserver la traçabilité des commandes et opérations.
+      </p>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer class="footer">
+
+  Plan 229 — ZNAEDU
+
+</footer>
+
+
+<script>
+
+  const searchSection =
+    document.getElementById(
+      "searchSection"
+    );
+
+
+  const searchHeroBtn =
+    document.getElementById(
+      "searchHeroBtn"
+    );
+
+
+  const publishBtn =
+    document.getElementById(
+      "publishBtn"
+    );
+
+
+  const publishHeroBtn =
+    document.getElementById(
+      "publishHeroBtn"
+    );
+
+
+  const searchForm =
+    document.getElementById(
+      "searchForm"
+    );
+
+
+  searchHeroBtn.addEventListener(
+    "click",
+    () => {
+
+      searchSection.scrollIntoView({
+        behavior: "smooth"
+      });
+
+      document
+        .getElementById("searchInput")
+        .focus();
+
+    }
+  );
+
+
+  function publishMessage() {
+
+    alert(
+      "La publication d'une annonce sera activée dans la version complète de Plan 229."
+    );
+
+  }
+
+
+  publishBtn.addEventListener(
+    "click",
+    publishMessage
+  );
+
+
+  publishHeroBtn.addEventListener(
+    "click",
+    publishMessage
+  );
+
+
+  searchForm.addEventListener(
+    "submit",
+    event => {
+
+      event.preventDefault();
+
+      const query =
+        document
+          .getElementById(
+            "searchInput"
+          )
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const category =
+        document
+          .getElementById(
+            "categoryFilter"
+          )
+          .value
+          .toLowerCase();
+
+
+      const listings =
+        document.querySelectorAll(
+          ".listing"
+        );
+
+
+      let visible = 0;
+
+
+      listings.forEach(
+        listing => {
+
+          const text =
+            listing.textContent
+              .toLowerCase();
+
+
+          const matchesQuery =
+            !query ||
+            text.includes(query);
+
+
+          const matchesCategory =
+            !category ||
+            text.includes(category);
+
+
+          const show =
+            matchesQuery &&
+            matchesCategory;
+
+
+          listing.style.display =
+            show
+              ? ""
+              : "none";
+
+
+          if (show) {
+            visible++;
+          }
+
+        }
+      );
+
+
+      const container =
+        document.getElementById(
+          "listingContainer"
+        );
+
+
+      const oldEmpty =
+        container.querySelector(
+          ".empty"
+        );
+
+
+      if (oldEmpty) {
+        oldEmpty.remove();
+      }
+
+
+      if (visible === 0) {
+
+        const empty =
+          document.createElement(
+            "div"
+          );
+
+
+        empty.className =
+          "empty";
+
+
+        empty.textContent =
+          "Aucune annonce ne correspond à votre recherche.";
+
+
+        container.appendChild(
+          empty
+        );
+
+      }
+
+    }
+  );
+
+</script>
+
 </body>
 </html>
