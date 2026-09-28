@@ -1,128 +1,496 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SCHOOL CONTROL — ZNAEDU</title>
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f8fc;
-      color: #17243a;
-    }
-
-    header {
-      background: #0b4ea2;
-      color: white;
-      padding: 22px 18px;
-    }
-
-    header h1 {
-      margin: 0 0 6px;
-      font-size: 25px;
-    }
-
-    header p {
-      margin: 0;
-      opacity: .92;
-    }
-
-    main {
-      max-width: 1000px;
-      margin: auto;
-      padding: 24px 18px;
-    }
-
-    .welcome {
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 8px 25px rgba(16,35,63,.08);
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 16px;
-      margin-top: 22px;
-    }
-
-    .card {
-      background: white;
-      border: 1px solid #dce7f5;
-      border-radius: 14px;
-      padding: 20px;
-    }
-
-    .card h2 {
-      margin-top: 0;
-      font-size: 19px;
-    }
-
-    .back {
-      display: inline-block;
-      margin-top: 24px;
-      padding: 11px 16px;
-      border-radius: 10px;
-      background: #0b4ea2;
-      color: white;
-      text-decoration: none;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Control — ZNAEDU</title>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
-  <header>
-    <h1>SCHOOL CONTROL</h1>
-    <p>Organiser • Suivre • Contrôler</p>
-  </header>
 
-  <main>
-    <section class="welcome">
-      <h2>Bienvenue dans SCHOOL CONTROL</h2>
+<header class="topbar">
+  <div>
+    <strong>ZNAEDU</strong>
+    <span>School Control</span>
+  </div>
 
-      <p>
-        L'espace de gestion et de suivi des établissements scolaires
-        intégré à ZNAEDU.
-      </p>
+  <button id="resetDemo" class="danger-btn">
+    Réinitialiser les données
+  </button>
+</header>
 
-      <div class="cards">
-        <div class="card">
-          <h2>🏫 Établissements</h2>
-          <p>Gérer les établissements et leur organisation.</p>
-        </div>
+<div class="layout">
 
-        <div class="card">
-          <h2>👨‍🏫 Enseignants</h2>
-          <p>Gérer les enseignants et leurs activités scolaires.</p>
-        </div>
+  <aside class="sidebar">
+    <nav>
+      <button class="nav-btn active" data-section="dashboard">
+        Tableau de bord
+      </button>
 
-        <div class="card">
-          <h2>🎓 Apprenants</h2>
-          <p>Suivre les apprenants et leur présence.</p>
-        </div>
+      <button class="nav-btn" data-section="school">
+        Établissement
+      </button>
 
-        <div class="card">
-          <h2>📚 Cours</h2>
-          <p>Organiser les cours, matières et emplois du temps.</p>
-        </div>
+      <button class="nav-btn" data-section="classes">
+        Classes
+      </button>
 
-        <div class="card">
-          <h2>🟢 Présences</h2>
-          <p>Suivre les présences, absences et cas particuliers.</p>
-        </div>
+      <button class="nav-btn" data-section="learners">
+        Apprenants
+      </button>
 
-        <div class="card">
-          <h2>📊 Statistiques</h2>
-          <p>Consulter les données et indicateurs de l'établissement.</p>
-        </div>
+      <button class="nav-btn" data-section="teachers">
+        Enseignants
+      </button>
+
+      <button class="nav-btn" data-section="assignments">
+        Affectations
+      </button>
+
+      <button class="nav-btn" data-section="attendance">
+        Présences
+      </button>
+    </nav>
+  </aside>
+
+  <main class="content">
+
+    <!-- TABLEAU DE BORD -->
+    <section id="dashboard" class="section active">
+
+      <div class="page-title">
+        <h1>Tableau de bord</h1>
+        <p>Gestion de l'établissement scolaire</p>
       </div>
 
-      <a class="back" href="../index.html">← Retour à ZNAEDU</a>
+      <div class="stats">
+
+        <div class="stat-card">
+          <span>Établissement</span>
+          <strong id="dashboardSchool">Non configuré</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Classes</span>
+          <strong id="classCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Apprenants</span>
+          <strong id="learnerCount">0</strong>
+        </div>
+
+        <div class="stat-card">
+          <span>Enseignants</span>
+          <strong id="teacherCount">0</strong>
+        </div>
+
+      </div>
+
     </section>
+
+
+    <!-- ETABLISSEMENT -->
+    <section id="school" class="section">
+
+      <div class="page-title">
+        <h1>Établissement</h1>
+        <p>Configuration de l'établissement scolaire</p>
+      </div>
+
+      <div class="panel">
+
+        <form id="schoolForm">
+
+          <label>
+            Nom de l'établissement
+            <input id="schoolName" type="text" required>
+          </label>
+
+          <label>
+            Année scolaire
+            <input
+              id="schoolYear"
+              type="text"
+              value="2026-2027"
+              required
+            >
+          </label>
+
+          <label>
+            Responsable
+            <input id="schoolManager" type="text">
+          </label>
+
+          <button class="primary-btn" type="submit">
+            Enregistrer
+          </button>
+
+        </form>
+
+      </div>
+
+    </section>
+
+
+    <!-- CLASSES -->
+    <section id="classes" class="section">
+
+      <div class="page-title row-between">
+
+        <div>
+          <h1>Classes</h1>
+          <p>Créer et gérer les classes de l'établissement</p>
+        </div>
+
+        <button id="addClassBtn" class="primary-btn">
+          + Créer une classe
+        </button>
+
+      </div>
+
+      <div id="classList" class="cards-grid"></div>
+
+    </section>
+
+
+    <!-- APPRENANTS -->
+    <section id="learners" class="section">
+
+      <div class="page-title row-between">
+
+        <div>
+          <h1>Apprenants</h1>
+          <p>Ajouter les apprenants dans leurs classes</p>
+        </div>
+
+        <button id="addLearnerBtn" class="primary-btn">
+          + Ajouter un apprenant
+        </button>
+
+      </div>
+
+      <div class="filters">
+
+        <select id="learnerClassFilter">
+          <option value="">Toutes les classes</option>
+        </select>
+
+        <input
+          id="learnerSearch"
+          type="search"
+          placeholder="Rechercher un apprenant..."
+        >
+
+      </div>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Matricule</th>
+              <th>Nom</th>
+              <th>Prénoms</th>
+              <th>Classe</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="learnerTableBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- ENSEIGNANTS -->
+    <section id="teachers" class="section">
+
+      <div class="page-title row-between">
+
+        <div>
+          <h1>Enseignants</h1>
+          <p>Gestion des enseignants</p>
+        </div>
+
+        <button id="addTeacherBtn" class="primary-btn">
+          + Ajouter un enseignant
+        </button>
+
+      </div>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénoms</th>
+              <th>Discipline</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody id="teacherTableBody"></tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- AFFECTATIONS -->
+    <section id="assignments" class="section">
+
+      <div class="page-title">
+        <h1>Affectations</h1>
+        <p>
+          Associer les enseignants aux classes et disciplines
+        </p>
+      </div>
+
+      <div class="panel">
+
+        <form id="assignmentForm">
+
+          <label>
+            Enseignant
+            <select id="assignmentTeacher" required></select>
+          </label>
+
+          <label>
+            Classe
+            <select id="assignmentClass" required></select>
+          </label>
+
+          <label>
+            Discipline
+            <input
+              id="assignmentSubject"
+              type="text"
+              required
+            >
+          </label>
+
+          <button class="primary-btn" type="submit">
+            Enregistrer l'affectation
+          </button>
+
+        </form>
+
+      </div>
+
+      <div id="assignmentList" class="list"></div>
+
+    </section>
+
+
+    <!-- PRESENCES -->
+    <section id="attendance" class="section">
+
+      <div class="page-title">
+
+        <h1>Présences</h1>
+
+        <p>
+          Suivi des présences des apprenants
+        </p>
+
+      </div>
+
+      <div class="attendance-controls">
+
+        <label>
+          Classe
+          <select id="attendanceClass"></select>
+        </label>
+
+        <label>
+          Date
+          <input id="attendanceDate" type="date">
+        </label>
+
+      </div>
+
+      <div id="attendanceList"></div>
+
+    </section>
+
   </main>
+
+</div>
+
+
+<!-- DIALOGUE : CREATION CLASSE -->
+<dialog id="classDialog">
+
+  <form method="dialog" id="classForm">
+
+    <h2>Créer une classe</h2>
+
+    <label>
+      Nom de la classe
+      <input
+        id="className"
+        type="text"
+        placeholder="Ex. 6e A"
+        required
+      >
+    </label>
+
+    <div class="dialog-actions">
+
+      <button
+        value="cancel"
+        class="secondary-btn"
+      >
+        Annuler
+      </button>
+
+      <button
+        type="submit"
+        class="primary-btn"
+      >
+        Créer
+      </button>
+
+    </div>
+
+  </form>
+
+</dialog>
+
+
+<!-- DIALOGUE : APPRENANT -->
+<dialog id="learnerDialog">
+
+  <form method="dialog" id="learnerForm">
+
+    <h2>Ajouter un apprenant</h2>
+
+    <label>
+      Matricule
+      <input
+        id="learnerMatricule"
+        type="text"
+        required
+      >
+    </label>
+
+    <label>
+      Nom
+      <input
+        id="learnerLastName"
+        type="text"
+        required
+      >
+    </label>
+
+    <label>
+      Prénoms
+      <input
+        id="learnerFirstName"
+        type="text"
+        required
+      >
+    </label>
+
+    <label>
+      Classe
+      <select
+        id="learnerClass"
+        required
+      ></select>
+    </label>
+
+    <div class="dialog-actions">
+
+      <button
+        value="cancel"
+        class="secondary-btn"
+      >
+        Annuler
+      </button>
+
+      <button
+        type="submit"
+        class="primary-btn"
+      >
+        Ajouter
+      </button>
+
+    </div>
+
+  </form>
+
+</dialog>
+
+
+<!-- DIALOGUE : ENSEIGNANT -->
+<dialog id="teacherDialog">
+
+  <form method="dialog" id="teacherForm">
+
+    <h2>Ajouter un enseignant</h2>
+
+    <label>
+      Nom
+      <input
+        id="teacherLastName"
+        type="text"
+        required
+      >
+    </label>
+
+    <label>
+      Prénoms
+      <input
+        id="teacherFirstName"
+        type="text"
+        required
+      >
+    </label>
+
+    <label>
+      Discipline principale
+      <input
+        id="teacherSubject"
+        type="text"
+        required
+      >
+    </label>
+
+    <div class="dialog-actions">
+
+      <button
+        value="cancel"
+        class="secondary-btn"
+      >
+        Annuler
+      </button>
+
+      <button
+        type="submit"
+        class="primary-btn"
+      >
+        Ajouter
+      </button>
+
+    </div>
+
+  </form>
+
+</dialog>
+
+
+<script src="assets/app.js"></script>
+
 </body>
 </html>
