@@ -1,1 +1,447 @@
+* {
+  box-sizing: border-box;
+}
 
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fb;
+  color: #172033;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* TOPBAR */
+
+.topbar {
+  height: 64px;
+  background: #fff;
+  border-bottom: 1px solid #e3e7ef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.topbar strong {
+  font-size: 20px;
+}
+
+.topbar span {
+  margin-left: 12px;
+  color: #687386;
+}
+
+
+/* LAYOUT */
+
+.layout {
+  display: flex;
+  min-height: calc(100vh - 64px);
+}
+
+
+/* SIDEBAR */
+
+.sidebar {
+  width: 230px;
+  background: #111827;
+  padding: 18px 12px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-btn {
+  border: 0;
+  background: transparent;
+  color: #cbd5e1;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 8px;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+  background: #273449;
+  color: #fff;
+}
+
+
+/* CONTENT */
+
+.content {
+  flex: 1;
+  padding: 28px;
+  max-width: 1400px;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+
+/* TITRES */
+
+.page-title {
+  margin-bottom: 24px;
+}
+
+.page-title h1 {
+  margin: 0 0 7px;
+  font-size: 28px;
+}
+
+.page-title p {
+  margin: 0;
+  color: #687386;
+}
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+
+/* STATISTIQUES */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.stat-card span {
+  display: block;
+  color: #687386;
+  margin-bottom: 12px;
+}
+
+.stat-card strong {
+  font-size: 25px;
+}
+
+
+/* PANELS */
+
+.panel {
+  background: #fff;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  padding: 22px;
+}
+
+
+/* FORMULAIRES */
+
+form {
+  display: grid;
+  gap: 15px;
+}
+
+label {
+  display: grid;
+  gap: 7px;
+  font-weight: 600;
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid #cfd6e2;
+  border-radius: 8px;
+  padding: 11px 12px;
+  background: #fff;
+  color: #172033;
+}
+
+
+/* BOUTONS */
+
+.primary-btn,
+.secondary-btn,
+.danger-btn {
+  border: 0;
+  border-radius: 8px;
+  padding: 11px 16px;
+  font-weight: 600;
+}
+
+.primary-btn {
+  background: #2563eb;
+  color: #fff;
+}
+
+.secondary-btn {
+  background: #e8edf5;
+  color: #172033;
+}
+
+.danger-btn {
+  background: #dc2626;
+  color: #fff;
+}
+
+
+/* CLASSES */
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(220px, 1fr)
+  );
+  gap: 16px;
+}
+
+.class-card {
+  background: #fff;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.class-card h3 {
+  margin-top: 0;
+}
+
+.class-card p {
+  color: #687386;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.delete-btn {
+  border: 0;
+  background: transparent;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+
+/* FILTRES */
+
+.filters,
+.attendance-controls {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.attendance-controls {
+  grid-template-columns: 300px 220px;
+}
+
+
+/* TABLEAUX */
+
+.table-wrapper {
+  background: #fff;
+  border: 1px solid #e3e7ef;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 13px 15px;
+  border-bottom: 1px solid #e8ebf1;
+  text-align: left;
+}
+
+th {
+  background: #f8fafc;
+  font-size: 14px;
+}
+
+
+/* LISTES */
+
+.list {
+  margin-top: 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.list-item {
+  background: #fff;
+  border: 1px solid #e3e7ef;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+
+/* PRESENCES */
+
+.attendance-row {
+  background: #fff;
+  border: 1px solid #e3e7ef;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.attendance-buttons {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.attendance-buttons button {
+  border: 1px solid #ccd4e0;
+  background: #fff;
+  border-radius: 7px;
+  padding: 8px 10px;
+}
+
+.attendance-buttons button.selected {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+
+/* DIALOGUES */
+
+dialog {
+  width: min(460px, calc(100% - 30px));
+  border: 0;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+dialog h2 {
+  margin-top: 0;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+
+/* VIDE */
+
+.empty {
+  padding: 25px;
+  text-align: center;
+  color: #687386;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+
+  .layout {
+    display: block;
+  }
+
+  .sidebar {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .sidebar nav {
+    flex-direction: row;
+    width: max-content;
+  }
+
+  .nav-btn {
+    white-space: nowrap;
+  }
+
+  .content {
+    padding: 18px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .row-between {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .filters,
+  .attendance-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .attendance-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+
+@media (max-width: 500px) {
+
+  .topbar {
+    padding: 0 12px;
+  }
+
+  .topbar span {
+    display: block;
+    margin-left: 0;
+    font-size: 12px;
+  }
+
+  .danger-btn {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
