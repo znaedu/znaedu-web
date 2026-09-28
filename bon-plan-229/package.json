@@ -1,1 +1,22 @@
-
+{
+  "name": "bon-plan-229",
+  "version": "1.0.0",
+  "description": "Plateforme Bon Plan 229 de mise en relation pour vendre, acheter et proposer des services.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "bon-plan-229",
+    "benin",
+    "marketplace",
+    "annonces",
+    "services"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
