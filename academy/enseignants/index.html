@@ -2,43 +2,423 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZNA Enseignants | Zénith Nova Academy</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <title>ZNA Enseignants</title>
-
-  <meta
-    name="description"
-    content="Espace professionnel des enseignants de Zénith Nova Academy">
-
-  <link
-    rel="stylesheet"
-    href="assets/style.css">
+  <link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
 
   <div id="app">
 
-    <div class="initial-loading">
-      Chargement de ZNA Enseignants...
-    </div>
+    <!-- =========================
+         CONNEXION
+    ========================== -->
+    <section id="login-screen" class="screen login-screen">
+      <div class="login-card">
+
+        <div class="brand-mark">ZNA</div>
+
+        <p class="eyebrow">ZÉNITH NOVA ACADEMY</p>
+        <h1>ZNA Enseignants</h1>
+
+        <p class="login-text">
+          Votre espace professionnel pour préparer, organiser,
+          enseigner, évaluer et suivre vos enseignements.
+        </p>
+
+        <button id="google-login" class="google-btn">
+          <span class="google-icon">G</span>
+          Se connecter avec Google
+        </button>
+
+        <p id="login-message" class="message"></p>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         APPLICATION
+    ========================== -->
+    <section id="teacher-app" class="hidden">
+
+      <!-- HEADER -->
+      <header class="topbar">
+
+        <div class="brand">
+          <div class="brand-mark small">ZNA</div>
+          <div>
+            <strong>ZNA Enseignants</strong>
+            <span>Zénith Nova Academy</span>
+          </div>
+        </div>
+
+        <div class="account-area">
+
+          <button id="profile-button" class="profile-button">
+            <div id="avatar" class="avatar">E</div>
+
+            <div class="account-text">
+              <strong id="teacher-name">Enseignant</strong>
+              <span id="teacher-email">—</span>
+            </div>
+
+            <span class="chevron">⌄</span>
+          </button>
+
+          <div id="profile-menu" class="profile-menu hidden">
+            <button id="profile-link">Mon profil</button>
+            <button id="logout-button" class="danger-link">Se déconnecter</button>
+          </div>
+
+        </div>
+
+      </header>
+
+
+      <div class="layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+          <div class="sidebar-title">MON ESPACE</div>
+
+          <button class="nav-item active" data-view="home">
+            <span>⌂</span>
+            <span>Accueil</span>
+          </button>
+
+          <button class="nav-item" data-view="teachings">
+            <span>▣</span>
+            <span>Mes enseignements</span>
+          </button>
+
+          <button class="nav-item" data-view="resources">
+            <span>▤</span>
+            <span>Supports & références</span>
+          </button>
+
+          <button class="nav-item" data-view="progress">
+            <span>◔</span>
+            <span>Ma progression</span>
+          </button>
+
+          <button class="nav-item" data-view="professional">
+            <span>◎</span>
+            <span>Vie professionnelle</span>
+          </button>
+
+          <div class="sidebar-separator"></div>
+
+          <div class="sidebar-title">MON COMPTE</div>
+
+          <button class="nav-item" data-view="profile">
+            <span>◯</span>
+            <span>Mon profil</span>
+          </button>
+
+        </aside>
+
+
+        <!-- MAIN -->
+        <main class="main-content">
+
+          <!-- =========================
+               ACCUEIL
+          ========================== -->
+          <section id="view-home" class="view">
+
+            <div class="welcome">
+              <div>
+                <p class="eyebrow">ESPACE ENSEIGNANT</p>
+                <h1>Bienvenue<span id="welcome-name"></span></h1>
+                <p>
+                  Commencez par choisir ce que vous enseignez.
+                  ZNA vous guidera ensuite jusqu'au cours,
+                  aux supports et aux ressources dont vous avez besoin.
+                </p>
+              </div>
+
+              <div class="welcome-icon">🎓</div>
+            </div>
+
+
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">ÉTAPE 1</p>
+                <h2>Quel est votre ordre d'enseignement ?</h2>
+                <p>
+                  Choisissez une seule catégorie pour commencer.
+                </p>
+              </div>
+            </div>
+
+
+            <div id="order-grid" class="order-grid">
+
+              <button class="order-card" data-order="maternelle">
+                <span class="order-icon">🌱</span>
+                <span class="order-title">Maternelle</span>
+                <span class="order-description">
+                  Petite, moyenne et grande section
+                </span>
+              </button>
+
+              <button class="order-card" data-order="primaire">
+                <span class="order-icon">📘</span>
+                <span class="order-title">Primaire</span>
+                <span class="order-description">
+                  CI, CP, CE1, CE2, CM1 et CM2
+                </span>
+              </button>
+
+              <button class="order-card" data-order="secondaire_general">
+                <span class="order-icon">🏫</span>
+                <span class="order-title">Secondaire général</span>
+                <span class="order-description">
+                  6e à Terminale
+                </span>
+              </button>
+
+              <button class="order-card" data-order="secondaire_technique">
+                <span class="order-icon">⚙️</span>
+                <span class="order-title">Technique & professionnel</span>
+                <span class="order-description">
+                  Enseignements techniques, technologiques et professionnels
+                </span>
+              </button>
+
+              <button class="order-card" data-order="superieur">
+                <span class="order-icon">🎓</span>
+                <span class="order-title">Supérieur</span>
+                <span class="order-description">
+                  Universités, écoles, facultés, filières et formations
+                </span>
+              </button>
+
+            </div>
+
+
+            <div class="quick-info">
+              <div class="info-icon">ℹ</div>
+              <div>
+                <strong>Comment fonctionne votre espace ?</strong>
+                <p>
+                  Ordre d'enseignement → Niveau/Promotion →
+                  Discipline → Cours → Préparation et ressources.
+                </p>
+              </div>
+            </div>
+
+          </section>
+
+
+          <!-- =========================
+               MES ENSEIGNEMENTS
+          ========================== -->
+          <section id="view-teachings" class="view hidden">
+
+            <div id="breadcrumb" class="breadcrumb"></div>
+
+            <div id="teaching-selector"></div>
+
+          </section>
+
+
+          <!-- =========================
+               DOSSIER PEDAGOGIQUE
+          ========================== -->
+          <section id="view-course" class="view hidden">
+
+            <div id="course-breadcrumb" class="breadcrumb"></div>
+
+            <div id="course-header"></div>
+
+            <div class="course-layout">
+
+              <aside class="course-menu">
+
+                <button class="course-menu-item active" data-course-tab="programme">
+                  01 · Programme
+                </button>
+
+                <button class="course-menu-item" data-course-tab="competences">
+                  02 · Compétences
+                </button>
+
+                <button class="course-menu-item" data-course-tab="contenus">
+                  03 · Contenus
+                </button>
+
+                <button class="course-menu-item" data-course-tab="capacites">
+                  04 · Capacités & habiletés
+                </button>
+
+                <button class="course-menu-item" data-course-tab="situations">
+                  05 · Situations d'apprentissage
+                </button>
+
+                <button class="course-menu-item" data-course-tab="strategies">
+                  06 · Stratégies pédagogiques
+                </button>
+
+                <button class="course-menu-item" data-course-tab="consignes">
+                  07 · Consignes
+                </button>
+
+                <button class="course-menu-item" data-course-tab="deroulement">
+                  08 · Déroulement
+                </button>
+
+                <button class="course-menu-item" data-course-tab="synthese">
+                  09 · Synthèse / trace écrite
+                </button>
+
+                <button class="course-menu-item" data-course-tab="evaluation">
+                  10 · Évaluation
+                </button>
+
+                <button class="course-menu-item" data-course-tab="remediation">
+                  11 · Remédiation
+                </button>
+
+                <button class="course-menu-item" data-course-tab="supports">
+                  12 · Supports & références
+                </button>
+
+                <button class="course-menu-item" data-course-tab="progression">
+                  13 · Ma progression
+                </button>
+
+              </aside>
+
+              <div id="course-content" class="course-content"></div>
+
+            </div>
+
+          </section>
+
+
+          <!-- =========================
+               RESSOURCES
+          ========================== -->
+          <section id="view-resources" class="view hidden">
+
+            <div class="page-title">
+              <p class="eyebrow">DOCUMENTATION</p>
+              <h1>Supports de cours & références</h1>
+              <p>
+                Retrouvez les ressources pédagogiques en les reliant
+                à leur discipline, leur niveau et leur source.
+              </p>
+            </div>
+
+            <div class="resource-filter-bar">
+
+              <select id="resource-level">
+                <option value="">Tous les ordres</option>
+                <option value="maternelle">Maternelle</option>
+                <option value="primaire">Primaire</option>
+                <option value="secondaire_general">Secondaire général</option>
+                <option value="secondaire_technique">Technique & professionnel</option>
+                <option value="superieur">Supérieur</option>
+              </select>
+
+              <input
+                id="resource-search"
+                type="search"
+                placeholder="Rechercher un support..."
+              >
+
+            </div>
+
+            <div id="resource-list" class="resource-list"></div>
+
+          </section>
+
+
+          <!-- =========================
+               PROGRESSION
+          ========================== -->
+          <section id="view-progress" class="view hidden">
+
+            <div class="page-title">
+              <p class="eyebrow">SUIVI</p>
+              <h1>Ma progression</h1>
+              <p>
+                Suivez les contenus déjà traités et ceux qui restent à enseigner.
+              </p>
+            </div>
+
+            <div class="empty-state">
+              <div class="empty-icon">◔</div>
+              <h3>Votre progression pédagogique</h3>
+              <p>
+                Cette partie sera directement reliée à vos enseignements,
+                vos cours et vos séquences.
+              </p>
+            </div>
+
+          </section>
+
+
+          <!-- =========================
+               VIE PROFESSIONNELLE
+          ========================== -->
+          <section id="view-professional" class="view hidden">
+
+            <div class="page-title">
+              <p class="eyebrow">PROFESSION</p>
+              <h1>Vie professionnelle</h1>
+              <p>
+                Ressources pour les animations pédagogiques,
+                conseils d'établissement et développement professionnel.
+              </p>
+            </div>
+
+            <div id="professional-list" class="professional-grid"></div>
+
+          </section>
+
+
+          <!-- =========================
+               PROFIL
+          ========================== -->
+          <section id="view-profile" class="view hidden">
+
+            <div class="page-title">
+              <p class="eyebrow">MON COMPTE</p>
+              <h1>Mon profil</h1>
+            </div>
+
+            <div class="profile-card">
+
+              <div class="profile-avatar" id="profile-avatar">E</div>
+
+              <div class="profile-details">
+                <h2 id="profile-name">Enseignant</h2>
+                <p id="profile-email">—</p>
+                <span class="role-badge">ENSEIGNANT</span>
+              </div>
+
+            </div>
+
+          </section>
+
+
+        </main>
+
+      </div>
+
+    </section>
 
   </div>
 
-  <div
-    id="app-message"
-    class="app-message"
-    hidden>
-  </div>
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js">
-  </script>
-
-  <script src="assets/app.js"></script>
+  <script src="./assets/app.js"></script>
 
 </body>
 </html>
